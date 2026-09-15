@@ -12,11 +12,6 @@ dist
 dist-ssr
 *.local
 
-# Resume stays out of the public repo — it carries a phone number and email.
-# The file still needs to exist locally at this path for the /resume link to
-# work, so upload it to the host separately rather than deleting it.
-public/*.pdf
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

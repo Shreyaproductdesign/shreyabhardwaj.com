@@ -59,10 +59,9 @@ line-heights, tracking and colour ramp. Two font families: Figtree for display,
 Manrope for text. Section headers share one eyebrow / title / lede pattern
 defined once in `src/App.css`.
 
-**Resume PDF.** `public/shreya-bhardwaj-resume.pdf` is gitignored — it carries a
-phone number and email, so it isn't committed. The site links to it at
-`/shreya-bhardwaj-resume.pdf`, so a deploy built from a fresh clone will 404 on
-the Resume link until the file is uploaded to the host separately.
+**Resume PDF.** `public/shreya-bhardwaj-resume.pdf` is committed so deploys serve
+it at `/shreya-bhardwaj-resume.pdf`. Source lives outside this repo as a LaTeX
+file; rebuild it there and copy the output over this path.
 
 **Framer embeds.** The case study routes currently frame the live Framer pages
 rather than serving coded ones. Framer's own nav is clipped by offsetting the
