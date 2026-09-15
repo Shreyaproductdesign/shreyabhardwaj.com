@@ -1,0 +1,652 @@
+/* ——— Wise case study ———
+   A plain vertical reading page. It shares the portfolio's tokens but not the
+   horizontal deck, so nothing here locks the document height. */
+
+.cs {
+  --cs-measure: 720px;
+  --cs-wide: 1100px;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+/* ——— Top bar ——— */
+.cs-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px var(--page-pad);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cs-back {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+}
+
+.cs-back:hover {
+  color: var(--text-muted);
+}
+
+.cs-bar-logo {
+  height: 18px;
+  width: auto;
+  opacity: 0.75;
+}
+
+/* ——— Rhythm ——— */
+.cs-main {
+  padding: 0 var(--page-pad) 0;
+}
+
+.cs-hero,
+.cs-section {
+  max-width: var(--cs-wide);
+  margin: 0 auto;
+  padding: clamp(56px, 7vw, 104px) 0;
+}
+
+.cs-section + .cs-section {
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ——— Type ——— */
+.cs-eyebrow,
+.cs-kicker {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cs-title {
+  max-width: 18ch;
+  margin: 0 0 24px;
+  font-family: var(--font-display);
+  font-size: var(--text-section);
+  font-weight: var(--weight-display);
+  line-height: var(--lh-section);
+  letter-spacing: var(--track-section);
+}
+
+.cs-h2 {
+  max-width: 24ch;
+  margin: 0 0 28px;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  font-weight: var(--weight-display);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+
+.cs-h3 {
+  margin: 0 0 8px;
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.cs-h3-standalone {
+  margin-top: 56px;
+  margin-bottom: 20px;
+}
+
+.cs-lede {
+  max-width: 54ch;
+  margin: 0 0 40px;
+  font-size: var(--text-lead);
+  line-height: var(--lh-lead);
+  letter-spacing: var(--track-body);
+  color: var(--text-secondary);
+  text-wrap: pretty;
+}
+
+.cs-prose {
+  max-width: var(--cs-measure);
+}
+
+.cs-prose p {
+  margin: 0 0 18px;
+  font-size: clamp(1rem, 1.2vw, 1.0625rem);
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.cs-prose p:last-child {
+  margin-bottom: 0;
+}
+
+.cs-prose strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.cs-prose-aside {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(1.125rem, 1.6vw, 1.375rem) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ——— Meta table ——— */
+.cs-meta {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0;
+  margin: 48px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.cs-meta-row {
+  padding: 20px 24px 20px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cs-meta dt {
+  margin-bottom: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cs-meta dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* ——— Notes ——— */
+.cs-note {
+  max-width: var(--cs-measure);
+  margin: 36px 0 0;
+  padding: 16px 20px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface-sunken);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.cs-note a {
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+/* ——— Media ——— */
+.cs-frame {
+  margin: 40px 0;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: var(--surface-sunken);
+}
+
+.cs-frame img {
+  width: 100%;
+  height: auto;
+}
+
+/* Art that already carries its own full-bleed background needs no inner chrome. */
+.cs-frame-flush {
+  border: none;
+  background: none;
+}
+
+/* Portrait-shaped reference artefacts, held back so they don't dominate. */
+.cs-frame-tall {
+  max-width: 780px;
+  margin-inline: auto;
+  background: var(--surface);
+}
+
+.cs-figure {
+  margin: 0;
+}
+
+.cs-figure figcaption {
+  margin-top: -22px;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.cs-shots {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.cs-shots .cs-frame {
+  margin: 40px 0 0;
+}
+
+/* ——— Pull quote ——— */
+.cs-pull {
+  max-width: 34ch;
+  margin: 48px 0;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.375rem, 2.6vw, 2rem);
+  font-style: italic;
+  line-height: 1.32;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/* ——— Big stat ——— */
+.cs-stat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: clamp(20px, 3vw, 44px);
+  padding: 32px 0 0;
+  border-top: 1px solid var(--border);
+}
+
+.cs-stat-figure {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 9vw, 7rem);
+  font-weight: var(--weight-display);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+
+.cs-stat-body {
+  flex: 1 1 320px;
+  margin: 0;
+  max-width: 44ch;
+  font-size: clamp(1rem, 1.2vw, 1.0625rem);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ——— Barriers ——— */
+.cs-barriers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  padding: 0;
+}
+
+.cs-barrier {
+  padding-top: 20px;
+  border-top: 2px solid var(--text-primary);
+}
+
+.cs-barrier-stat {
+  display: block;
+  margin-bottom: 12px;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: var(--weight-display);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.cs-barrier p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ——— Split columns ——— */
+.cs-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: clamp(28px, 4vw, 56px);
+  margin-top: 44px;
+}
+
+.cs-list {
+  padding: 0;
+}
+
+.cs-list li {
+  position: relative;
+  padding: 12px 0 12px 22px;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.cs-list li::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ——— Quote chips ——— */
+.cs-quotes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  padding: 0;
+}
+
+.cs-quote {
+  padding: 20px 22px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: var(--surface-sunken);
+  font-family: var(--font-display);
+  font-size: 1.0625rem;
+  font-style: italic;
+  line-height: 1.45;
+  color: var(--text-primary);
+}
+
+.cs-quotes-accent {
+  margin-top: 16px;
+}
+
+.cs-quotes-accent .cs-quote {
+  border-color: transparent;
+  background: var(--accent-soft);
+}
+
+/* ——— Personas ——— */
+.cs-personas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 24px;
+  margin-top: 44px;
+  padding: 0;
+}
+
+.cs-persona {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.cs-persona-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.cs-persona-head img {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: var(--surface-sunken);
+}
+
+.cs-persona-head .cs-h3 {
+  margin: 0;
+}
+
+.cs-persona-type {
+  margin: 2px 0 0;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.cs-persona-label {
+  margin: 0 0 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.cs-persona-list {
+  margin: 0 0 22px;
+  padding: 0;
+}
+
+.cs-persona-list li {
+  position: relative;
+  padding: 4px 0 4px 20px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.cs-persona-list li::before {
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+}
+
+.cs-persona-list.is-can li::before {
+  content: "✓";
+  color: var(--status-live-solid);
+}
+
+.cs-persona-list.is-cannot li::before {
+  content: "✕";
+  color: var(--text-primary);
+}
+
+.cs-persona-challenge {
+  margin: auto 0 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.cs-persona-challenge strong {
+  color: var(--text-primary);
+}
+
+/* ——— How might we ——— */
+.cs-hmw-text {
+  max-width: 30ch;
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4.2vw, 3.25rem);
+  font-weight: var(--weight-display);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+/* ——— Patterns explored ——— */
+.cs-patterns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 36px 0;
+  padding: 0;
+  counter-reset: pattern;
+}
+
+.cs-pattern {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 18px 20px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.cs-pattern-num {
+  font-family: var(--font-display);
+  font-size: 0.8125rem;
+  color: var(--text-faint);
+}
+
+/* ——— Principles ——— */
+.cs-principles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(24px, 3vw, 40px);
+  margin-top: 56px;
+  padding: 0;
+}
+
+.cs-principle {
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.cs-principle p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ——— Review notes ——— */
+.cs-reviews {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 40px;
+  padding: 0;
+}
+
+.cs-review {
+  padding: 20px 22px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  background: var(--surface-sunken);
+}
+
+.cs-review p {
+  margin: 0 0 12px;
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.cs-review-who {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ——— Next steps ——— */
+.cs-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(24px, 3vw, 40px);
+  margin-top: 44px;
+  padding: 0;
+}
+
+.cs-step {
+  padding-top: 18px;
+  border-top: 2px solid var(--accent);
+}
+
+.cs-step p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* ——— Learnings ——— */
+.cs-learnings {
+  margin-top: 44px;
+  padding: 0;
+}
+
+.cs-learning {
+  display: flex;
+  gap: clamp(18px, 3vw, 40px);
+  padding: 26px 0;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.cs-learning:last-child {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cs-learning-num {
+  flex: 0 0 auto;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--text-faint);
+}
+
+.cs-learning p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ——— Footer ——— */
+.cs-footer {
+  max-width: var(--cs-wide);
+  margin: 0 auto;
+  padding: 48px 0 64px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.cs-footer-back {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.cs-footer-back:hover {
+  color: var(--text-muted);
+}
+
+.cs-footer-mail {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+  text-decoration-color: var(--border);
+}
+
+.cs-footer-mail:hover {
+  color: var(--text-primary);
+}
+
+@media (max-width: 640px) {
+  .cs-pull,
+  .cs-hmw-text {
+    max-width: none;
+  }
+
+  .cs-title,
+  .cs-h2 {
+    max-width: none;
+  }
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Miro">
+  <rect width="100" height="100" rx="22" fill="#FFD02F"/>
+  <g fill="#050038">
+    <!-- Official-style three Miro marks -->
+    <path d="M17 22h14.8l-4.6 20.2 9.4 35.8H24.2L17 49.4V22zm24.6 0H56.4l-4.6 20.2 9.4 35.8H48.8L41.6 49.4V22zm24.6 0H81l-4.6 20.2 9.4 35.8H73.4L66.2 49.4V22z"/>
+  </g>
+</svg>

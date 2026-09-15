@@ -1,0 +1,223 @@
+# About section redesign — better-layout + better-typography
+
+Audited the rendered section at 390 / 768 / 1024 / 1440 / 1920, under
+pseudo-localization and in the RTL mirror. Findings and fixes below.
+
+## Typography
+
+- [x] Add a role-based type scale to `index.css` (size + line-height + weight travel
+      together) and map every About role onto it — replaces 9 ad-hoc sizes with
+      near-duplicate pairs (20/19.2, 15/14, 11/11/12)
+- [x] Kill the two visible widows ("see." and "it?") — drop the hard `<br>` from the
+      display statements and let `text-wrap: balance` set the lines
+- [x] `text-wrap: pretty` on the descriptions
+- [x] Body line-height 1.45 → ~1.55 (skill floor for body copy is 1.5)
+- [x] One uppercase label role at 12px, one tracking — currently three treatments
+      at 11/11/12px
+- [x] Add `-moz-osx-font-smoothing: grayscale` to the root (only `-webkit-` was set)
+
+## Layout
+
+- [x] One content measure and one leading edge — currently 640 / 448 / 480 with three
+      trailing edges (0 / 192 / 160)
+- [x] Spacing scale, with inter-group gaps ≥ 2× intra-group; story gaps are currently
+      a near-uniform 18–38 so the narrative beats do not group
+- [x] Remove the `.about-soft-follow { margin-top: -8px }` negative-margin hack
+- [x] Logical properties: `text-align: left` → `start`, `left: 0` →
+      `inset-inline-start` (the fact card does not mirror in RTL today)
+- [x] `.about-facts-deck { height: 220px }` → grid stacking, so the deck is sized by
+      its tallest card and translated copy cannot clip it (3px headroom today)
+- [x] Fun-fact dots: 8px targets with 7px gaps → expanded hit area + clearance
+- [x] Stacked cards peek 10px → 16–32px so the stack reads as swipeable
+
+- [x] Align the Experience card to the same measure — it scrolls in the same panel,
+      so 720px against 576px read as a stray edge. Date ranges went to two lines at
+      the narrower width, so the date column is now `minmax(max-content, …)` with
+      `white-space: nowrap`.
+
+## Open
+
+- [ ] Four dashed "Photo 1–4" placeholders still ship in production. Shreya is
+      sending real photos; drop them into `PHOTO_SLOTS` when they arrive.
+
+## Review
+
+Rendered-page audit at 390 / 480 / 640 / 768 / 1024 / 1280 / 1440 / 1920, plus
+pseudo-localization, the RTL mirror and `prefers-reduced-motion`.
+
+Typography — 9 ad-hoc sizes with three near-duplicate pairs (20/19.2, 15/14,
+11/11/12) are now 7 roles from one scale. Every line-height is an explicit
+unitless ratio; five elements were previously on `normal`. The two visible
+widows are gone at all 8 widths, fixed by deleting the hand-broken lines from
+the display statements and letting `text-wrap: balance` set them.
+
+Layout — three content widths (640 / 448 / 480) and three trailing edges
+(0 / 192 / 160) are now one 576px measure with a single leading and trailing
+edge. Grouping went from a near-uniform 18–38px to 12px inside a beat, 48px
+between beats, 96px between sections: 4x and 2x, so the ratio does the work.
+The fact deck is grid-stacked instead of `height: 220px`, so it grows with its
+tallest card rather than clipping (it had 3px of headroom under translation).
+The fact card now mirrors correctly in RTL, where it used to sit 80px off its
+own container's leading edge. Fun-fact dots went from 8px targets at 7px gaps
+to 24px targets that no longer overlap, with the active scale moved onto a
+pseudo-element so it can't inflate the hit area.
+
+Section is 2023px tall, down from 2230px, despite the larger gaps — the wider
+measure buys back more lines than the spacing spends.
+
+Not verified: real assistive-technology output, and any locale beyond the
+pseudo-localized run.
+
+---
+
+# Font consolidation
+
+The home panel only ever used Manrope and Figtree; Playfair Display appeared in
+23 rules everywhere else, which is why Playground and the case studies read as a
+different site.
+
+- [x] Two families, both already on the home page: Figtree for every display
+      voice (wordmark, headings, italic asides), Manrope for text and UI
+- [x] Weight tokens (`--weight-display: 700`, `--weight-title: 600`) — Figtree has
+      no stroke contrast, so display hierarchy comes from weight where Playfair's
+      400 carried it
+- [x] Drop Playfair from both HTML entry points; load Figtree's real italic axis
+      so the asides aren't browser-synthesized (Manrope has no italic at all)
+
+Verified: exactly 2 families render, every weight/style combo in use resolves to
+a real loaded face (no synthesis), 0 widows across 390–1920, and no overflow.
+
+## Section-header IA consistency
+
+Four sections had four different text hierarchies. Unified into one pattern.
+
+| | Before | After |
+|---|---|---|
+| Text leading edge | Home 58px, Cases 104px, Playground 104px, **About 432px** | Cases / Playground / About all **104px** |
+| Eyebrow | 11px/700/0.16em (Cases, Wise), 12px/700/0.16em (Playground), none (About) | `--text-label` 12px / 600 / `--track-label` everywhere |
+| Eyebrow → title gap | 18px / 12px / 14px | `--space-4` everywhere |
+| Section title | 56px lh1.12, 80px lh0.98, 112px lh1.06, 76px lh1.02 | `--text-section` 80px / `--lh-section` / `--track-section` |
+| Lede | Playground: **italic Figtree 25.6px lh1.35**; others Manrope 17–20px | Manrope `--text-lead` / `--lh-lede` everywhere |
+
+- New tokens in `index.css`: `--text-section`, `--lh-section`, `--track-section`.
+- `App.css` now defines the eyebrow / title / lede roles **once**, as grouped
+  selectors, instead of one private copy per section.
+- `.about-shell` moved into the shared `--max` container and left-aligned; the
+  36rem reading measure now lives on its children, so About hangs on the same
+  leading edge as the case rail rather than floating centre.
+- About gained the missing eyebrow and lede so it has the same three parts.
+  Copy is placeholder — "The person behind the work" / "How I got here, what I
+  care about, and a few things that keep me curious."
+
+Deliberately left alone: the hero masthead (full-bleed wordmark, its own
+scale) and the Wise page's narrower article measure (standalone long-form).
+
+## About width, snake cadence, case-study 404
+
+**Case study 404.** `href` was `/wise-case-study` but that path is a directory
+index — the Vite dev server and most static hosts only serve it at
+`/wise-case-study/`. Added the trailing slash; link now returns 200.
+
+**About width.** Everything was locked to one 36rem column on the leading
+edge, which left ~656px of the 1232px panel empty and squeezed both display
+statements into three stub lines. Width is now assigned by role:
+
+| Block | Width at 1440 |
+|---|---|
+| Header (eyebrow/title/lede) | 576px |
+| Story (display statements) | 832px |
+| Prose inside the story | capped at 544px |
+| Photo grid | 1232px (full panel) |
+| Fun facts | 576px |
+
+All still start at 104px, so the leading edge stays shared with Playground and
+the case rail. Display statements now break in 2 lines, and "What drives me"
+fits on one row instead of two.
+
+**Photo grid.** 4 slots to 6, on a 6x2 grid. Spans tile it exactly
+(4+3+1+2+1+1 = 12) so there are no holes; at =640px it drops to 2 columns with
+spans of 1 or 2, which also tiles cleanly and keeps DOM order (no `dense`).
+
+**Snake cadence.** Attract mode and play mode shared `TICK_MS = 145`, so the
+idle loop was busy enough to pull the eye off the hero copy. Split:
+
+- attract 235ms/step -> measured 4.25 steps/sec
+- playing 145ms/step -> measured 6.75 steps/sec
+- speeds up 2.5ms per apple, floored at 95ms, so it tightens as you grow
+- `prefers-reduced-motion` now holds the idle loop still (verified: two frames
+  2s apart are byte-identical) while Play still runs
+- a long stall no longer pays itself back as a burst of steps
+
+## Experience + fun-facts card width
+
+The Experience card was 36rem and centred, so once About moved to the 104px
+leading edge it read as a stray edge. Both card objects now match About's
+story block: 52rem wide, hung on the shared leading edge.
+
+- `.exp-card` aligns to the `--max` container without a wrapper via
+  `margin-inline: max(0px, (100% - var(--max)) / 2) auto`.
+- `.about-facts-block` moved 36rem -> 52rem, since a 576px card stacked
+  directly above an 832px card stepped in and out for no reason.
+- `.exp-row` date column capped at 12rem (was `0.38fr`, which grew to ~277px
+  at the new width and stranded the role copy).
+- "Professional experiences" was hand-broken into two `<span>`s with
+  `display: block`. At 832px it fits on one line, so the spans are gone and
+  `text-wrap: balance` handles narrow viewports (verified: 1 line at 1440 and
+  768, 2 at 390).
+
+Widths in the About panel are now role-based, three values not five:
+header 576 · story + cards 832 · photo grid 1232. All start at 104px.
+
+## Wise case study — temporary Framer embed
+
+"View case study" now frames the live Framer page instead of the coded one.
+
+- New `src/WiseFramerEmbed.tsx` + `.css`. `wise-main.tsx` points at it.
+- `src/WiseCaseStudy.tsx` and `.css` are untouched and still in the repo —
+  restoring is a one-line import swap in `wise-main.tsx`.
+- Checked first that Framer sends no `X-Frame-Options` or CSP
+  `frame-ancestors`, and confirmed no JS frame-buster (top URL stays ours).
+- Framer's own nav band is exactly 90px at 1440/1024/768/390 and scrolls with
+  the document rather than sticking, so the frame is pulled up 90px inside an
+  `overflow: hidden` wrapper with the height added back. The visible window is
+  still full height, just offset past the nav, so nothing is cut mid-line.
+- Chrome is one glass "Back to portfolio" pill to `/`. No site nav.
+
+Verified: desktop click-through lands on `/wise-case-study/` with no site nav,
+the Framer page rendered, back returns to `/`.
+
+### Known limits
+- **Mobile**: the Framer page has no small-screen layout; it relies on the
+  browser scaling its ~1400px viewport down, which iframes don't do, so the
+  hero clipped with no way to scroll to it (`scrollWidth == innerWidth`, the
+  content just overflowed hidden). Below 1000px we now `location.replace` to
+  the real Framer URL and let the browser's back button return.
+- The "Made in Framer" badge stays — cross-origin, can't be removed, and
+  masking it would cover content.
+- Framer's clipped nav links are still in the iframe's DOM, so a keyboard user
+  tabbing into the frame can reach links they can't see. Not fixable across
+  origins; goes away when the coded page returns.
+- The 90px offset is hardcoded. If Framer changes that nav height, it drifts.
+
+## QuickFix + Dadvice on the same embed shell
+
+Generalised the Wise-only shell into `src/FramerEmbed.tsx` (props: `url`,
+`name`) + `FramerEmbed.css`, and gave each case study a real route:
+
+| Route | Frames | Was |
+|---|---|---|
+| `/wise-case-study/` | Framer wise page | already embedded |
+| `/quickfix-case-study/` | Framer quickfix page | direct link, new tab |
+| `/dadvice-case-study/` | Framer dadvice page | direct link, new tab |
+
+- One HTML entry + `src/<stem>-main.tsx` per route, registered in
+  `vite.config.ts`. Directory indexes, so they need the trailing slash.
+- QuickFix and Dadvice dropped `external: true`, so they open in the same tab
+  and the CTA arrow is the internal one. `CaseStudies.tsx` keeps the `external`
+  capability for future genuinely-outbound links.
+- Playground marquee tiles repointed to the same routes.
+- Checked both new Framer URLs send no framing headers, and their nav band is
+  also exactly 90px, so the shared offset holds for all three.
+
+Verified all three: HTTP 200, no site nav, back button to `/`, frame loaded,
+Framer nav clipped, and the rail links open in the same tab.

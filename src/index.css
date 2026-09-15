@@ -1,0 +1,142 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Primitives — neutral ramp, even in perceived lightness, denser at the light end */
+  --n-0: #ffffff;
+  --n-50: #fafafa;
+  --n-100: #f2f2f2;
+  --n-200: #e6e6e6;
+  --n-300: #d4d4d4;
+  --n-400: #b1b1b1;
+  --n-500: #8f8f8f;
+  --n-600: #707070;
+  --n-700: #505050;
+  --n-800: #303030;
+  --n-900: #171717;
+
+  /* Primitives — sun accent (brand) and leaf (status only) */
+  --sun-100: #fcf2d6;
+  --sun-200: #fce7ab;
+  --sun-400: #ffd02f;
+  --sun-600: #bd9a2a;
+  --leaf-200: #d8f3cf;
+  --leaf-400: #98dc81;
+  --leaf-600: #369e4e;
+
+  /* Semantic — the only tier components reference */
+  --surface: var(--n-0);
+  --surface-raised: var(--n-0);
+  --surface-sunken: var(--n-100);
+  --surface-inverse: var(--n-900);
+  --border-subtle: var(--n-200);
+  --border: var(--n-300);
+  --border-strong: var(--n-500);
+  --text-primary: var(--n-900);
+  --text-secondary: var(--n-700);
+  --text-muted: var(--n-600);
+  --text-faint: var(--n-500);
+  --text-on-inverse: var(--n-0);
+  --text-on-accent: var(--n-900);
+  --accent: var(--sun-400);
+  --accent-soft: var(--sun-200);
+  --status-live: var(--leaf-400);
+  --status-live-solid: var(--leaf-600);
+  --wordmark: var(--n-900);
+  --shadow-rgb: 23, 23, 23;
+
+  /* One deceleration curve for the whole site, so every surface settles alike. */
+  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* Two families, both of them already on the home page: Figtree carries every
+     display voice (wordmark, headings, italic asides), Manrope carries text and
+     UI. Figtree ships a real italic, which is why the asides use it. */
+  --font-display: "Figtree", system-ui, -apple-system, sans-serif;
+  --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
+
+  /* Figtree has no stroke contrast to lean on, so a display line carries its
+     hierarchy through weight. */
+  --weight-display: 700;
+  --weight-title: 600;
+  --weight-wordmark: 900;
+  --page-pad: clamp(20px, 4vw, 70px);
+  --max: 1232px;
+
+  /* Type scale — one step per role, so a role is one decision instead of three.
+     Size, leading and tracking are picked together and travel together. */
+  --text-display-xl: clamp(3.25rem, 10vw, 7rem);
+  /* Section titles. Every section header uses this one step, so About and
+     Playground can't drift back into two different scales. */
+  --text-section: clamp(2.75rem, 7vw, 5rem);
+  --text-display: clamp(2rem, 4.6vw, 3.125rem);
+  --text-title: clamp(1.5rem, 2.6vw, 1.75rem);
+  --text-lead: clamp(1.0625rem, 1.5vw, 1.25rem);
+  --text-body: 1rem;
+  --text-caption: 0.875rem;
+  --text-label: 0.75rem;
+
+  --lh-display: 1.06;
+  --lh-section: 1;
+  --lh-title: 1.15;
+  --lh-lead: 1.5;
+  --lh-body: 1.55;
+  --lh-flat: 1.2;
+
+  --track-display: -0.03em;
+  --track-section: -0.02em;
+  --track-title: -0.02em;
+  --track-body: -0.01em;
+  --track-label: 0.14em;
+
+  /* Spacing scale — grouping relies on the ratio between steps, so inter-group
+     space is always at least 2x the intra-group step it separates. */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--surface);
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--surface);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
