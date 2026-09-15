@@ -1172,45 +1172,52 @@
   transform: translate3d(0, -14px, 0);
 }
 
-/* Six columns over two rows, and the six slots below span it exactly, so the
-   collage tiles with no holes. */
+/* Six columns over two rows. The row height is set so a 1-column cell lands at
+   roughly 3:4 and a 2-column cell at roughly 3:2 — which is what the photos
+   actually are — so `cover` trims a few percent instead of a face. The six
+   spans below tile the twelve cells exactly, in DOM order, with no holes. */
 .about-photos {
   margin: 0;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: clamp(110px, 12vw, 176px);
+  grid-auto-rows: clamp(150px, 18vw, 260px);
   gap: var(--space-3);
 }
 
-.about-photo-tall {
+/* Full-body shot, so it gets the big portrait cell. */
+.about-photo-portrait-lg {
   grid-column: span 2;
   grid-row: span 2;
 }
 
-.about-photo-wide {
-  grid-column: span 3;
-}
-
-.about-photo-duo {
+.about-photo-landscape {
   grid-column: span 2;
 }
 
-.about-photo-sq {
+.about-photo-portrait {
   grid-column: span 1;
 }
 
 .about-photo-slot {
-  display: grid;
-  place-items: center;
+  position: relative;
+  margin: 0;
+  overflow: hidden;
   border-radius: 16px;
-  border: 1px dashed var(--border);
   background: var(--surface-sunken);
+}
+
+.about-photo-slot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* Intrinsic width/height are on the element for CLS, so they need
+     overriding here to fill the cell. object-position comes per photo. */
+  object-fit: cover;
 }
 
 
 /* One label role for the whole section: photo captions, "What drives me" and
    the fun-facts overline were three sizes and two weights. */
-.about-photo-label,
 .about-drives-label,
 .about-facts-label {
   margin: 0;
@@ -1223,11 +1230,6 @@
   color: var(--text-muted);
 }
 
-.about-photo-label {
-  color: var(--text-faint);
-}
-
-/* Story shares the shell leading edge with Photo 1 (Leo-style left stack) */
 .about-story {
   margin: 0;
   display: flex;
@@ -1502,24 +1504,22 @@
 }
 
 @media (max-width: 640px) {
-  /* Two columns, and every span is 1 or 2, so the six slots still tile with
-     no holes and keep DOM order. */
+  /* Two even columns of squares. Stacking six photos at full height would
+     make the section a very long scroll, so the crop is uniform instead. */
   .about-photos {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 120px;
+    grid-auto-rows: auto;
   }
 
-  .about-photo-tall {
-    grid-column: span 2;
-    grid-row: span 1;
+  .about-photo-slot {
+    aspect-ratio: 1;
   }
 
-  .about-photo-wide {
-    grid-column: span 2;
-  }
-
-  .about-photo-duo {
+  .about-photo-portrait-lg,
+  .about-photo-landscape,
+  .about-photo-portrait {
     grid-column: span 1;
+    grid-row: span 1;
   }
 
   /* Beats tighten on a short viewport, but stay 2x the gap inside a beat. */

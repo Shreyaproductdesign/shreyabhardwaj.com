@@ -3,14 +3,67 @@ import { useEffect, useRef, useState } from "react";
 const GREETINGS = ["Hello", "Ciao", "Hola", "Namaste", "Bonjour", "Hallo"] as const;
 const ROTATE_MS = 2600;
 
-/* Spans are ordered to tile the 6x2 grid exactly: 4 + 3 + 1 + 2 + 1 + 1 = 12. */
+/* Cell shapes are picked to match each photo's real aspect ratio, so the crop
+   is a few percent rather than a chopped face. On the 6x2 grid a `portrait`
+   cell lands at 0.75 and a `landscape` cell at 1.55 — the photos are 0.75/0.77
+   and 1.33/1.48. Order tiles the grid exactly: 4 + 2 + 2 + 2 + 1 + 1 = 12.
+
+   `focus` is the object-position, nudged up where heads sit high in the frame. */
 const PHOTO_SLOTS = [
-  { id: "p1", label: "Photo 1", span: "tall" },
-  { id: "p2", label: "Photo 2", span: "wide" },
-  { id: "p3", label: "Photo 3", span: "sq" },
-  { id: "p4", label: "Photo 4", span: "duo" },
-  { id: "p5", label: "Photo 5", span: "sq" },
-  { id: "p6", label: "Photo 6", span: "sq" },
+  {
+    id: "graduation",
+    src: "/assets/photo-graduation.jpg",
+    alt: "Shreya in cap and gown on graduation day",
+    span: "portrait-lg",
+    focus: "center 40%",
+    w: 768,
+    h: 1024,
+  },
+  {
+    id: "workshop",
+    src: "/assets/photo-workshop.jpg",
+    alt: "Shreya presenting to colleagues in front of a wall of sticky notes",
+    span: "landscape",
+    focus: "center 35%",
+    w: 1024,
+    h: 768,
+  },
+  {
+    id: "team-studio",
+    src: "/assets/photo-team-studio.jpg",
+    alt: "Shreya with her team in the studio",
+    span: "landscape",
+    focus: "center 40%",
+    w: 1024,
+    h: 691,
+  },
+  {
+    id: "team-social",
+    src: "/assets/photo-team-social.jpg",
+    alt: "Shreya and friends at a celebration with yellow balloons",
+    span: "landscape",
+    focus: "center 40%",
+    w: 1024,
+    h: 768,
+  },
+  {
+    id: "athens",
+    src: "/assets/photo-athens.jpg",
+    alt: "Shreya smiling in front of the Acropolis in Athens",
+    span: "portrait",
+    focus: "center 45%",
+    w: 768,
+    h: 1024,
+  },
+  {
+    id: "park",
+    src: "/assets/photo-park.jpg",
+    alt: "Shreya in a park at sunset",
+    span: "portrait",
+    focus: "center 40%",
+    w: 786,
+    h: 1024,
+  },
 ] as const;
 
 const DRIVES = [
@@ -164,14 +217,22 @@ export function AboutSection() {
           </p>
         </div>
 
-        <div className="about-photos" aria-label="Photo placeholders">
+        <div className="about-photos" aria-label="Photos of Shreya">
           {PHOTO_SLOTS.map((slot) => (
-            <div
+            <figure
               key={slot.id}
               className={`about-photo-slot about-photo-${slot.span}`}
             >
-              <span className="about-photo-label">{slot.label}</span>
-            </div>
+              <img
+                src={slot.src}
+                alt={slot.alt}
+                width={slot.w}
+                height={slot.h}
+                style={{ objectPosition: slot.focus }}
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
           ))}
         </div>
 

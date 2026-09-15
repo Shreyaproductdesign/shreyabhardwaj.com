@@ -221,3 +221,35 @@ Generalised the Wise-only shell into `src/FramerEmbed.tsx` (props: `url`,
 
 Verified all three: HTTP 200, no site nav, back button to `/`, frame loaded,
 Framer nav clipped, and the rail links open in the same tab.
+
+## Real photos in the About section
+
+Six photos replaced the dashed placeholders, so the pending placeholder task is
+closed.
+
+Optimised to JPEG, 1100px long edge, q76, progressive — 778KB for all six
+(largest 253KB). `loading="lazy"` and `decoding="async"`, with intrinsic
+`width`/`height` on each `<img>` so they don't shift layout.
+
+The grid was reshaped so cells match the photos rather than cropping faces. The
+set is 3 portraits (0.75 / 0.75 / 0.77) and 3 landscapes (1.33 / 1.33 / 1.48),
+so the row height is tuned to make a 1-column cell ~0.75 and a 2-column cell
+~1.55:
+
+| Slot | Cell at 1440 | Photo | Crop |
+| --- | --- | --- | --- |
+| portrait-lg | 403x530 (0.76) | graduation (0.75) | 1% |
+| landscape | 403x259 (1.55) | workshop (1.33) | 14% |
+| landscape | 403x259 (1.55) | team studio (1.48) | 5% |
+| landscape | 403x259 (1.55) | team social (1.33) | 14% |
+| portrait | 195x259 (0.75) | Athens (0.75) | 0% |
+| portrait | 195x259 (0.75) | park (0.77) | 2% |
+
+Spans still tile the 12 cells exactly in DOM order (4+2+2+2+1+1). `focus` sets
+object-position per photo, nudged up where heads sit high.
+
+At =640px it becomes two columns of squares — a uniform ~25% crop, which keeps
+the section compact instead of stacking six full-height photos into a very long
+scroll. Faces checked at 1440, 1024 and 390.
+
+Dropped the now-dead `.about-photo-label` styles.
