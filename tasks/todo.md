@@ -572,3 +572,32 @@ the shadow still deepens so the state never rests on motion alone. Empty state
 Pre-existing, outside this scope and not in the verdict: the page is 5px wider
 than a 320px viewport. It is the Playground marquee track (5489px), not the
 cards.
+
+## Case grid: three wide, two paired
+
+Presence, Obeya and Wise run the full grid width with their media beside the
+copy; QuickFix and Dadvice share the last row. Driven by `WIDE_COUNT` rather
+than an index check, and `is-featured` became `is-wide` since it no longer
+means "the one".
+
+Going full width exposed two things that were fine at half width:
+
+- The Obeya placeholder held 50% of a 1232px card, so a third of the section
+  was blank grey. Artwork still gets 50%; a placeholder now gets 34%.
+- Three titles at `--text-display` (50px at 1440) all shouted, and "Increasing
+  transparency for legalese" wrapped to three lines in the narrower copy
+  column. The wide cards now use `--text-title`, the same step as the paired
+  ones — width and the side-by-side split carry the emphasis, which is also one
+  fewer size in the scale. All five titles now fit on one or two lines.
+
+Section is 2.54vp, about where it was before the rearrangement (2.53vp), and
+the page is 9.5vp.
+
+Verified: 320–1920 with no card clipping and the group gaps holding at
+24/24/24; the status chip sits exactly on the identity row's trailing edge at
+every width (the earlier "false" reading was a tolerance artifact in the check,
+not a layout bug); RTL mirrors the media to the leading side with the radius
+following (`20px 0 0 20px`), the placeholder keeping its 34%, and the paired row
+reversing; reduced motion leaves no transform on hover while the shadow still
+deepens; the focus ring is on the card overlay at 2px with the card's radius
+and the native inline ring suppressed.

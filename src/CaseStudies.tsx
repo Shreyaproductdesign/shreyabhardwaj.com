@@ -20,6 +20,9 @@ type CaseStudiesProps = {
   studies: CaseStudy[];
 };
 
+/** How many of the leading studies run full width before the grid pairs up. */
+const WIDE_COUNT = 3;
+
 /* A card grid rather than one full-viewport panel per study. The panels read
    well but cost five viewports before a reader reached anything else, and they
    only ever showed one study at a time — so nothing was comparable at a
@@ -52,8 +55,10 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             <article
               key={study.id}
               id={study.id}
-              /* The first card leads, so it spans the grid and runs wide. */
-              className={`case-card${i === 0 ? " is-featured" : ""}${
+              /* The Miro and Wise work gets the full width with its media
+                 beside the copy; the two self-initiated projects share the
+                 last row. */
+              className={`case-card${i < WIDE_COUNT ? " is-wide" : ""}${
                 canOpen ? " is-open" : ""
               }`}
             >
