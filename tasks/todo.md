@@ -326,3 +326,23 @@ awareness, and collaboration".
 
 Outstanding: the GIF is a recording of the Create Sidekick modal, so the
 artwork still shows the old feature. Needs a replacement clip.
+
+## Second Miro card: Obeya room, not "collaboration"
+
+The card was filler — "Making collaboration feel inevitable" over "Systems that
+help teams move from idea to shared understanding with less friction" — and said
+nothing about the actual project.
+
+It's client work: a major US aviation company, under NDA, whose Obeya room was
+rebuilt in Miro. The client can't be named, so the sector carries the weight
+instead.
+
+- Title: An Obeya room, rebuilt in Miro
+- Description: Lean planning lives on the walls of one physical room. For a
+  major US aviation client, that room became a canvas.
+- Tags: Product design / Enterprise / Client work
+- Hero index label: Miro Obeya room
+
+"Obeya" is left unglossed in the title and explained in the description, since
+most readers won't know the term but it's the thing that makes the card worth
+reading. At 113 chars the description sits with its siblings (106, 121, 123).

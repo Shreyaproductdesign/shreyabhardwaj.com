@@ -25,10 +25,10 @@ const caseStudies: CaseStudy[] = [
     id: "miro-case-2",
     company: "Miro",
     logo: "/assets/logo-miro-icon.png",
-    title: "Making collaboration feel inevitable",
-    tags: ["Product design", "Systems", "Enterprise"],
+    title: "An Obeya room, rebuilt in Miro",
+    tags: ["Product design", "Enterprise", "Client work"],
     description:
-      "Systems that help teams move from idea to shared understanding with less friction.",
+      "Lean planning lives on the walls of one physical room. For a major US aviation client, that room became a canvas.",
     status: "incoming",
   },
   {
