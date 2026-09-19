@@ -467,3 +467,36 @@ Dropped the Volunteer fun fact. It said "Helped out with Concern UK", which the
 prose now covers in her own voice — and names correctly as Concern Worldwide,
 which is what the vest in the photo says. The deck is three cards now and the
 counter follows. Easy to restore with different copy if she wants four.
+
+## Glimpse alignment
+
+The section had three different left edges and no shared top line. Measured at
+1440:
+
+| Element | Left edge |
+| --- | --- |
+| Photo strip | 58px |
+| `.case-head` / `.about-shell` | 104px |
+| Glimpse eyebrow and headline | 162px |
+
+Root cause: `.glimpse-head` set `max-width: var(--max)` *and*
+`padding: 0 var(--page-pad)`, so the gutter was counted twice and its text
+started 58px inside the site's leading edge. The strip had the opposite
+problem — `padding` but no `max-width`, so it was half-bleed, ending 46px past
+the content edge and lining up with nothing.
+
+Fixed by putting the gutter on the `.glimpse` section once, and giving the head
+and the strip the same `max-width: var(--max); margin-inline: auto`. All five
+edges now agree, verified at 940/1024/1100/1280/1440/1920.
+
+`align-items: flex-end` was bottom-aligning two columns of different heights,
+which pushed "WHAT DRIVES ME" 64px above "OFF THE CLOCK". The head is a
+two-column grid with `align-items: start`, so the labels share a line.
+
+The pills column is capped at 27rem rather than being a fraction. As a fraction
+it drifted with the viewport and broke the four pills 3+1 at 1440 and one per
+row when narrow. Fixed, it holds 2+2 at every width and stays flush with the
+container's right edge — the same edge the last photo frame ends on.
+
+Strip frames went 197px → 183px, since the row now spans the content column
+rather than overhanging it.

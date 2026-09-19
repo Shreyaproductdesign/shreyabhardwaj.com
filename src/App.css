@@ -10,22 +10,36 @@
    its own height and clips its own art. */
 
 /* ——— About glimpse ——— */
+/* The gutter lives here, once. The head and the strip then both sit in the
+   same --max column as .case-head and .about-shell, so the section's text and
+   its first photo start on the site's one leading edge. */
 .glimpse {
-  padding: clamp(56px, 8vh, 96px) 0 clamp(64px, 9vh, 104px);
+  padding: clamp(56px, 8vh, 96px) var(--page-pad) clamp(64px, 9vh, 104px);
   background: var(--surface);
   color: var(--text-primary);
   overflow-x: clip;
 }
 
-.glimpse-head {
+.glimpse-head,
+.glimpse-strip {
   width: 100%;
   max-width: var(--max);
-  margin: 0 auto clamp(32px, 5vh, 56px);
-  padding: 0 var(--page-pad);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
+  margin-inline: auto;
+}
+
+/* Two columns rather than a flex row with space-between: the headline and the
+   pills are different heights, and `start` puts their labels on one line
+   instead of bottom-aligning them 64px apart. The second column is wide enough
+   for two pills per row. */
+.glimpse-head {
+  margin-bottom: clamp(32px, 5vh, 56px);
+  display: grid;
+  /* The pills column is capped rather than fluid. As a fraction it drifted
+     with the viewport and broke the four pills 3+1 at 1440 and 1-per-row when
+     narrow; 27rem holds them at 2+2, and being fixed it stays flush with the
+     container's right edge, which the photo strip below also ends on. */
+  grid-template-columns: minmax(0, 1fr) minmax(min-content, 27rem);
+  align-items: start;
   gap: var(--space-8) var(--space-12);
 }
 
@@ -34,9 +48,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-3);
-  /* Grows into the space the pills leave, capped at a readable measure. The
-     basis is small enough that both still fit side by side on a laptop. */
-  flex: 1 1 26rem;
+  /* Reading measure, narrower than the column it sits in. */
   max-width: 36rem;
 }
 
@@ -87,10 +99,7 @@
 }
 
 .glimpse-drives {
-  /* Sits beside the line, and drops below only once the pair genuinely runs
-     out of room — which the flex wrap on the head handles. */
-  flex: 0 1 20rem;
-  width: auto;
+  width: 100%;
 }
 
 /* Shared by the glimpse strip and the row inside About. The proportional
@@ -114,9 +123,12 @@
   object-fit: cover;
 }
 
-/* The glimpse runs the full width of the page rather than the text column. */
-.glimpse-strip {
-  padding: 0 var(--page-pad);
+@media (max-width: 900px) {
+  /* One column, so the pills follow the headline instead of squeezing beside
+     it. */
+  .glimpse-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 900px) {
