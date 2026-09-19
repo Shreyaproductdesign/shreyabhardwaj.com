@@ -38,11 +38,11 @@ const PHOTOS: Photo[] = [
     h: 768,
   },
   {
-    id: "park",
-    src: "/assets/photo-park.jpg",
-    alt: "Shreya in a park at sunset",
-    w: 786,
-    h: 1024,
+    id: "concern",
+    src: "/assets/photo-concern.jpg",
+    alt: "Shreya in a Concern Worldwide vest while volunteering outside UCL",
+    w: 825,
+    h: 1100,
   },
   {
     id: "team-studio",

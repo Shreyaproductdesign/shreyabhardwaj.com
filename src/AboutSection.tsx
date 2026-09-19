@@ -4,8 +4,8 @@ import { PhotoRow, type Photo } from "./PhotoRow";
 const GREETINGS = ["Hello", "Ciao", "Hola", "Namaste", "Bonjour", "Hallo"] as const;
 const ROTATE_MS = 2600;
 
-/* Sits just above the fun facts, where the Concern Worldwide shot lands next
-   to the volunteering card that mentions it. */
+/* Breaks up the narrative before the fun facts. The volunteering shot moved up
+   to the glimpse strip, so this row is the team and city photos. */
 const ABOUT_PHOTOS: Photo[] = [
   {
     id: "team-wall",
@@ -22,11 +22,11 @@ const ABOUT_PHOTOS: Photo[] = [
     h: 638,
   },
   {
-    id: "concern",
-    src: "/assets/photo-concern.jpg",
-    alt: "Shreya in a Concern Worldwide vest while volunteering outside UCL",
-    w: 825,
-    h: 1100,
+    id: "park",
+    src: "/assets/photo-park.jpg",
+    alt: "Shreya in a park at sunset",
+    w: 786,
+    h: 1024,
   },
 ];
 

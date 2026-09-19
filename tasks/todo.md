@@ -522,3 +522,18 @@ beside it absorbing the slack — so the pill row ends exactly where the strip
 does. Confirmed identical right edges at 920/1024/1100/1280/1440/1920, with the
 `max-width: 27rem` kept on the list so a long label wraps instead of eating the
 headline's column.
+
+## Volunteering photo into the glimpse strip
+
+Swapped the park sunset shot out of the glimpse strip for the Concern
+Worldwide volunteering one, and moved the park shot down into the About row
+slot it vacated. A swap rather than a straight replacement, so neither row
+loses a frame and no photo appears twice — asserted in the browser.
+
+Both are portrait at 0.750 and 0.768, so no geometry changed: the strip is
+still six frames at 183px and the About row three at 307px, all at 0% crop.
+
+Trade-off worth noting: the volunteering shot no longer sits directly above the
+"including Concern Worldwide" sentence in About, which was why it was placed
+there. It now leads with the person instead, higher up the page. The About row
+is the team and city photos.
