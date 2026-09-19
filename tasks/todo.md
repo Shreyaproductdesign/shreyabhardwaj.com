@@ -601,3 +601,21 @@ following (`20px 0 0 20px`), the placeholder keeping its 34%, and the paired row
 reversing; reduced motion leaves no transform on hover while the shadow still
 deepens; the focus ring is on the card overlay at 2px with the card's radius
 and the native inline ring suppressed.
+
+## Removed the coffee preamble, kept the mug
+
+Dropped "Hey, nice to meet you / Wait, let me just get my coffee first" and
+"Okay, I think I'm good now / So yeah, let me tell you about myself". The story
+now opens on "I was a kid who painted walls", with the mug above it.
+
+The mug moved out of the beat wrapper and into the story directly — with one
+child left, the wrapper only added a gap the story already sets. Its leftover
+4px margin went too: it had made this the one 52px gap in a column of 48s.
+
+Its alt text went to empty. It used to illustrate the line about fetching a
+coffee; with that line gone it is decoration, and "Pixel art coffee mug" would
+be read out for no reason. Matches how the pixel fields are already handled.
+
+Verified at 1440 and 390: the removed copy is gone, story gaps are even
+(48px / 32px), the mug's leading edge sits on the story's, and About is 2.66vp,
+down from 2.86.

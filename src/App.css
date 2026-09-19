@@ -1226,8 +1226,11 @@
   text-wrap: pretty;
 }
 
+/* No margin: it sits directly in the story now, which sets the gap. The 4px
+   left over from when it was inside a beat made this the one 52px gap in a
+   column of 48s. */
 .about-coffee {
-  margin: var(--space-1) 0;
+  margin: 0;
 }
 
 .about-coffee-img {

@@ -155,27 +155,17 @@ export function AboutSection() {
         </div>
 
         <div className="about-story">
-          <div className="about-beat">
-            <p className="about-soft">
-              Hey, nice to meet you.
-              <br />
-              Wait, let me just get my coffee first.
-            </p>
-
-            <figure className="about-coffee">
-              <img
-                className="about-coffee-img"
-                src="/assets/pixel-coffee.png"
-                alt="Pixel art coffee mug"
-              />
-            </figure>
-
-            <p className="about-soft">
-              Okay, I think I’m good now.
-              <br />
-              So yeah, let me tell you about myself.
-            </p>
-          </div>
+          {/* The mug opens the story on its own now. No beat wrapper: with one
+              child it would only add a gap the story already sets. Decorative,
+              so it carries no alt text — the copy it used to illustrate
+              ("let me get my coffee first") is gone. */}
+          <figure className="about-coffee">
+            <img
+              className="about-coffee-img"
+              src="/assets/pixel-coffee.png"
+              alt=""
+            />
+          </figure>
 
           <div className="about-beat">
             {/* Lines are balanced rather than hand-broken, so no viewport
