@@ -253,3 +253,30 @@ the section compact instead of stacking six full-height photos into a very long
 scroll. Faces checked at 1440, 1024 and 390.
 
 Dropped the now-dead `.about-photo-label` styles.
+
+## Snake reward pills: copy and cadence
+
+The four pills mixed voices — "I vibe code" had her speaking, "curious" and
+"systems brain" were bare labels — and only the first few were ever reachable.
+
+Now it opens with "Learn more about Shreya" on the first apple (the accent
+pill), then one quality every second apple: scores 1, 3, 5, 7, 9, 11...
+Fourteen qualities, all third person, so they read as one voice introducing
+her.
+
+The thresholds are derived from `INTRO_AT` and `QUALITY_EVERY` rather than
+hand-written per trait, and `unlockedCount()` awards the next pill whenever the
+score has run ahead, so nothing is missed if a tick is skipped.
+
+Most players will never reach the last few, so the quality order re-shuffles
+each run — a replay shows a different set.
+
+Long copy needed a real clamp. A pill is centred on the apple, and at 190px
+wide ("She mixes depth with personality") the old fixed 76px pad let it hang
+off the band. It now measures its own width in a layout effect and nudges back
+in before paint, so the crop is invisible.
+
+Verified by letting attract mode feed itself: pills arrived at scores
+1, 3, 5, 7, 9, 11, intro first and accented, one voice throughout, none
+escaping the band. The clamp was then forced by squeezing the band to 300px —
+it held on all six, including pills wider than the gutters allow.
