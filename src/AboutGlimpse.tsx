@@ -54,10 +54,9 @@ const PHOTOS: Photo[] = [
 ];
 
 const DRIVES = [
-  "Deep thinking",
-  "Creating without boundaries",
-  "Being curious",
-  "Mixing depth + personality",
+  "Data",
+  "Asking why",
+  "Old-school design + AI",
 ] as const;
 
 export function AboutGlimpse() {

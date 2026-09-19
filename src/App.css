@@ -34,11 +34,12 @@
 .glimpse-head {
   margin-bottom: clamp(32px, 5vh, 56px);
   display: grid;
-  /* The pills column is capped rather than fluid. As a fraction it drifted
-     with the viewport and broke the four pills 3+1 at 1440 and 1-per-row when
-     narrow; 27rem holds them at 2+2, and being fixed it stays flush with the
-     container's right edge, which the photo strip below also ends on. */
-  grid-template-columns: minmax(0, 1fr) minmax(min-content, 27rem);
+  /* The pills column is sized to its content rather than to a fraction of the
+     viewport. A fraction drifted as the window changed and wrapped the pills
+     into ragged rows; content-sized, the row ends on the container's right
+     edge — the same edge the photo strip below ends on. The 1fr beside it
+     absorbs the slack, so the column stays flush right. */
+  grid-template-columns: minmax(0, 1fr) minmax(min-content, max-content);
   align-items: start;
   gap: var(--space-8) var(--space-12);
 }
@@ -100,6 +101,9 @@
 
 .glimpse-drives {
   width: 100%;
+  /* Stops long labels from eating the headline's column; the pills wrap
+     inside this instead. */
+  max-width: 27rem;
 }
 
 /* Shared by the glimpse strip and the row inside About. The proportional
@@ -1269,10 +1273,6 @@
 
 .about-drive-pill:nth-child(3) {
   border-color: rgba(8, 146, 196, 0.45);
-}
-
-.about-drive-pill:nth-child(4) {
-  border-color: rgba(209, 93, 81, 0.45);
 }
 
 .about-spectrum {

@@ -500,3 +500,25 @@ container's right edge — the same edge the last photo frame ends on.
 
 Strip frames went 197px → 183px, since the row now spans the content column
 rather than overhanging it.
+
+## What drives me: new copy
+
+Replaced all four pills with Shreya's three: Data, Asking why, Old-school
+design + AI. Phrased as noun fragments to match the label style, and the third
+uses the `+` that "Mixing depth + personality" already established rather than
+spelling out "blend of". Dropped the now-unused fourth pill colour, so the
+three take yellow, green and blue.
+
+The screenshot showing them stacked one per line was the pre-alignment layout
+(the label sat above the pills rather than level with the eyebrow), so the
+earlier fix already covered it. Swept 390 to 1920 plus three zoom levels: three
+pills on one row everywhere, with room to spare.
+
+The shorter copy did expose one thing. The pills column had been capped at
+27rem, which the four long labels filled; three short ones left it well short
+of the container's right edge while the photo strip below still ran to it. The
+column is content-sized now — `minmax(min-content, max-content)` with the 1fr
+beside it absorbing the slack — so the pill row ends exactly where the strip
+does. Confirmed identical right edges at 920/1024/1100/1280/1440/1920, with the
+`max-width: 27rem` kept on the list so a long label wraps instead of eating the
+headline's column.
