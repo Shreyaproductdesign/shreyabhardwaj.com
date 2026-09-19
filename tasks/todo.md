@@ -280,3 +280,33 @@ Verified by letting attract mode feed itself: pills arrived at scores
 1, 3, 5, 7, 9, 11, intro first and accented, one voice throughout, none
 escaping the band. The clamp was then forced by squeezing the band to 300px —
 it held on all six, including pills wider than the gutters allow.
+
+## Location prominence and the missing Tails.com role
+
+Readers were missing "Amsterdam-based" because it sat in running text at the
+same weight as everything around it. The city now carries an accent swipe at
+weight 700 — 12.22:1 against the dark ink, so it passes AA comfortably. The
+swipe has no side padding on purpose: the word is followed immediately by a
+hyphen, and horizontal padding there reads as a stray space.
+
+Hero lede is now: Amsterdam-based designer. Currently working as a product
+designer at Miro, shaping how teams collaborate in a multiplayer world with AI.
+
+Tails.com was absent from the experience list entirely, not just its location.
+Added from the resume as Associate Product Designer, London, Mar 2025 – Jul
+2025, which also makes the count badge read (5).
+
+Since the complaint was about a missing location, every role now shows its
+city behind a dot separator. The dot is a pseudo-element so it isn't announced,
+and it hangs off the place rather than sitting between the two, so it wraps away
+with it on narrow rows. Cities only — the countries add width without telling
+the reader anything.
+
+While reconciling against the resume, three other entries were off and are now
+aligned: Wolffkraft was "2022 – 2023" (Dec 2022 – Jun 2023), Userfacet was
+"2022" (Jun 2022 – Nov 2022), and both were titled "Product Designer" / "UX
+Designer" rather than "UX/Product Designer". Normalised "June" to "Jun" on the
+Wise row so the date column is consistent.
+
+Still mismatched on purpose: the site says Product Designer at Miro, the resume
+says Junior Product Designer.

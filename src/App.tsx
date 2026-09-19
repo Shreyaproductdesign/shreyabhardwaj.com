@@ -96,23 +96,33 @@ const experience: ExperienceItem[] = [
   {
     company: "Miro",
     role: "Product Designer",
+    location: "Amsterdam",
     dates: "Aug 2025 – Present",
     current: true,
   },
   {
+    company: "Tails.com",
+    role: "Associate Product Designer",
+    location: "London",
+    dates: "Mar 2025 – Jul 2025",
+  },
+  {
     company: "Wise",
     role: "Product Design Intern",
-    dates: "June 2024 – Aug 2024",
+    location: "London",
+    dates: "Jun 2024 – Aug 2024",
   },
   {
     company: "Wolffkraft Design Studio",
-    role: "Product Designer",
-    dates: "2022 – 2023",
+    role: "UX/Product Designer",
+    location: "Bangalore",
+    dates: "Dec 2022 – Jun 2023",
   },
   {
     company: "Userfacet",
-    role: "UX Designer",
-    dates: "2022",
+    role: "UX/Product Designer",
+    location: "Bangalore",
+    dates: "Jun 2022 – Nov 2022",
   },
 ];
 

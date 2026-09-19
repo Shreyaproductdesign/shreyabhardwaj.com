@@ -68,8 +68,11 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
               Who I am
             </a>
             <p className="hero-index-lede">
-              Amsterdam-based product designer. Currently at Miro, shaping how
-              teams collaborate with AI. Playful, precise, and a little pixel.
+              {/* Readers kept missing the location in running text, so it gets
+                  the accent swipe rather than another line of copy. */}
+              <mark className="hero-index-place">Amsterdam</mark>-based
+              designer. Currently working as a product designer at Miro, shaping
+              how teams collaborate in a multiplayer world with AI.
             </p>
           </div>
 

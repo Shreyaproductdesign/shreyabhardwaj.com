@@ -258,6 +258,18 @@
   color: var(--text-primary);
 }
 
+/* `mark`'s default is a browser yellow that ignores the palette, so the swipe
+   is redrawn with the site's accent. No side padding: the word is followed
+   immediately by a hyphen, and padding there reads as a space. */
+.hero-index-place {
+  padding: 0.16em 0;
+  background: var(--accent);
+  color: var(--text-primary);
+  font-weight: 700;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 .hero-index-label {
   display: inline-block;
   margin: 0 0 10px;
@@ -1776,6 +1788,19 @@
   font-weight: 400;
   line-height: 1.4;
   color: var(--text-secondary);
+}
+
+/* Sits after the role behind a dot separator. The dot is a pseudo-element so
+   it isn't read out, and it lives on the place rather than between the two so
+   it wraps away with it on narrow rows. */
+.exp-place {
+  color: var(--text-muted);
+}
+
+.exp-place::before {
+  content: "·";
+  margin: 0 0.45em;
+  color: var(--border);
 }
 
 @media (max-width: 640px) {

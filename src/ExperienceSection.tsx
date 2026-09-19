@@ -1,6 +1,8 @@
 export type ExperienceItem = {
   company: string;
   role: string;
+  /** City only — the countries add width without telling the reader more. */
+  location: string;
   dates: string;
   current?: boolean;
 };
@@ -50,7 +52,10 @@ export function ExperienceSection({
                   ) : null}
                   <h3 className="exp-company">{job.company}</h3>
                 </div>
-                <p className="exp-role">{job.role}</p>
+                <p className="exp-role">
+                  {job.role}
+                  <span className="exp-place">{job.location}</span>
+                </p>
               </div>
             </li>
           ))}
