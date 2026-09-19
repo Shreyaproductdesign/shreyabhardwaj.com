@@ -1,39 +1,137 @@
 .page {
   background: var(--surface);
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
 }
 
-/* ——— Horizontal deck ——— */
-.deck {
+/* ——— Sections ———
+   The sections stack and the document scrolls: no deck scroller, no per-panel
+   scroller. That leaves one scrollbar and one scroll position, and lets the
+   browser handle anchors, Page Up/Down, Home/End and find-in-page rather than
+   any of it being re-implemented. Nothing to declare here — each section sets
+   its own height and clips its own art. */
+
+/* ——— About glimpse ——— */
+.glimpse {
+  padding: clamp(56px, 8vh, 96px) 0 clamp(64px, 9vh, 104px);
+  background: var(--surface);
+  color: var(--text-primary);
+  overflow-x: clip;
+}
+
+.glimpse-head {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto clamp(32px, 5vh, 56px);
+  padding: 0 var(--page-pad);
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-12);
+}
+
+.glimpse-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  /* Grows into the space the pills leave, capped at a readable measure. The
+     basis is small enough that both still fit side by side on a laptop. */
+  flex: 1 1 26rem;
+  max-width: 36rem;
+}
+
+.glimpse-eyebrow {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.glimpse-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: var(--weight-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--track-title);
+  text-wrap: balance;
+}
+
+.glimpse-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  margin-top: var(--space-1);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: var(--track-body);
+  color: var(--text-secondary);
+  transition: color 0.2s var(--ease-out);
+}
+
+.glimpse-more:hover {
+  color: var(--text-primary);
+}
+
+.glimpse-more-arrow {
+  transition: transform 0.2s var(--ease-out);
+}
+
+.glimpse-more:hover .glimpse-more-arrow {
+  transform: translateY(2px);
+}
+
+.glimpse-drives {
+  /* Sits beside the line, and drops below only once the pair genuinely runs
+     out of room — which the flex wrap on the head handles. */
+  flex: 0 1 20rem;
+  width: auto;
+}
+
+/* Full-bleed, and the column weights come from the photos themselves so every
+   frame ends up the same height with no cropping. */
+.glimpse-strip {
+  display: grid;
+  gap: var(--space-3);
+  padding: 0 var(--page-pad);
+}
+
+.glimpse-frame {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--surface-sunken);
+}
+
+.glimpse-frame img {
+  display: block;
+  width: 100%;
   height: 100%;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scrollbar-width: none;
-  overscroll-behavior-x: contain;
+  object-fit: cover;
 }
 
-.deck::-webkit-scrollbar {
-  display: none;
+@media (max-width: 900px) {
+  /* Six proportional columns get too short to read here, so the strip becomes
+     two rows of three squares. */
+  .glimpse-strip {
+    /* Overrides the inline proportional columns from the component. */
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .glimpse-frame {
+    aspect-ratio: 1 !important;
+  }
 }
 
-.deck > * {
-  flex: 0 0 100vw;
-  width: 100vw;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scroll-snap-align: start;
-  scrollbar-width: none;
-}
-
-.deck > *::-webkit-scrollbar {
-  display: none;
+@media (max-width: 520px) {
+  .glimpse-strip {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
 }
 
 /* ——— Nav ——— */
@@ -466,57 +564,183 @@
     );
 }
 
-/* ——— Case studies (full pages) ——— */
+/* ——— Case studies (card grid) ——— */
 .case-studies {
   position: relative;
-  background: var(--surface);
-}
-
-.case-panel {
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  align-items: center;
-  padding: 110px var(--page-pad) 72px;
-  scroll-margin-top: 0;
+  padding: clamp(72px, 10vh, 120px) var(--page-pad);
   background: var(--surface);
   color: var(--text-primary);
 }
 
-.case-panel-inner {
+.case-head,
+.case-grid {
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
+}
+
+.case-head {
+  margin-bottom: clamp(32px, 5vh, 56px);
+}
+
+.case-grid {
   display: grid;
-  gap: clamp(36px, 5vw, 64px);
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 2.4vw, 32px);
 }
 
-.case-panel.has-media .case-panel-inner {
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
-}
-
-.case-copy {
+.case-card {
+  /* Anchors the title link, which is stretched over the whole card below. */
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  max-width: 38rem;
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  border-radius: 20px;
+  background: var(--surface);
+  transition:
+    transform 0.3s var(--ease-out),
+    border-color 0.3s var(--ease-out),
+    box-shadow 0.3s var(--ease-out);
 }
 
-/* Eyebrow role lives with the other section-header parts. */
+/* Only the cards that go somewhere respond to the cursor. */
+.case-card.is-open:has(a:hover),
+.case-card.is-open:has(a:focus-visible) {
+  transform: translateY(-4px);
+  border-color: var(--border);
+  box-shadow: 0 22px 48px rgba(var(--shadow-rgb), 0.12);
+}
 
+.case-card.is-open:has(a:focus-visible) {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
 
-.case-header {
+/* The lead card spans the grid and sets its copy beside the media. */
+.case-card.is-featured {
+  grid-column: 1 / -1;
+  flex-direction: row-reverse;
+}
+
+.case-card.is-featured .case-card-media {
+  flex: 1 1 54%;
+  /* Height comes from the copy column beside it, not a fixed ratio. */
+  aspect-ratio: auto;
+  min-height: 100%;
+}
+
+.case-card.is-featured .case-card-body {
+  flex: 1 1 46%;
+  padding: clamp(24px, 2.6vw, 40px);
+}
+
+.case-card.is-featured .case-title {
+  font-size: var(--text-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--track-display);
+}
+
+.case-card-media {
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  background: var(--surface-sunken);
+}
+
+.case-card-media.is-empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  border-inline-end: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(145deg, rgba(var(--shadow-rgb), 0.04), transparent 55%),
+    var(--surface-sunken);
+}
+
+.case-media-mark {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--n-200);
+}
+
+.case-media-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.case-card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s var(--ease-out);
+}
+
+/* The frame clips, so the image drifts in behind a fixed edge. */
+.case-card.is-open:has(a:hover) .case-card-media.is-empty {
+  display: grid;
+  place-items: center;
+  gap: 8px;
+  border-inline-end: 1px solid var(--border-subtle);
+  background:
+    linear-gradient(145deg, rgba(var(--shadow-rgb), 0.04), transparent 55%),
+    var(--surface-sunken);
+}
+
+.case-media-mark {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: var(--weight-display);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--n-200);
+}
+
+.case-media-label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.case-card-media img {
+  transform: scale(1.04);
+}
+
+.case-card-body {
   display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+/* Pushed to the bottom so the tags and the prompt line up across a row of
+   cards whose titles run to different lengths. */
+.case-card-foot {
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  margin-bottom: 22px;
+  gap: var(--space-3);
 }
 
 .case-brand {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   min-width: 0;
@@ -538,30 +762,32 @@
   color: var(--text-primary);
 }
 
-.case-index {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--text-faint);
-  font-variant-numeric: tabular-nums;
-}
-
 .case-title {
-  margin: 0 0 18px;
+  margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4.4vw, 3.5rem);
-  font-weight: var(--weight-display);
-  letter-spacing: -0.015em;
-  line-height: 1.12;
-  max-width: 14ch;
+  font-size: var(--text-title);
+  font-weight: var(--weight-title);
+  letter-spacing: var(--track-title);
+  line-height: var(--lh-title);
   color: var(--text-primary);
   text-wrap: balance;
 }
 
+.case-title a {
+  color: inherit;
+}
+
+/* Stretches the title's link across the card so the whole card is the hit
+   area. The card is the positioning context. */
+.case-title a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
 .case-desc {
-  margin: 0 0 28px;
-  max-width: 34ch;
+  margin: 0;
+  max-width: 46ch;
   font-family: var(--font-sans);
   font-size: 1.0625rem;
   font-weight: 400;
@@ -570,17 +796,10 @@
   text-wrap: pretty;
 }
 
-.case-desc-soft {
-  font-family: var(--font-display);
-  font-style: italic;
-  color: var(--text-muted);
-}
-
 .case-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 32px;
 }
 
 .case-tag {
@@ -601,17 +820,81 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-.case-actions {
+/* Reads as an aside to the company name, for anyone who doesn't know it. */
+.case-sector {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 400;
+  line-height: var(--lh-flat);
+  color: var(--text-muted);
+}
+
+.case-sector::before {
+  content: "·";
+  margin-inline-end: 0.45em;
+  color: var(--border);
+}
+
+/* Values are sometimes a number and sometimes a phrase, so the value and its
+   label sit on a baseline together rather than being a giant numeral. */
+.case-stat {
+  width: 100%;
+  margin: var(--space-1) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.2em 0.5em;
+}
+
+.case-stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: var(--weight-display);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-title);
+  color: var(--text-primary);
+}
+
+.case-stat-label {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  line-height: var(--lh-body);
+  color: var(--text-muted);
+}
+
+.case-open {
+  margin: 0;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  min-height: 44px;
+  gap: 0.45em;
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: var(--track-body);
+  white-space: nowrap;
+  color: var(--text-primary);
+  transition: color 0.25s var(--ease-out);
+}
+
+/* Nothing to open yet, so it reads as a note instead of an invitation. */
+.case-card:not(.is-open) .case-open {
+  font-weight: 500;
+  color: var(--text-faint);
+}
+
+.case-open-arrow {
+  transition: transform 0.3s var(--ease-out);
+}
+
+.case-card.is-open:has(a:hover) .case-open-arrow {
+  transform: translateX(4px);
 }
 
 .case-status {
   display: inline-flex;
   align-items: center;
-  margin-inline-start: 4px;
   padding: 5px 10px;
   border-radius: 999px;
   font-family: var(--font-sans);
@@ -631,318 +914,62 @@
   box-shadow: 0 0 0 1px rgba(54, 158, 78, 0.18);
 }
 
-.case-media {
-  display: block;
-  width: 100%;
-}
-
-.case-media-frame {
-  border-radius: 22px;
-  overflow: hidden;
-  background: var(--surface-sunken);
-  border: 1px solid var(--border-subtle);
-  aspect-ratio: 16 / 10;
-  box-shadow: 0 24px 50px rgba(var(--shadow-rgb), 0.1);
-  transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
-}
-
-.case-media-frame img,
-.case-media-frame video {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  transition: transform 0.6s var(--ease-out);
-}
-
-/* Only the frames that actually go somewhere respond to the cursor. */
-.case-media-frame.is-linked {
-  display: block;
-  cursor: pointer;
-}
-
-.case-media-frame.is-linked:hover,
-.case-media-frame.is-linked:focus-visible {
-  transform: translateY(-6px);
-  box-shadow: 0 34px 70px rgba(var(--shadow-rgb), 0.16);
-}
-
-/* The frame clips, so the image drifts in behind a fixed edge. */
-.case-media-frame.is-linked:hover img,
-.case-media-frame.is-linked:focus-visible img {
-  transform: scale(1.04);
-}
-
-.case-media-frame.is-linked:focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 4px;
-}
-
-.case-media-frame.is-linked:active {
-  transform: translateY(-2px);
-}
-
-.case-media-empty {
-  display: grid;
-  place-items: center;
-  gap: 10px;
-  background:
-    linear-gradient(145deg, rgba(var(--shadow-rgb), 0.04), transparent 55%),
-    var(--surface-sunken);
-  border-style: dashed;
-  border-color: var(--border);
-  box-shadow: none;
-}
-
-.case-media-mark {
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 8vw, 5rem);
-  font-weight: var(--weight-display);
-  letter-spacing: -0.02em;
-  color: var(--n-200);
-  line-height: 1;
-}
-
-.case-media-label {
-  font-family: var(--font-sans);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-
-.case-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 20px 12px 22px;
-  border-radius: 999px;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: var(--text-on-inverse);
-  background: var(--text-primary);
-  border: 1px solid transparent;
-  box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.18);
-  transition:
-    transform 0.35s var(--ease-out),
-    background 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.35s ease;
-}
-
-.case-cta-muted {
-  background: transparent;
-  color: var(--text-faint);
-  border-color: var(--border);
-  box-shadow: none;
-  pointer-events: none;
-}
-
-.case-cta-arrow {
-  display: inline-block;
-  transition: transform 0.35s var(--ease-out);
-}
-
-.case-cta:hover {
-  transform: translateY(-2px);
-  background: transparent;
-  color: var(--text-primary);
-  border-color: var(--border-strong);
-  box-shadow: 0 12px 28px rgba(var(--shadow-rgb), 0.12);
-}
-
-.case-cta:hover .case-cta-arrow {
-  transform: translateX(4px);
-}
-
-.case-cta:active {
-  transform: translateY(0) scale(0.98);
-}
-
-@media (max-width: 960px) {
-  .case-panel.has-media .case-panel-inner {
-    grid-template-columns: 1fr;
+@media (max-width: 900px) {
+  .case-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .case-copy {
-    max-width: 40rem;
+  /* The lead card loses its side-by-side split and stacks like the rest. */
+  .case-card.is-featured {
+    flex-direction: column;
   }
 
-  .case-title {
-    max-width: 18ch;
+  .case-card.is-featured .case-card-media {
+    flex: 1 1 auto;
+    aspect-ratio: 16 / 10;
+    min-height: 0;
   }
 
-  .case-desc {
-    max-width: 46ch;
+  .case-card.is-featured .case-card-body {
+    flex: 1 1 auto;
   }
 
-  .case-media {
-    order: -1;
-    max-width: 640px;
+  .case-card-media.is-empty {
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--border-subtle);
+  }
+
+  .case-card.is-featured .case-title {
+    font-size: var(--text-title);
+    line-height: var(--lh-title);
+    letter-spacing: var(--track-title);
   }
 }
 
-/* Right scroll rail */
-.case-rail {
-  position: fixed;
-  top: 50%;
-  right: clamp(14px, 2.4vw, 28px);
-  transform: translateY(-50%);
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease;
-}
+@media (max-width: 640px) {
+  /* Beside the logo and the status chip the sector wrapped to three ragged
+     lines, so it takes a line of its own and drops the separator with it. */
+  .case-sector {
+    flex-basis: 100%;
+  }
 
-.case-rail.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.case-rail-num {
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
-}
-
-.case-rail-track {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0;
-  height: min(220px, 32vh);
-  width: 18px;
-}
-
-.case-rail-dot {
-  position: relative;
-  width: 6px;
-  height: 6px;
-  /* No auto margins: they would swallow the free space and override the track's
-     space-between, leaving the dots bunched inward from the marker's reach. */
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-/* The dot itself is a pseudo-element so hover can scale it without dragging the
-   name label — a real child — along with it. */
-.case-rail-dot::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--border);
-  transition: transform 0.3s var(--ease-out), background 0.3s ease;
-}
-
-/* Lifts the target to 22px without disturbing the 6px layout box that the
-   travelling marker aligns itself to. */
-.case-rail-dot::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-}
-
-.case-rail-dot:hover::before {
-  transform: scale(1.5);
-  background: var(--text-secondary);
-}
-
-/* Filled, and ringed by the marker, so the study you are on reads at a glance
-   instead of being the one dot that has gone missing. */
-.case-rail-dot.is-active::before {
-  background: var(--text-primary);
-}
-
-.case-rail-dot:focus-visible {
-  outline: none;
-}
-
-.case-rail-dot:focus-visible::before {
-  transform: scale(1.5);
-  background: var(--text-primary);
-}
-
-.case-rail-tip {
-  position: absolute;
-  right: 20px;
-  top: 50%;
-  translate: 0 -50%;
-  padding: 5px 11px;
-  border-radius: 999px;
-  border: 1px solid var(--border-subtle);
-  background: var(--surface);
-  box-shadow: 0 6px 18px rgba(var(--shadow-rgb), 0.1);
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  color: var(--text-secondary);
-  opacity: 0;
-  transform: translateX(6px);
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.3s var(--ease-out);
-}
-
-.case-rail-dot:hover .case-rail-tip,
-.case-rail-dot:focus-visible .case-rail-tip {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.case-rail-marker {
-  position: absolute;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
-  border: 1.5px solid var(--text-primary);
-  border-radius: 50%;
-  pointer-events: none;
-  transition: top 0.55s var(--ease-out);
+  .case-sector::before {
+    content: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .case-rail-marker,
-  .case-rail-dot::before,
-  .case-rail-tip,
-  .case-media-frame,
-  .case-media-frame img {
+  .case-card,
+  .case-card-media img,
+  .case-open-arrow {
     transition: none;
   }
 
-  /* Keep the feedback, drop the travel: colour and the name label still respond,
-     they just arrive without moving. */
-  .case-rail-dot:hover::before,
-  .case-rail-dot:focus-visible::before,
-  .case-media-frame.is-linked:hover,
-  .case-media-frame.is-linked:focus-visible,
-  .case-media-frame.is-linked:hover img,
-  .case-media-frame.is-linked:focus-visible img,
-  .case-media-frame.is-linked:active {
-    transform: none;
-  }
-
-  .case-rail-dot:hover .case-rail-tip,
-  .case-rail-dot:focus-visible .case-rail-tip {
+  /* Keep the feedback, drop the travel: the border and shadow still respond. */
+  .case-card.is-open:has(a:hover),
+  .case-card.is-open:has(a:focus-visible),
+  .case-card.is-open:has(a:hover) .case-card-media img,
+  .case-card.is-open:has(a:hover) .case-open-arrow {
     transform: none;
   }
 }
@@ -976,6 +1003,7 @@
 }
 
 .playground-heading,
+.case-heading,
 .about-greeting {
   margin: 0 0 var(--space-4);
   font-family: var(--font-display);
@@ -987,6 +1015,7 @@
 }
 
 .playground-lede,
+.case-lede,
 .about-lede {
   margin: 0;
   max-width: 44ch;
@@ -998,105 +1027,6 @@
   letter-spacing: var(--track-body);
   color: var(--text-secondary);
   text-wrap: pretty;
-}
-
-@media (max-width: 720px) {
-  .case-rail {
-    display: none;
-  }
-
-  .case-panel {
-    padding-top: 96px;
-    padding-bottom: 64px;
-  }
-
-  .case-title {
-    max-width: 16ch;
-  }
-
-  .case-header {
-    margin-bottom: 22px;
-  }
-}
-
-.project-featured,
-.project-card {
-  display: block;
-  color: inherit;
-  transition: transform 0.35s ease, opacity 0.25s ease;
-}
-
-.project-featured:hover,
-.project-card:hover {
-  opacity: 0.92;
-}
-
-.project-featured {
-  margin-bottom: 56px;
-}
-
-.project-media {
-  width: 100%;
-  border-radius: 28px;
-  overflow: hidden;
-  background: var(--surface-sunken);
-  margin-bottom: 22px;
-}
-
-.project-media img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.project-featured .project-media {
-  aspect-ratio: 1168 / 331;
-}
-
-.project-card .project-media {
-  aspect-ratio: 544 / 290;
-}
-
-.project-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px 40px;
-}
-
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 14px;
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: var(--surface-sunken);
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
-  color: var(--text-secondary);
-}
-
-.project-title {
-  font-family: var(--font-display);
-  letter-spacing: -0.01em;
-  font-size: clamp(20px, 2vw, 28px);
-  font-weight: var(--weight-title);
-  line-height: 1.2;
-  color: var(--text-secondary);
-  margin-bottom: 10px;
-}
-
-.project-desc {
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--text-muted);
-  max-width: 52ch;
 }
 
 /* ——— About (editorial, normal flow) ——— */
@@ -1142,10 +1072,6 @@
   max-width: 34rem;
 }
 
-.about-photos {
-  width: 100%;
-}
-
 .about-intro {
   margin: 0;
 }
@@ -1184,52 +1110,9 @@
   transform: translate3d(0, -14px, 0);
 }
 
-/* Six columns over two rows. The row height is set so a 1-column cell lands at
-   roughly 3:4 and a 2-column cell at roughly 3:2 — which is what the photos
-   actually are — so `cover` trims a few percent instead of a face. The six
-   spans below tile the twelve cells exactly, in DOM order, with no holes. */
-.about-photos {
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-auto-rows: clamp(150px, 18vw, 260px);
-  gap: var(--space-3);
-}
 
-/* Full-body shot, so it gets the big portrait cell. */
-.about-photo-portrait-lg {
-  grid-column: span 2;
-  grid-row: span 2;
-}
-
-.about-photo-landscape {
-  grid-column: span 2;
-}
-
-.about-photo-portrait {
-  grid-column: span 1;
-}
-
-.about-photo-slot {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  border-radius: 16px;
-  background: var(--surface-sunken);
-}
-
-.about-photo-slot img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  /* Intrinsic width/height are on the element for CLS, so they need
-     overriding here to fill the cell. object-position comes per photo. */
-  object-fit: cover;
-}
-
-
-/* One label role for the whole section: photo captions, "What drives me" and
-   the fun-facts overline were three sizes and two weights. */
+/* One label role across the section: "What drives me" and the fun-facts
+   overline were two sizes and two weights. */
 .about-drives-label,
 .about-facts-label {
   margin: 0;
@@ -1516,24 +1399,6 @@
 }
 
 @media (max-width: 640px) {
-  /* Two even columns of squares. Stacking six photos at full height would
-     make the section a very long scroll, so the crop is uniform instead. */
-  .about-photos {
-    grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto;
-  }
-
-  .about-photo-slot {
-    aspect-ratio: 1;
-  }
-
-  .about-photo-portrait-lg,
-  .about-photo-landscape,
-  .about-photo-portrait {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-
   /* Beats tighten on a short viewport, but stay 2x the gap inside a beat. */
   .about-story {
     gap: var(--space-8);

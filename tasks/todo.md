@@ -346,3 +346,74 @@ instead.
 "Obeya" is left unglossed in the title and explained in the description, since
 most readers won't know the term but it's the thing that makes the card worth
 reading. At 113 chars the description sits with its siblings (106, 121, 123).
+
+## Vertical scrolling
+
+The horizontal deck broke the reading model — clicking Work slid the page
+sideways. The whole thing was three CSS rules and a wheel-hijacking hook, so
+the fix was mostly deletion: `.page` lost its `height`/`overflow`, `.deck`
+lost the flex row, x-snap and scroller, `.deck > *` lost the 100vw panel sizing
+and its own nested scroller, and `useHorizontalDeck` (about 100 lines
+intercepting wheel events, tracking gesture intent and animating panels) is
+gone.
+
+Everything else was already vertical-friendly: sections set `min-height:
+100vh`, `scroll-behavior: smooth` was on `html`, and the case rail's
+IntersectionObserver used `root: null`, so it kept working untouched.
+
+Native scrolling now handles anchors, Page Up/Down, Home/End, space and
+find-in-page, none of which the hook supported. The snake already
+preventDefaults arrow keys with `capture: true`, so steering still holds the
+page still — verified both directions.
+
+Two things the change made relevant:
+- `scroll-behavior: smooth` now animates jumps of up to nine viewports, so
+  `prefers-reduced-motion` cuts it to `auto`.
+- `.page`'s `overflow: hidden` used to absorb overflowing decorative art. Tested
+  from 390 to 1920 with clipping disabled — every section already clips its own,
+  so no replacement rule was needed.
+
+## About glimpse, and a denser case grid
+
+Feedback was "About is too long, and I want a glimpse of the person right after
+home". Measuring first reframed it: About was 3.4vp but Case Studies was 5.0vp,
+43% of the page, and About didn't start until viewport 6.3. It read as too long
+because it was buried.
+
+**Glimpse band** (new `AboutGlimpse.tsx`) sits between the hero and the case
+studies at vp 1.3: a one-liner, the "what drives me" pills, a link down, and
+the six photos as a full-width strip. The photos and pills *moved* rather than
+being copied, so About dropped to 2.57vp and nothing is duplicated — asserted
+in the browser (four pills on the page, not eight).
+
+The strip weights its grid columns by each photo's aspect ratio and puts that
+same ratio on the frames. If width is k × ratio then height is k for every
+frame, so they all match exactly with zero cropping — measured 0% crop at 1440
+with all six frames at 197px. Below 900px it becomes squares, since six
+proportional columns get too short to read.
+
+**Case grid** replaces five full-viewport panels, which cost 5vp and only ever
+showed one study at a time. Cards put company, sector and result side by side:
+2.53vp, and the page went 11.7vp → 9.0vp.
+
+- Sector on each card, so a recruiter who doesn't know the name still gets it
+  ("Visual collaboration SaaS, 100M+ users").
+- A stat per card. All of them are Shreya's own numbers, nothing inferred:
+  Obeya 433K MAU (+40% YoY, 87% retained at 6 months), Wise +65% engagement,
+  Dadvice investor-backed, AI Presence "Canvas 2025" as a placeholder pending
+  real figures. QuickFix has none yet and the card handles the absence.
+- The whole card is the click target via a link on the title stretched with
+  `::after`, so there's one link per card rather than nested links. Verified by
+  clicking dead space near the tags and landing on the case study, and that
+  incoming cards stay inert.
+- Cards without artwork keep a placeholder media block. Without it the Obeya
+  card stretched to its neighbour and left a hole in the middle.
+- The rail went with the panels, along with ~9.7KB of dead CSS (rail, panels,
+  media frames, pill CTA, and the legacy `.project-*` rules from before the
+  deck).
+
+Verified at 390/768/1024/1440: no horizontal overflow, no nested scrollers, no
+console errors, no failed assets, and nav anchors landing with scrollX at 0.
+
+Open question flagged to Shreya: the featured card is Miro AI Presence, which
+is "Incoming" and therefore not clickable, so the lead card can't be opened.

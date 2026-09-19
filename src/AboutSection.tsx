@@ -3,76 +3,6 @@ import { useEffect, useRef, useState } from "react";
 const GREETINGS = ["Hello", "Ciao", "Hola", "Namaste", "Bonjour", "Hallo"] as const;
 const ROTATE_MS = 2600;
 
-/* Cell shapes are picked to match each photo's real aspect ratio, so the crop
-   is a few percent rather than a chopped face. On the 6x2 grid a `portrait`
-   cell lands at 0.75 and a `landscape` cell at 1.55 — the photos are 0.75/0.77
-   and 1.33/1.48. Order tiles the grid exactly: 4 + 2 + 2 + 2 + 1 + 1 = 12.
-
-   `focus` is the object-position, nudged up where heads sit high in the frame. */
-const PHOTO_SLOTS = [
-  {
-    id: "graduation",
-    src: "/assets/photo-graduation.jpg",
-    alt: "Shreya in cap and gown on graduation day",
-    span: "portrait-lg",
-    focus: "center 40%",
-    w: 768,
-    h: 1024,
-  },
-  {
-    id: "workshop",
-    src: "/assets/photo-workshop.jpg",
-    alt: "Shreya presenting to colleagues in front of a wall of sticky notes",
-    span: "landscape",
-    focus: "center 35%",
-    w: 1024,
-    h: 768,
-  },
-  {
-    id: "team-studio",
-    src: "/assets/photo-team-studio.jpg",
-    alt: "Shreya with her team in the studio",
-    span: "landscape",
-    focus: "center 40%",
-    w: 1024,
-    h: 691,
-  },
-  {
-    id: "team-social",
-    src: "/assets/photo-team-social.jpg",
-    alt: "Shreya and friends at a celebration with yellow balloons",
-    span: "landscape",
-    focus: "center 40%",
-    w: 1024,
-    h: 768,
-  },
-  {
-    id: "athens",
-    src: "/assets/photo-athens.jpg",
-    alt: "Shreya smiling in front of the Acropolis in Athens",
-    span: "portrait",
-    focus: "center 45%",
-    w: 768,
-    h: 1024,
-  },
-  {
-    id: "park",
-    src: "/assets/photo-park.jpg",
-    alt: "Shreya in a park at sunset",
-    span: "portrait",
-    focus: "center 40%",
-    w: 786,
-    h: 1024,
-  },
-] as const;
-
-const DRIVES = [
-  "Deep thinking",
-  "Creating without boundaries",
-  "Being curious",
-  "Mixing depth + personality",
-] as const;
-
 const FUN_FACTS = [
   {
     title: "Volunteer",
@@ -97,11 +27,9 @@ export function AboutSection() {
   const [leaving, setLeaving] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [drivesIn, setDrivesIn] = useState(false);
   const [factIndex, setFactIndex] = useState(0);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const drivesRef = useRef<HTMLDivElement>(null);
   const startX = useRef(0);
   const activeX = useRef(0);
 
@@ -134,23 +62,6 @@ export function AboutSection() {
     const id = window.setTimeout(() => setLeaving(null), 650);
     return () => window.clearTimeout(id);
   }, [leaving]);
-
-  useEffect(() => {
-    const node = drivesRef.current;
-    if (!node) return;
-    if (reducedMotion) {
-      setDrivesIn(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) setDrivesIn(true);
-      },
-      { threshold: 0.4 },
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, [reducedMotion]);
 
   const goFact = (next: number) => {
     const n = FUN_FACTS.length;
@@ -217,25 +128,6 @@ export function AboutSection() {
           </p>
         </div>
 
-        <div className="about-photos" aria-label="Photos of Shreya">
-          {PHOTO_SLOTS.map((slot) => (
-            <figure
-              key={slot.id}
-              className={`about-photo-slot about-photo-${slot.span}`}
-            >
-              <img
-                src={slot.src}
-                alt={slot.alt}
-                width={slot.w}
-                height={slot.h}
-                style={{ objectPosition: slot.focus }}
-                loading="lazy"
-                decoding="async"
-              />
-            </figure>
-          ))}
-        </div>
-
         <div className="about-story">
           <div className="about-beat">
             <p className="about-soft">
@@ -270,24 +162,6 @@ export function AboutSection() {
             <p className="about-soft">
               That curiosity led me into the design world.
             </p>
-          </div>
-
-          <div
-            className={`about-drives${drivesIn ? " is-in" : ""}`}
-            ref={drivesRef}
-          >
-            <p className="about-drives-label">What drives me</p>
-            <ul className="about-drive-list">
-              {DRIVES.map((label, i) => (
-                <li
-                  key={label}
-                  className="about-drive-pill"
-                  style={{ ["--i" as string]: i }}
-                >
-                  {label}
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div className="about-beat">

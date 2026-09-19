@@ -360,7 +360,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       if (!want) return;
       if (!playingRef.current) return;
 
-      // Keep the deck from sliding while steering.
+      // Arrow keys scroll the page now, so hold it while steering.
       e.preventDefault();
       e.stopPropagation();
 

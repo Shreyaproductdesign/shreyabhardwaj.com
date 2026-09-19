@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
 import "./App.css";
+import { AboutGlimpse } from "./AboutGlimpse";
 import { AboutSection } from "./AboutSection";
 import { CaseStudies, type CaseStudy } from "./CaseStudies";
 import { ExperienceSection, type ExperienceItem } from "./ExperienceSection";
@@ -14,10 +14,13 @@ const caseStudies: CaseStudy[] = [
     id: "miro-case-1",
     company: "Miro",
     logo: "/assets/logo-miro-icon.png",
+    sector: "Visual collaboration SaaS, 100M+ users",
     title: "Exploring the UI & UX of Miro AI Presence",
     tags: ["Product design", "AI", "Multiplayer"],
     description:
       "Intent, awareness, and collaboration, without getting in the way.",
+    // Placeholder until Shreya has the numbers for this one.
+    stat: { value: "Canvas 2025", label: "launched on stage" },
     image: "/assets/miro-ai-presence-cursor.gif",
     status: "incoming",
   },
@@ -25,22 +28,29 @@ const caseStudies: CaseStudy[] = [
     id: "miro-case-2",
     company: "Miro",
     logo: "/assets/logo-miro-icon.png",
+    sector: "Visual collaboration SaaS, 100M+ users",
     title: "An Obeya room, rebuilt in Miro",
     tags: ["Product design", "Enterprise", "Client work"],
     description:
       "Lean planning lives on the walls of one physical room. For a major US aviation client, that room became a canvas.",
+    stat: {
+      value: "433K MAU",
+      label: "up 40% YoY · 87% retained at 6 months",
+    },
     status: "incoming",
   },
   {
     id: "wise-case-study",
     company: "Wise",
     logo: "/assets/logo-wise.png",
+    sector: "Cross-border payments fintech",
     title: "Increasing transparency for legalese",
     tags: ["Mobile", "Website", "Fintech"],
     description:
       "Helping Wise communicate its Acceptable Use Policy clearly during onboarding, without slowing people down.",
     // Trailing slash matters on all three: these are directory indexes, and
     // both the Vite dev server and static hosts 404 on the bare path.
+    stat: { value: "+65%", label: "engagement with the policy" },
     href: "/wise-case-study/",
     image: "/assets/project-wise.png",
     status: "live",
@@ -48,6 +58,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "quickfix-case-study",
     company: "QuickFix",
+    sector: "Emergency services app, self-initiated",
     title: "A design system built with Airbnb's DLS method",
     tags: ["Mobile App", "Website", "Design system"],
     description:
@@ -59,10 +70,15 @@ const caseStudies: CaseStudy[] = [
   {
     id: "dadvice-case-study",
     company: "Dadvice",
+    sector: "Pregnancy support app, self-initiated",
     title: "A pregnancy guide for dads-to-be",
     tags: ["Mobile App", "Healthcare", "Product Strategy"],
     description:
       "An app that empowers fathers with knowledge, tools, and support to navigate pregnancy and strengthen their relationships.",
+    stat: {
+      value: "Investor-backed",
+      label: "picked up to launch as a startup",
+    },
     href: "/dadvice-case-study/",
     image: "/assets/project-dadvice.png",
     status: "live",
@@ -126,111 +142,7 @@ const experience: ExperienceItem[] = [
   },
 ];
 
-function useHorizontalDeck() {
-  const deckRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const deck = deckRef.current;
-    if (!deck) return;
-
-    /* How far a gesture must push past a panel's edge before the deck moves on. */
-    const OVERSCROLL = 180;
-    /* A gap this long in the wheel stream counts as letting go of the trackpad. */
-    const GESTURE_GAP = 260;
-    /* Long enough to cover the smooth scroll between two panels. */
-    const SETTLE = 560;
-
-    let intent = 0;
-    let lastWheel = 0;
-    let settleUntil = 0;
-    /* True once the current gesture has done something that disqualifies it from
-       changing panels — either it scrolled a panel's content, or it already
-       caused a change. Cleared only by letting go. */
-    let spent = false;
-
-    const panelAt = (node: EventTarget | null) =>
-      node instanceof Element
-        ? (node.closest(".deck > *") as HTMLElement | null)
-        : null;
-
-    const goTo = (direction: 1 | -1) => {
-      const last = deck.children.length - 1;
-      const current = Math.round(deck.scrollLeft / deck.clientWidth);
-      const next = Math.min(last, Math.max(0, current + direction));
-      if (next === current) return;
-      deck.scrollTo({ left: next * deck.clientWidth, behavior: "smooth" });
-      settleUntil = performance.now() + SETTLE;
-      intent = 0;
-      spent = true;
-    };
-
-    const onWheel = (e: WheelEvent) => {
-      if (e.ctrlKey) return;
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
-
-      const now = performance.now();
-      const fresh = now - lastWheel > GESTURE_GAP;
-      lastWheel = now;
-
-      /* Letting go starts a clean slate, so nothing a previous gesture banked can
-         surface later as a jump that came out of nowhere. */
-      if (fresh) {
-        intent = 0;
-        spent = false;
-      }
-
-      /* Sit still while the deck animates, and absorb the tail of the flick that
-         moved it, so one gesture can never skip two panels. */
-      if (now < settleUntil) {
-        e.preventDefault();
-        return;
-      }
-
-      const panel = panelAt(e.target);
-      if (panel) {
-        const room =
-          e.deltaY > 0
-            ? panel.scrollHeight - panel.clientHeight - panel.scrollTop
-            : panel.scrollTop;
-        if (room > 1) {
-          /* The panel can still absorb this, so let it scroll. Reading a panel is
-             what makes a gesture spent: arriving at the end of the case studies
-             should park there, not carry straight on into the next panel. */
-          intent = 0;
-          spent = true;
-          return;
-        }
-      }
-
-      e.preventDefault();
-      if (spent) return;
-
-      if (intent !== 0 && Math.sign(intent) !== Math.sign(e.deltaY)) intent = 0;
-      intent += e.deltaY;
-      if (Math.abs(intent) < OVERSCROLL) return;
-      goTo(intent > 0 ? 1 : -1);
-    };
-
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (performance.now() < settleUntil) return;
-      if (e.key === "ArrowRight") goTo(1);
-      if (e.key === "ArrowLeft") goTo(-1);
-    };
-
-    deck.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      deck.removeEventListener("wheel", onWheel);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
-
-  return deckRef;
-}
-
 function App() {
-  const deckRef = useHorizontalDeck();
-
   return (
     <div className="page">
       <header className="nav">
@@ -258,8 +170,10 @@ function App() {
         </nav>
       </header>
 
-      <main className="deck" ref={deckRef}>
+      <main className="deck">
         <HeroIndex caseStudies={caseStudies} experience={experience} />
+
+        <AboutGlimpse />
 
         <CaseStudies studies={caseStudies} />
 

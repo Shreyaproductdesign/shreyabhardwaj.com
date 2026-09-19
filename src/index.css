@@ -111,6 +111,14 @@ html {
   background: var(--surface);
 }
 
+/* Nav is anchor-driven and the page runs to about a dozen viewports, so a jump
+   to the Playground is a long animated ride. Honour the preference and cut it. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   font-family: var(--font-sans);
   background: var(--surface);
