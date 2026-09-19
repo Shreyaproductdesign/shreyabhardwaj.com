@@ -77,40 +77,48 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                 </div>
               )}
 
+              {/* Four groups, separated by space rather than lines: who it was
+                  for, what it was, what came of it, and how to open it. */}
               <div className="case-card-body">
-                <div className="case-brand">
-                  {study.logo ? (
-                    <img className="case-logo" src={study.logo} alt="" />
-                  ) : null}
-                  <span className="case-company">{study.company}</span>
+                <div className="case-identity">
+                  <div className="case-brand">
+                    {study.logo ? (
+                      <img className="case-logo" src={study.logo} alt="" />
+                    ) : null}
+                    <span className="case-company">{study.company}</span>
+                    {/* Trails the row, so it never wraps under the name the way
+                        it did sharing a line with the sector. */}
+                    <span
+                      className={`case-status${
+                        isIncoming ? "" : " case-status-live"
+                      }`}
+                    >
+                      {isIncoming ? "Incoming" : "Live"}
+                    </span>
+                  </div>
                   {study.sector ? (
-                    <span className="case-sector">{study.sector}</span>
+                    <p className="case-sector">{study.sector}</p>
                   ) : null}
-                  <span
-                    className={`case-status${
-                      isIncoming ? "" : " case-status-live"
-                    }`}
-                  >
-                    {isIncoming ? "Incoming" : "Live"}
-                  </span>
                 </div>
 
-                {/* The only link in the card, stretched over the whole card by
-                    CSS. That keeps the full card clickable without nesting a
-                    link inside a link. */}
-                <h3 className="case-title">
-                  {canOpen ? (
-                    <a href={study.href} {...linkProps}>
-                      {study.title}
-                    </a>
-                  ) : (
-                    study.title
-                  )}
-                </h3>
+                <div className="case-headline">
+                  {/* The only link in the card, stretched over the whole card
+                      by CSS. That keeps the full card clickable without
+                      nesting a link inside a link. */}
+                  <h3 className="case-title">
+                    {canOpen ? (
+                      <a href={study.href} {...linkProps}>
+                        {study.title}
+                      </a>
+                    ) : (
+                      study.title
+                    )}
+                  </h3>
 
-                {study.description ? (
-                  <p className="case-desc">{study.description}</p>
-                ) : null}
+                  {study.description ? (
+                    <p className="case-desc">{study.description}</p>
+                  ) : null}
+                </div>
 
                 {study.stat ? (
                   <p className="case-stat">
@@ -118,6 +126,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
                     <span className="case-stat-label">{study.stat.label}</span>
                   </p>
                 ) : null}
+
 
                 <div className="case-card-foot">
                   <div className="case-tags" aria-label="Topics">

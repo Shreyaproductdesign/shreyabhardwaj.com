@@ -53,6 +53,22 @@
   /* One deceleration curve for the whole site, so every surface settles alike. */
   --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
 
+  /* Depth on cards and containers comes from these rather than a 1px border,
+     so it adapts to whatever sits behind it. Three layers: a ring standing in
+     for the border, a subtle lift, then ambient depth. */
+  --shadow-border:
+    0px 0px 0px 1px oklch(0 0 0 / 0.06),
+    0px 1px 2px -1px oklch(0 0 0 / 0.06),
+    0px 2px 4px 0px oklch(0 0 0 / 0.04);
+  --shadow-border-hover:
+    0px 0px 0px 1px oklch(0 0 0 / 0.08),
+    0px 1px 2px -1px oklch(0 0 0 / 0.08),
+    0px 2px 4px 0px oklch(0 0 0 / 0.06);
+
+  /* Pure black at 10%, never a palette neutral: a tinted ring picks up the
+     surface behind the image and reads as dirt on its edge. */
+  --image-outline: oklch(0 0 0 / 0.1);
+
   /* Two families, both of them already on the home page: Figtree carries every
      display voice (wordmark, headings, italic asides), Manrope carries text and
      UI. Figtree ships a real italic, which is why the asides use it. */

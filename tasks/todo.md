@@ -537,3 +537,38 @@ Trade-off worth noting: the volunteering shot no longer sits directly above the
 "including Concern Worldwide" sentence in About, which was why it was placed
 there. It now leads with the person instead, higher up the page. The About row
 is the team and city photos.
+
+## Case card review (better-interface)
+
+Scope: the five case-study cards, via better-layout, better-typography and
+better-ui. better-colors and better-writing not reviewed — no evidence in this
+scope. Findings, by root cause:
+
+| Sev | Principle | Before | After |
+| --- | --- | --- | --- |
+| HIGH | ui / accessibility | `scale(1.04)` had lost its hover selector and applied to every card image at rest, cropping 2% off each and pushing the document 5px wide at 320px | selector restored to `.case-card.is-open:has(a:hover)`; card clipping now 0 at every width |
+| HIGH | ui, focus | the focus ring was the browser default on the inline title link, boxing two wrapped lines instead of the card | ring moved to the stretched `::after`, tracing the card at its own radius, inset so the card's clip can't cut it. On the link itself, so it does not depend on `:has()` |
+| MEDIUM | layout, group with space | every gap in the card body was 12px — brand/title/desc/stat/foot all equal, so nothing grouped | four semantic groups (identity, headline, proof, meta) with 24px between and 4–8px inside, i.e. 3x |
+| MEDIUM | layout, space not lines | `.case-stat` had `border-top` plus 12px padding plus 4px margin, a rule doing a job the gap already did | separator deleted |
+| MEDIUM | typography, type scale | five ad-hoc sizes (11/13/15/17px) bypassing the project's own tokens | 12/14/16/20/28px, all `--text-label` through `--text-title` |
+| MEDIUM | typography, hierarchy | title and stat value were both 28px, so neither led | stat value one step down at `--text-lead` (20px) |
+| MEDIUM | ui, shadows for depth | `border: 1px solid var(--border-subtle)` for elevation | `--shadow-border` / `--shadow-border-hover`, the skill's exact three-layer oklch values |
+| MEDIUM | ui, image outlines | card images had no outline | `1px oklch(0 0 0 / 0.1)` at `outline-offset: -1px`, with the media's flush corners matched to the card radius so it hugs them |
+| MEDIUM | layout, growth | the status chip shared a line with the sector and wrapped under the company name at narrow widths | chip trails the identity row, sector on its own line; brand row is 1 row at every width from 320 to 1920 |
+| LOW | ui, motion restraint | 300ms on the card hover | 150ms, with the image zoom at 400ms |
+
+Concentric radius: media is flush, so outer = inner + 0 padding and the media
+takes the card's radius on its flush corners only — logical corner properties,
+so the featured card's split mirrors. Verified in RTL: media moves to the
+leading side and its radius follows (`20px 0 0 20px`).
+
+Verification: widths 320/390/640/768/900/1024/1280/1440/1920 — group gaps
+24/24/24, brand 1 row, no card clipping. 200% zoom at 1440 and 390 — title
+fits, prompt visible. RTL mirror. Reduced motion — no transform on hover, and
+the shadow still deepens so the state never rests on motion alone. Empty state
+— the stat-less QuickFix card keeps its foot baseline level with Dadvice
+(718px both).
+
+Pre-existing, outside this scope and not in the verdict: the page is 5px wider
+than a 320px viewport. It is the Playground marquee track (5489px), not the
+cards.
