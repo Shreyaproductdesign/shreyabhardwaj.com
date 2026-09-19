@@ -30,11 +30,10 @@ const ABOUT_PHOTOS: Photo[] = [
   },
 ];
 
+/* Volunteering used to lead this deck ("Helped out with Concern UK"), but the
+   story above now says it in Shreya's own words — and names the charity
+   correctly. The cards are for things the prose doesn't cover. */
 const FUN_FACTS = [
-  {
-    title: "Volunteer",
-    body: "Helped out with Concern UK. Small acts, big heart.",
-  },
   {
     title: "200+ wins",
     body: "Art competitions since I was a kid. Walls were never safe.",
@@ -199,14 +198,19 @@ export function AboutSection() {
               </span>
             </p>
 
+            {/* Not hand-broken: the old version was four short lines forced with
+                <br>, which stranded words at some widths. */}
             <p className="about-spectrum">
-              It’s a spectrum.
-              <br />
-              Either coffee and a book on the couch all day…
-              <br />
-              or six places planned to the minute.
-              <br />
-              <span className="about-spectrum-end">Almost no in-between.</span>
+              I’m someone who follows my mood. Some days I’m reading a good
+              thriller with coffee in hand, other days I’m painting whatever
+              comes to mind, and often I’m just out exploring the city with no
+              plan at all.
+            </p>
+
+            <p className="about-spectrum">
+              I also enjoy volunteering whenever I can. I’ve worked with a few
+              charities over the years, including{" "}
+              <span className="about-spectrum-end">Concern Worldwide</span>.
             </p>
           </div>
         </div>

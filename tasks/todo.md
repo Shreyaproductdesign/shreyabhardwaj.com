@@ -447,3 +447,23 @@ photos, which costs 33% — fine for solo shots. Squaring the About row cropped
 46% off the widest frame, and that one has five people in it, so below 640px it
 becomes one column at true ratios instead. Cropping scenery is fine; cropping
 people out of a group photo is not.
+
+## New "outside of work" copy
+
+Shreya's own summary replaces the spectrum block, which it contradicted: the
+old line was "Either coffee and a book on the couch all day… or six places
+planned to the minute. Almost no in-between," and the new copy is "follows my
+mood… often I'm just out exploring the city with no plan at all." Both couldn't
+stand.
+
+It reads as two paragraphs in one beat — the three moods, then volunteering —
+with "Concern Worldwide" carrying the emphasis that "Almost no in-between" used
+to. Punctuation normalised (her hyphen-as-dash and em dash became sentence
+breaks) and the four hand-broken `<br>` lines are gone, so nothing strands a
+word at odd widths. Checked at 1440 and 390: four/five lines and two/three
+lines, both ending on a full word.
+
+Dropped the Volunteer fun fact. It said "Helped out with Concern UK", which the
+prose now covers in her own voice — and names correctly as Concern Worldwide,
+which is what the vest in the photo says. The deck is three cards now and the
+counter follows. Easy to restore with different copy if she wants four.
