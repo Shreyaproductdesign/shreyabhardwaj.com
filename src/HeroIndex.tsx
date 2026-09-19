@@ -13,7 +13,7 @@ type HeroIndexProps = {
 const DISPLAY_NAME = "Shreya Bhardwaj";
 
 function shortCaseLabel(study: CaseStudy) {
-  if (study.id === "miro-case-1") return "Miro AI Sidekicks";
+  if (study.id === "miro-case-1") return "Miro AI Presence";
   if (study.id === "miro-case-2") return "Miro collaboration";
   if (study.company === "Wise") return "Wise legalese";
   return study.title;

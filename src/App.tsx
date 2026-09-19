@@ -14,11 +14,11 @@ const caseStudies: CaseStudy[] = [
     id: "miro-case-1",
     company: "Miro",
     logo: "/assets/logo-miro-icon.png",
-    title: "Exploring the UI & UX of Miro’s AI Sidekicks",
-    tags: ["Product design", "AI", "Sidekicks"],
+    title: "Exploring the UI & UX of Miro AI Presence",
+    tags: ["Product design", "AI", "Multiplayer"],
     description:
-      "Presence, intent, and collaboration, without getting in the way.",
-    image: "/assets/miro-sidekicks-cursor.gif",
+      "Intent, awareness, and collaboration, without getting in the way.",
+    image: "/assets/miro-ai-presence-cursor.gif",
     status: "incoming",
   },
   {

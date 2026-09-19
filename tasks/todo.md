@@ -310,3 +310,19 @@ Wise row so the date column is consistent.
 
 Still mismatched on purpose: the site says Product Designer at Miro, the resume
 says Junior Product Designer.
+
+## Case study renamed to Miro AI Presence
+
+The first card said "Miro's AI Sidekicks" in four places: the card title, the
+short label in the hero index, a tag, and the GIF's filename. All four now say
+AI Presence, which matches the resume ("Led the visual and UX identity for Miro
+AI Presence, launched at Canvas 2025"). The asset moved with `git mv` so its
+history follows it.
+
+Two copy knock-ons from the rename: the "Presence" tag and the description's
+opening word both became a third echo of the product name, so the tag is now
+"Multiplayer" (matching the hero lede) and the description opens "Intent,
+awareness, and collaboration".
+
+Outstanding: the GIF is a recording of the Create Sidekick modal, so the
+artwork still shows the old feature. Needs a replacement clip.
