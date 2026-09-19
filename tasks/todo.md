@@ -417,3 +417,33 @@ console errors, no failed assets, and nav anchors landing with scrollX at 0.
 
 Open question flagged to Shreya: the featured card is Miro AI Presence, which
 is "Incoming" and therefore not clickable, so the lead card can't be opened.
+
+## Three more photos, and one row implementation
+
+Added the graffiti-wall team shot, the Becoming Wiser cohort, and the Concern
+Worldwide volunteering photo. They went into the long About section rather than
+the glimpse strip: nine photos in one justified row would drop it to about
+120px tall, and the long About had been left with no images at all after the
+photo grid moved up.
+
+Placed just above the fun facts, so the Concern shot sits directly over the
+"Volunteer — Helped out with Concern UK" card that mentions it. It also breaks
+up what had become an unbroken column of text.
+
+Sources: the Concern photo came from the 3024x4032 HEIC in Downloads via
+`sips`, not the 768px attachment, and the team shot from the original JPG. The
+Becoming Wiser one only existed as a screenshot, so a flat-edge detector
+trimmed its border (852x640 -> 848x638). All three at 1100px long edge, q70-76,
+490KB total, lazy with intrinsic dimensions.
+
+Rather than a second copy of the proportional-column trick, it moved into a
+shared `PhotoRow` component: columns weighted by each photo's ratio, frames
+carrying the same ratio, so every frame lands at one height with nothing
+cropped. The glimpse strip and the About row are now the same component with
+different width variants. Measured 0% crop on both at 1440 and 1024.
+
+The two rows part company on mobile, deliberately. The glimpse squares its
+photos, which costs 33% — fine for solo shots. Squaring the About row cropped
+46% off the widest frame, and that one has five people in it, so below 640px it
+becomes one column at true ratios instead. Cropping scenery is fine; cropping
+people out of a group photo is not.

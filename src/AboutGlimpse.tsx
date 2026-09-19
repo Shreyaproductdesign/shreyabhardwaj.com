@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { PhotoRow, type Photo } from "./PhotoRow";
 
 /* A short personal beat between the hero and the case studies. Readers were
    reaching the long About only after five viewports of work and calling it
@@ -7,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 
 /* Ordered portrait, landscape, portrait… so the strip has a rhythm rather
    than three tall frames in a row. */
-const PHOTOS = [
+const PHOTOS: Photo[] = [
   {
     id: "graduation",
     src: "/assets/photo-graduation.jpg",
@@ -50,7 +51,7 @@ const PHOTOS = [
     w: 1024,
     h: 691,
   },
-] as const;
+];
 
 const DRIVES = [
   "Deep thinking",
@@ -58,11 +59,6 @@ const DRIVES = [
   "Being curious",
   "Mixing depth + personality",
 ] as const;
-
-/* Columns are weighted by each photo's aspect ratio and the frames carry that
-   ratio, which makes every frame the same height with nothing cropped: if
-   width is k × ratio then height is k for all of them. */
-const COLUMNS = PHOTOS.map((p) => `${(p.w / p.h).toFixed(3)}fr`).join(" ");
 
 export function AboutGlimpse() {
   const [drivesIn, setDrivesIn] = useState(false);
@@ -121,28 +117,12 @@ export function AboutGlimpse() {
         </div>
       </div>
 
-      <div
+      <PhotoRow
+        photos={PHOTOS}
         className="glimpse-strip"
-        style={{ gridTemplateColumns: COLUMNS }}
-        aria-label="Photos of Shreya"
-      >
-        {PHOTOS.map((photo) => (
-          <figure
-            key={photo.id}
-            className="glimpse-frame"
-            style={{ aspectRatio: `${photo.w} / ${photo.h}` }}
-          >
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              width={photo.w}
-              height={photo.h}
-              loading="lazy"
-              decoding="async"
-            />
-          </figure>
-        ))}
-      </div>
+        label="Photos of Shreya"
+      />
+
     </section>
   );
 }

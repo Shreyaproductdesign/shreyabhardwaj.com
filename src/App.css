@@ -93,37 +93,41 @@
   width: auto;
 }
 
-/* Full-bleed, and the column weights come from the photos themselves so every
-   frame ends up the same height with no cropping. */
-.glimpse-strip {
+/* Shared by the glimpse strip and the row inside About. The proportional
+   column weights arrive inline from the component; see PhotoRow. */
+.photo-row {
   display: grid;
   gap: var(--space-3);
-  padding: 0 var(--page-pad);
 }
 
-.glimpse-frame {
+.photo-frame {
   margin: 0;
   overflow: hidden;
   border-radius: 12px;
   background: var(--surface-sunken);
 }
 
-.glimpse-frame img {
+.photo-frame img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* The glimpse runs the full width of the page rather than the text column. */
+.glimpse-strip {
+  padding: 0 var(--page-pad);
+}
+
 @media (max-width: 900px) {
   /* Six proportional columns get too short to read here, so the strip becomes
-     two rows of three squares. */
+     two rows of three squares. The `!important` overrides the inline columns
+     and ratios the component sets. */
   .glimpse-strip {
-    /* Overrides the inline proportional columns from the component. */
     grid-template-columns: repeat(3, 1fr) !important;
   }
 
-  .glimpse-frame {
+  .glimpse-strip .photo-frame {
     aspect-ratio: 1 !important;
   }
 }
@@ -1064,6 +1068,21 @@
 .about-story,
 .about-facts-block {
   width: min(52rem, 100%);
+}
+
+/* Photos get the full section width; the text blocks stay at their measure. */
+.about-photo-row {
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  /* One column at the real ratios rather than a square grid. These are group
+     shots, and squaring the widest one cropped 46% of its width — which is
+     people out of the frame, not scenery. The glimpse strip can square its
+     photos because those are solo shots. */
+  .about-photo-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 }
 
 /* Reading measure for prose, independent of the wider block it sits in. */

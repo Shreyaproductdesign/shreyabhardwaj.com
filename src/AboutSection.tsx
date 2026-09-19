@@ -1,7 +1,34 @@
 import { useEffect, useRef, useState } from "react";
+import { PhotoRow, type Photo } from "./PhotoRow";
 
 const GREETINGS = ["Hello", "Ciao", "Hola", "Namaste", "Bonjour", "Hallo"] as const;
 const ROTATE_MS = 2600;
+
+/* Sits just above the fun facts, where the Concern Worldwide shot lands next
+   to the volunteering card that mentions it. */
+const ABOUT_PHOTOS: Photo[] = [
+  {
+    id: "team-wall",
+    src: "/assets/photo-team-wall.jpg",
+    alt: "Shreya and four teammates posing in front of a graffiti wall",
+    w: 1100,
+    h: 599,
+  },
+  {
+    id: "wise-cohort",
+    src: "/assets/photo-wise-cohort.jpg",
+    alt: "Shreya with the Wise intern cohort at a Becoming Wiser session",
+    w: 848,
+    h: 638,
+  },
+  {
+    id: "concern",
+    src: "/assets/photo-concern.jpg",
+    alt: "Shreya in a Concern Worldwide vest while volunteering outside UCL",
+    w: 825,
+    h: 1100,
+  },
+];
 
 const FUN_FACTS = [
   {
@@ -183,6 +210,12 @@ export function AboutSection() {
             </p>
           </div>
         </div>
+
+        <PhotoRow
+          photos={ABOUT_PHOTOS}
+          className="about-photo-row"
+          label="More photos of Shreya"
+        />
 
         <div className="about-facts-block">
           <p className="about-facts-label">Fun facts · swipe</p>
