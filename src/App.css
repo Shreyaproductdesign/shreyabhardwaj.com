@@ -366,9 +366,12 @@
   background: var(--surface);
 }
 
+/* Three equal columns. The middle one carried 1.3fr back when each entry read
+   "Company: Role (dates)" and needed the room; logo-and-name rows don't, and
+   unequal widths put the three headings at uneven intervals. */
 .hero-index-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.3fr) minmax(0, 0.75fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(28px, 4vw, 64px);
   align-items: start;
 }
@@ -460,13 +463,14 @@
   outline-offset: -1px;
 }
 
-/* Same chip as the Experience card, a step smaller for this list. Shares the
-   card's dot so the live-green reads the same in both places. */
+/* Same chip as the Experience card, a step smaller for this list. 5px block
+   against 10px inline puts it at 22px; at 2px against 8px it read as
+   squashed. No dot: "Current" already says it, and the card's copy of this
+   chip dropped its dot too so there is one treatment. */
 .hero-index-current {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 2px 8px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
@@ -1746,8 +1750,7 @@
 .exp-current {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-family: var(--font-sans);
   font-size: 0.6875rem;
@@ -1756,13 +1759,6 @@
   text-transform: uppercase;
   color: var(--text-primary);
   background: var(--accent);
-}
-
-.exp-current-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--status-live-solid);
 }
 
 .exp-company {

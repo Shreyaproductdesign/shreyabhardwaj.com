@@ -718,3 +718,25 @@ Worth knowing: it is a wordmark rather than a symbol, so at 20px the lettering
 is not legible — it reads as a blue tile. That is fine here because the company
 name sits right beside it, but a square symbol version would render better if
 one exists.
+
+## Even hero columns, and the Current chip
+
+The gaps between the three hero columns were already equal (64/64 at 1920) — it
+was the widths that weren't. `0.95fr / 1.3fr / 0.75fr` gave 551 / 716 / 413, so
+the three headings landed at uneven intervals. The middle column had the extra
+room from when each entry read "Company: Role (dates)"; logo-and-name rows
+don't need it, so all three are `1fr`. Headings now sit 615/614 apart at 1920
+and 460/461 at 1440.
+
+Side effect: the longest case-study link stopped wrapping at 1280 and above.
+
+The Current chip lost the green dot and went from `2px 8px` to `5px 10px`
+padding — 22px tall instead of 16px. At 2px block against 8px inline it read as
+squashed, which is what felt off.
+
+The Experience card's copy of the chip dropped its dot as well, so "Current" is
+one treatment in both places rather than two. `.exp-current-dot` is gone;
+`--status-live-solid` is still used by three other rules so the token stays.
+
+Verified at 900/1024/1280/1440/1920: equal widths, even intervals, one chip,
+and the hero still fits the viewport at every one.

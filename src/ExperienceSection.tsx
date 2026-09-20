@@ -48,7 +48,6 @@ export function ExperienceSection({
                 <div className="exp-company-line">
                   {job.current ? (
                     <span className="exp-current">
-                      <span className="exp-current-dot" aria-hidden="true" />
                       Current
                     </span>
                   ) : null}
