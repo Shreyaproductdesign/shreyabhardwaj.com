@@ -704,3 +704,17 @@ points smaller (10px) to sit properly beside the 20px logos.
 
 Verified at 1440x900, 1024x768 and 390x844: exactly one chip, every row still a
 single line, and the hero still fits the viewport at all three.
+
+## Tails.com logo
+
+Shreya sent it, so the monogram stand-in is gone. Processed to a 225px square
+PNG (20KB) to match the other four marks. All five now load with no failed
+requests, and every row is still a single line.
+
+The monogram fallback stays in the component for any future role that arrives
+without a logo.
+
+Worth knowing: it is a wordmark rather than a symbol, so at 20px the lettering
+is not legible — it reads as a blue tile. That is fine here because the company
+name sits right beside it, but a square symbol version would render better if
+one exists.

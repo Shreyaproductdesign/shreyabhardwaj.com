@@ -119,6 +119,7 @@ const experience: ExperienceItem[] = [
   },
   {
     company: "Tails.com",
+    logo: "/assets/company-tails.png",
     role: "Associate Product Designer",
     location: "London",
     dates: "Mar 2025 – Jul 2025",
