@@ -793,3 +793,26 @@ inset ring (the field clips its overflow, so an outside ring would be cut).
 
 Under reduced motion the label keeps its colour fill and drops the lift and the
 press scale.
+
+## Attract mode and click-to-play together
+
+Reverted the pause-on-load: the auto-steer, the 235ms ambient cadence and the
+reduced-motion freeze are all back exactly as they were. The field-wide control
+layers on top, so the snake ambles on its own *and* a reader can take over from
+anywhere in the band.
+
+- Starting is the field's job, so the HUD offers Stop only while playing rather
+  than duplicating the invitation.
+- Stopping hands control back to attract mode instead of freezing the board.
+- The apple still avoids the middle while the invitation is on screen. Only a
+  small central block is excluded, so the attract path barely notices.
+
+Verified: animating on load; invitation visible while it ambles; score climbing
+on its own; a click at 12%/80% of the field takes over; the invitation clears
+and Stop appears; Escape brings the invitation back and the board keeps
+ambling; reduced motion holds attract still yet still lets you play.
+
+Note the trait pills are ambient again, since attract-mode eating feeds them.
+That is the earlier behaviour, not a regression, but it does mean a pill and the
+play invitation can sit near each other — the invitation is larger (16px/700
+with a play triangle) against the pill's 13px/600.
