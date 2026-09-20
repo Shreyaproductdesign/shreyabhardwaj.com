@@ -332,29 +332,52 @@
   height: 100%;
 }
 
-/* The board's one control while idle. Translucent so the still snake behind it
-   still reads, and it fills in on hover rather than appearing on it — a button
-   that only exists on hover can't be found on a touch screen. */
+/* The whole field is the control while idle, not just the pill in the middle
+   of it. The canvas gave no sign it was clickable, so a click that missed the
+   pill looked like a dead button. */
 .snake-start {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  /* `translate` centres it, leaving `transform` free for the hover lift. */
-  translate: -50% -50%;
-  padding: 12px 22px;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out);
+}
+
+/* The cue that the area is live, across the whole of it. */
+.snake-start:hover,
+.snake-start:focus-visible {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.snake-start:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: -2px;
+}
+
+/* Always visible rather than revealed on hover: a hover-only control can't be
+   found on a touch screen. Translucent, so the still board reads behind it. */
+.snake-start-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 14px 26px;
   border-radius: 999px;
   border: 1px solid var(--border-subtle);
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
   box-shadow: var(--shadow-border);
   font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 600;
+  font-size: var(--text-body);
+  font-weight: 700;
   letter-spacing: var(--track-body);
   white-space: nowrap;
-  color: var(--text-secondary);
-  cursor: pointer;
+  color: var(--text-primary);
   transition:
     background 0.2s var(--ease-out),
     color 0.2s var(--ease-out),
@@ -363,8 +386,14 @@
     transform 0.2s var(--ease-out);
 }
 
-.snake-start:hover,
-.snake-start:focus-visible {
+/* A triangle's geometric centre is left of its visual one, so it needs a nudge. */
+.snake-start-icon {
+  font-size: 0.8em;
+  transform: translateX(1px);
+}
+
+.snake-start:hover .snake-start-label,
+.snake-start:focus-visible .snake-start-label {
   background: var(--accent);
   border-color: transparent;
   color: var(--text-on-accent);
@@ -372,27 +401,22 @@
   transform: translateY(-1px);
 }
 
-.snake-start:focus-visible {
-  outline: 2px solid var(--text-primary);
-  outline-offset: 3px;
-}
-
-.snake-start:active {
+.snake-start:active .snake-start-label {
   scale: 0.96;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .snake-start {
+  .snake-start-label {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
-  /* The colour change still marks the hover, so no feedback is lost. */
-  .snake-start:hover,
-  .snake-start:focus-visible {
+  /* The fill still marks the hover, so no feedback is lost with the travel. */
+  .snake-start:hover .snake-start-label,
+  .snake-start:focus-visible .snake-start-label {
     transform: none;
   }
 
-  .snake-start:active {
+  .snake-start:active .snake-start-label {
     scale: 1;
   }
 }

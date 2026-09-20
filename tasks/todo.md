@@ -769,3 +769,27 @@ board goes still again.
 Side effect worth noting: the trait pills no longer appear on their own, since
 they were fed by attract-mode eating. They are now strictly a reward for
 playing, which is what they were designed to be.
+
+## The snake's play control covers the field
+
+Shreya reported the button "does not work". It did — a raw mouse click at its
+centre started the game, and nothing was intercepting it. The real fault was
+the target: a 215x45 pill inside a 1325x396 field, with a canvas around it that
+gave no sign of being clickable. A click that landed near the snake did nothing
+and read as a dead button.
+
+The control now covers the whole field, and the cue matches the hit area:
+hovering anywhere tints the entire area and fills the label. Verified with raw
+mouse clicks at nine points across the field — all nine start the game.
+
+More prominent as asked: 16px at weight 700 with a play triangle, 270x52
+against the old 215x45. The triangle takes the 1px optical nudge a play glyph
+needs, since its geometric centre sits left of its visual one, and it is
+`aria-hidden`, so the accessible name stays "Play to learn about Shreya" —
+confirmed through the accessibility tree rather than from `textContent`.
+
+Keyboard: reachable on the 14th tab, Enter starts the game, and focus draws an
+inset ring (the field clips its overflow, so an outside ring would be cut).
+
+Under reduced motion the label keeps its colour fill and drops the lift and the
+press scale.

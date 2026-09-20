@@ -397,13 +397,21 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       <div className="snake-field" ref={wrapRef}>
         <canvas className="snake-canvas" ref={canvasRef} />
 
+        {/* Covers the whole field rather than sitting in the middle of it. As a
+            pill it was a 215x45 target inside a 1325x396 area, so a click
+            anywhere near the snake itself did nothing at all. */}
         {playing ? null : (
           <button
             className="snake-start"
             type="button"
             onClick={() => setPlaying(true)}
           >
-            Play to learn about Shreya
+            <span className="snake-start-label">
+              <span className="snake-start-icon" aria-hidden="true">
+                ▶
+              </span>
+              Play to learn about Shreya
+            </span>
           </button>
         )}
       </div>
