@@ -1,5 +1,7 @@
 export type ExperienceItem = {
   company: string;
+  /** Square company mark. Falls back to a monogram where there isn't one. */
+  logo?: string;
   role: string;
   /** City only — the countries add width without telling the reader more. */
   location: string;

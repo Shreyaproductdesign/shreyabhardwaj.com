@@ -413,9 +413,9 @@
 .hero-index-list {
   display: flex;
   flex-direction: column;
-  /* Small enough to read as one block like the reference, large enough to keep
-     entries apart once a long one wraps to two lines. */
-  gap: 3px;
+  /* Roomier than the 3px it used when entries wrapped: single lines with a
+     logo beside them need the gap to separate rows, not lines. */
+  gap: var(--space-2);
 }
 
 .hero-index-link {
@@ -438,11 +438,38 @@
 }
 
 .hero-index-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
   font-family: var(--font-sans);
   font-size: clamp(15px, 1.1vw, 16.5px);
   font-weight: 400;
   line-height: 1.4;
   color: var(--text-primary);
+}
+
+.hero-index-logo {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  object-fit: cover;
+  /* The marks are square tiles carrying their own backgrounds, so they need
+     the same hairline the photos get rather than sitting edge-to-edge on white. */
+  outline: 1px solid var(--image-outline);
+  outline-offset: -1px;
+}
+
+/* Stand-in where there is no mark on file. A pale tile read as an image that
+   had failed to load next to four solid ones, so it takes their weight. */
+.hero-index-logo.is-monogram {
+  display: grid;
+  place-items: center;
+  background: var(--n-900);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--surface);
 }
 
 .hero-giant-name {

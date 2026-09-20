@@ -102,13 +102,22 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
             <a className="hero-index-label" href="#about-me">
               Experience
             </a>
+            {/* Companies only. The roles and dates live in the Experience
+                card, and spelling them out here ran each entry to two lines. */}
             <ul className="hero-index-list">
               {experience.map((job) => (
                 <li
                   className="hero-index-item"
                   key={`${job.company}-${job.dates}`}
                 >
-                  {job.company}: {job.role} ({job.dates})
+                  {job.logo ? (
+                    <img className="hero-index-logo" src={job.logo} alt="" />
+                  ) : (
+                    <span className="hero-index-logo is-monogram">
+                      {job.company.slice(0, 1)}
+                    </span>
+                  )}
+                  {job.company}
                 </li>
               ))}
             </ul>

@@ -111,6 +111,7 @@ const playgroundMarquee: MarqueeItem[] = [
 const experience: ExperienceItem[] = [
   {
     company: "Miro",
+    logo: "/assets/logo-miro-icon.png",
     role: "Product Designer",
     location: "Amsterdam",
     dates: "Aug 2025 – Present",
@@ -124,18 +125,21 @@ const experience: ExperienceItem[] = [
   },
   {
     company: "Wise",
+    logo: "/assets/logo-wise.png",
     role: "Product Design Intern",
     location: "London",
     dates: "Jun 2024 – Aug 2024",
   },
   {
     company: "Wolffkraft Design Studio",
+    logo: "/assets/company-wolffkraft.png",
     role: "UX/Product Designer",
     location: "Bangalore",
     dates: "Dec 2022 – Jun 2023",
   },
   {
     company: "Userfacet",
+    logo: "/assets/company-userfacet.png",
     role: "UX/Product Designer",
     location: "Bangalore",
     dates: "Jun 2022 – Nov 2022",

@@ -660,3 +660,35 @@ Still overflowing, and not fixable by spacing: 375x812 by 25px, 375x667 by
 against a 667px screen. Closing it means trimming the index on small phones —
 its experience and case lists repeat sections further down — which is a content
 call, so it is left for Shreya.
+
+## Hero experience list: company and logo only
+
+Each entry was "Miro: Product Designer (Aug 2025 – Present)", which wrapped to
+two lines on most of them. Now it is a 20px mark plus the company name, on one
+line. The roles, dates and locations are unchanged on the Experience card
+below, so nothing was lost — just not said twice.
+
+Logos already in the assets: Miro, Wise, Wolffkraft, Userfacet. All four are
+square tiles carrying their own background, so they take the same
+`oklch(0 0 0 / 0.1)` hairline the photos use rather than meeting the white
+page edge-to-edge.
+
+Tails.com has no mark on file and renders a monogram. The first attempt used
+`--surface-sunken`, which beside four solid marks read as an image that had
+failed to load, so it now takes their visual weight.
+
+A useful side effect: single-line rows shrank the stacked mobile index from
+550px to 506px, which pulled 375x812 inside the viewport on top of the sizes
+already fixed. Remaining overflow is 375x667 (114px) and landscape phones.
+
+| Viewport | Hero | Both visible |
+| --- | --- | --- |
+| 1920x1080 | 1080 | yes |
+| 1440x900 | 900 | yes |
+| 1280x800 | 800 | yes |
+| 1024x768 | 768 | yes |
+| 768x1024 | 1024 | yes |
+| 430x932 | 932 | yes |
+| 390x844 | 844 | yes |
+| 375x812 | 812 | yes |
+| 375x667 | 781 | no, 114px over |
