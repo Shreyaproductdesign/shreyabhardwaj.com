@@ -692,3 +692,15 @@ already fixed. Remaining overflow is 375x667 (114px) and landscape phones.
 | 390x844 | 844 | yes |
 | 375x812 | 812 | yes |
 | 375x667 | 781 | no, 114px over |
+
+## Current chip in the hero experience list
+
+A Current chip sits after Miro. Driven by the `current: true` flag already on
+the experience data, not a hardcoded first-row check, so it moves with the role.
+
+Reuses the Experience card's chip: same accent background and the same
+`.exp-current-dot` element, so the live green stays defined in one place. Two
+points smaller (10px) to sit properly beside the 20px logos.
+
+Verified at 1440x900, 1024x768 and 390x844: exactly one chip, every row still a
+single line, and the hero still fits the viewport at all three.

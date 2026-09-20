@@ -460,6 +460,24 @@
   outline-offset: -1px;
 }
 
+/* Same chip as the Experience card, a step smaller for this list. Shares the
+   card's dot so the live-green reads the same in both places. */
+.hero-index-current {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: var(--lh-flat);
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--text-primary);
+  background: var(--accent);
+}
+
 /* Stand-in where there is no mark on file. A pale tile read as an image that
    had failed to load next to four solid ones, so it takes their weight. */
 .hero-index-logo.is-monogram {

@@ -118,6 +118,12 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
                     </span>
                   )}
                   {job.company}
+                  {job.current ? (
+                    <span className="hero-index-current">
+                      <span className="exp-current-dot" aria-hidden="true" />
+                      Current
+                    </span>
+                  ) : null}
                 </li>
               ))}
             </ul>
