@@ -740,3 +740,32 @@ one treatment in both places rather than two. `.exp-current-dot` is gone;
 
 Verified at 900/1024/1280/1440/1920: equal widths, even intervals, one chip,
 and the hero still fits the viewport at every one.
+
+## Snake starts paused
+
+The board auto-played next to the hero index, which forced a choice between
+reading the three columns and watching the snake. It now holds one still frame
+behind a translucent "Play to learn about Shreya" button.
+
+- The animation frame runs only while playing, so an idle board costs nothing
+  and genuinely does not move — verified by hashing the canvas twice 2.5s apart
+  and getting the same value.
+- Attract mode's greedy auto-steer, its 235ms cadence, and the reduced-motion
+  branch that existed purely to freeze it are deleted. There is no ambient
+  motion left for that branch to suppress.
+- The button is translucent and always visible rather than appearing on hover,
+  since a hover-only control can't be found on a touch screen. It fills with
+  the accent on hover and focus, carries a 0.96 press, and under reduced motion
+  keeps the colour change while dropping the travel.
+- The HUD renders only when playing or once a best score exists, so the idle
+  board has one control instead of a Play button in two places.
+- The apple keeps clear of the middle while idle. Behind the frosted button it
+  read as a rendering fault; checked over twelve loads, it never lands there now.
+
+Flow verified: idle still, click starts it and the canvas animates, arrow keys
+steer without scrolling the page, Escape stops it, the overlay returns and the
+board goes still again.
+
+Side effect worth noting: the trait pills no longer appear on their own, since
+they were fed by attract-mode eating. They are now strictly a reward for
+playing, which is what they were designed to be.

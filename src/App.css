@@ -332,6 +332,71 @@
   height: 100%;
 }
 
+/* The board's one control while idle. Translucent so the still snake behind it
+   still reads, and it fills in on hover rather than appearing on it — a button
+   that only exists on hover can't be found on a touch screen. */
+.snake-start {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  /* `translate` centres it, leaving `transform` free for the hover lift. */
+  translate: -50% -50%;
+  padding: 12px 22px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.62);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: var(--shadow-border);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: var(--track-body);
+  white-space: nowrap;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition:
+    background 0.2s var(--ease-out),
+    color 0.2s var(--ease-out),
+    border-color 0.2s var(--ease-out),
+    box-shadow 0.2s var(--ease-out),
+    transform 0.2s var(--ease-out);
+}
+
+.snake-start:hover,
+.snake-start:focus-visible {
+  background: var(--accent);
+  border-color: transparent;
+  color: var(--text-on-accent);
+  box-shadow: var(--shadow-border-hover);
+  transform: translateY(-1px);
+}
+
+.snake-start:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 3px;
+}
+
+.snake-start:active {
+  scale: 0.96;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snake-start {
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  /* The colour change still marks the hover, so no feedback is lost. */
+  .snake-start:hover,
+  .snake-start:focus-visible {
+    transform: none;
+  }
+
+  .snake-start:active {
+    scale: 1;
+  }
+}
+
 .snake-score {
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;

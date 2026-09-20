@@ -3,11 +3,9 @@ import { useEffect, useRef, useState } from "react";
 type Cell = { x: number; y: number };
 type Dir = { x: number; y: number };
 
-/* The snake runs in two modes and they want different cadences. Attract mode is
-   background texture next to the hero copy, so it ambles; play mode wants the
-   classic Nokia responsiveness. One shared speed made the idle loop busy enough
-   to pull the eye off the text. */
-const TICK_ATTRACT_MS = 235;
+/* The board sits still until someone presses play. It used to auto-play beside
+   the hero index, which meant the reader had to choose between the copy and a
+   moving snake — so nothing animates until the game is actually started. */
 const TICK_PLAY_MS = 145;
 /* Classic snake tightens as you grow. Caps out so it stays steerable. */
 const TICK_PLAY_MIN_MS = 95;
@@ -84,6 +82,11 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
     onEatRef.current = onEat;
   }, [onEat]);
 
+  /* Set up by the effect below and driven by the one after it: the animation
+     frame only runs while playing, so an idle board costs nothing and holds
+     one still frame. */
+  const engineRef = useRef<{ start: () => void; stop: () => void } | null>(null);
+
   useEffect(() => {
     const wrap = wrapRef.current;
     const canvas = canvasRef.current;
@@ -131,6 +134,14 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       };
     };
 
+    /* While the board is idle the play button covers the middle of the field,
+       so an apple landing there sits behind frosted glass and reads as a
+       rendering fault. Keep it clear until the game is running. */
+    const underPlayButton = (c: Cell) =>
+      !playingRef.current &&
+      Math.abs(c.x - (cols - 1) / 2) < cols * 0.22 &&
+      Math.abs(c.y - (rows - 1) / 2) < Math.max(1, rows * 0.22);
+
     const placeFood = () => {
       let spot: Cell;
       let guard = 0;
@@ -140,7 +151,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
           y: Math.floor(Math.random() * rows),
         };
         guard += 1;
-      } while (hits(spot, snake) && guard < 200);
+      } while ((hits(spot, snake) || underPlayButton(spot)) && guard < 200);
       food = spot;
     };
 
@@ -179,44 +190,10 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       }
     };
 
-    // Attract mode: greedily steer toward food without eating itself.
-    const autoSteer = () => {
-      const options: Dir[] = [
-        { x: 1, y: 0 },
-        { x: -1, y: 0 },
-        { x: 0, y: 1 },
-        { x: 0, y: -1 },
-      ];
-      const current = snake[0];
-      const scored = options
-        .filter((o) => !(o.x === -dir.x && o.y === -dir.y))
-        .map((o) => {
-          const next = wrapCell({ x: current.x + o.x, y: current.y + o.y });
-          const safe = !hits(next, snake.slice(0, -1));
-          const dx = Math.min(
-            Math.abs(next.x - food.x),
-            cols - Math.abs(next.x - food.x),
-          );
-          const dy = Math.min(
-            Math.abs(next.y - food.y),
-            rows - Math.abs(next.y - food.y),
-          );
-          return { dir: o, safe, dist: dx + dy };
-        })
-        .filter((o) => o.safe)
-        .sort((a, b) => a.dist - b.dist);
-
-      if (scored.length) dir = scored[0].dir;
-    };
-
     const step = () => {
-      if (playingRef.current) {
-        if (queued) {
-          dir = queued;
-          queued = null;
-        }
-      } else {
-        autoSteer();
+      if (queued) {
+        dir = queued;
+        queued = null;
       }
 
       const next = wrapCell({ x: snake[0].x + dir.x, y: snake[0].y + dir.y });
@@ -302,28 +279,13 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       }
     };
 
-    const tickMs = () => {
-      if (!playingRef.current) return TICK_ATTRACT_MS;
-      return Math.max(
-        TICK_PLAY_MIN_MS,
-        TICK_PLAY_MS - scoreValue * TICK_PLAY_RAMP_MS,
-      );
-    };
+    const tickMs = () =>
+      Math.max(TICK_PLAY_MIN_MS, TICK_PLAY_MS - scoreValue * TICK_PLAY_RAMP_MS);
 
     const loop = (t: number) => {
       if (!last) last = t;
       acc += t - last;
       last = t;
-
-      /* Reduced motion: hold the idle loop still rather than crawling behind
-         the copy. Pressing Play still runs the game, because that motion is
-         asked for rather than ambient. */
-      if (reducedMotion.matches && !playingRef.current) {
-        acc = 0;
-        draw();
-        raf = requestAnimationFrame(loop);
-        return;
-      }
 
       const tick = tickMs();
       /* A long stall (backgrounded tab, or crossing a mode change) shouldn't
@@ -368,36 +330,82 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       queued = want;
     };
 
+    const start = () => {
+      if (raf) return;
+      // Fresh clock, so time spent idle isn't paid back as a burst of steps.
+      last = 0;
+      acc = 0;
+      raf = requestAnimationFrame(loop);
+    };
+
+    const stop = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+      // Leave the board readable rather than blank.
+      draw();
+    };
+
+    engineRef.current = { start, stop };
+
     resize();
-    const observer = new ResizeObserver(resize);
+    draw();
+    const observer = new ResizeObserver(() => {
+      resize();
+      // A resize while idle has no loop to repaint it.
+      if (!playingRef.current) draw();
+    });
     observer.observe(wrap);
     window.addEventListener("keydown", onKeyDown, { capture: true });
-    raf = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(raf);
       observer.disconnect();
       window.removeEventListener("keydown", onKeyDown, { capture: true });
+      engineRef.current = null;
     };
   }, []);
 
+  useEffect(() => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    if (playing) engine.start();
+    else engine.stop();
+  }, [playing]);
+
   return (
     <div className="snake" data-playing={playing ? "true" : "false"}>
-      <div className="snake-hud">
-        <span className="snake-score">
-          {score} {best > 0 ? `· best ${best}` : ""}
-        </span>
-        <button
-          className="snake-toggle"
-          type="button"
-          onClick={() => setPlaying((p) => !p)}
-        >
-          {playing ? "Stop" : "Play Snake"}
-        </button>
-      </div>
+      {/* Only while there is something to report. Idle, the board's one control
+          is the button over the field, so a second Play here would just be the
+          same action twice. */}
+      {playing || best > 0 ? (
+        <div className="snake-hud">
+          <span className="snake-score">
+            {score} {best > 0 ? `· best ${best}` : ""}
+          </span>
+          {playing ? (
+            <button
+              className="snake-toggle"
+              type="button"
+              onClick={() => setPlaying(false)}
+            >
+              Stop
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="snake-field" ref={wrapRef}>
         <canvas className="snake-canvas" ref={canvasRef} />
+
+        {playing ? null : (
+          <button
+            className="snake-start"
+            type="button"
+            onClick={() => setPlaying(true)}
+          >
+            Play to learn about Shreya
+          </button>
+        )}
       </div>
     </div>
   );
