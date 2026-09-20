@@ -32,17 +32,31 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
     const REFERENCE = 200;
     let lastWidth = 0;
 
+    let lastCap = 0;
+
+    /** Resolved px ceiling for the wordmark's box, set as `max-height` in CSS. */
+    const capOf = (styles: CSSStyleDeclaration) => parseFloat(styles.maxHeight);
+
     const fit = () => {
       const available = el.clientWidth;
       if (!available) return;
-      const fill =
-        parseFloat(
-          getComputedStyle(el).getPropertyValue("--wordmark-fill"),
-        ) || 1;
+      const styles = getComputedStyle(el);
+      const fill = parseFloat(styles.getPropertyValue("--wordmark-fill")) || 1;
+
       el.style.fontSize = `${REFERENCE}px`;
       const measured = inner.offsetWidth;
       if (!measured) return;
-      el.style.fontSize = `${(REFERENCE * available * fill) / measured}px`;
+      const byWidth = (REFERENCE * available * fill) / measured;
+
+      /* Width alone made the wordmark tall enough to push the snake band and
+         the index out of the viewport on a short window. The cap and the
+         line-height ratio both come from CSS, measured at the reference size,
+         so neither value is duplicated here. */
+      const cap = capOf(styles);
+      const ratio = inner.offsetHeight / REFERENCE;
+      const byHeight = cap > 0 && ratio > 0 ? cap / ratio : Infinity;
+
+      el.style.fontSize = `${Math.min(byWidth, byHeight)}px`;
     };
 
     fit();
@@ -50,13 +64,21 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
 
     const observer = new ResizeObserver(([entry]) => {
       const width = entry.contentRect.width;
-      if (width === lastWidth) return;
+      // The cap is viewport-relative, so a height-only resize has to re-fit too.
+      const cap = capOf(getComputedStyle(el));
+      if (width === lastWidth && cap === lastCap) return;
       lastWidth = width;
+      lastCap = cap;
       fit();
     });
     observer.observe(el.parentElement ?? el);
+    // ResizeObserver on the parent misses a viewport that only changed height.
+    window.addEventListener("resize", fit);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", fit);
+    };
   }, []);
 
   return (

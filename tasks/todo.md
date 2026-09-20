@@ -619,3 +619,44 @@ be read out for no reason. Matches how the pixel fields are already handled.
 Verified at 1440 and 390: the removed copy is gone, story gaps are even
 (48px / 32px), the mug's leading edge sits on the story's, and About is 2.66vp,
 down from 2.86.
+
+## Hero: wordmark and snake both in the viewport
+
+The hero measured 1205px against a 900px window — 305px over — so the name and
+the game were never on screen at once. Two independent causes:
+
+1. **The snake band had no definite height.** Its content is a canvas sized
+   with `height: 100%`, and a percentage height cannot resolve against an
+   auto-height parent, so the band fell back to its content and settled at
+   699px, dictating the hero's size. It now takes `clamp(150px, 32vh, 380px)`
+   and still grows into whatever the index and wordmark leave over, with a
+   150px floor so the game stays playable.
+2. **The wordmark was sized from width alone.** At 1440 it came out 189px
+   regardless of viewport height — 188px of box on a 700px window. The fit
+   script now also honours a ceiling, and reads both the cap (`max-height`) and
+   the line-height ratio from CSS rather than repeating either number in JS. It
+   also re-fits on a height-only resize, which the ResizeObserver on the parent
+   had been ignoring.
+
+Measured hero vs viewport, with both elements fully in view:
+
+| Viewport | Hero | Both visible |
+| --- | --- | --- |
+| 1920x1080 | 1080 | yes |
+| 1440x900 | 900 | yes |
+| 1440x700 | 700 | yes |
+| 1280x800 | 800 | yes |
+| 1024x768 | 768 | yes |
+| 768x1024 | 1024 | yes |
+| 430x932 | 932 | yes |
+| 390x844 | 844 | yes |
+
+The tighter band applies from 820px, the width where the index collapses to one
+tall column, rather than from the phone breakpoint — that is what brought the
+iPad in.
+
+Still overflowing, and not fixable by spacing: 375x812 by 25px, 375x667 by
+158px, and landscape phones. On those the stacked hero index alone is 550px,
+against a 667px screen. Closing it means trimming the index on small phones —
+its experience and case lists repeat sections further down — which is a content
+call, so it is left for Shreya.
