@@ -72,6 +72,10 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
   /* Score of the game that just ended, so the glass can say how it went.
      Null until a game has been lost; cleared again when the next one starts. */
   const [ended, setEnded] = useState<number | null>(null);
+  /* Touch-first device: the pane says swipe, not arrow keys. */
+  const [coarse] = useState(
+    () => window.matchMedia("(pointer: coarse)").matches,
+  );
   const playingRef = useRef(false);
 
   useEffect(() => {
@@ -380,6 +384,33 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       queued = want;
     };
 
+    /* Swipe to steer: the direction of a finger's travel, once it has moved
+       far enough to mean it. Same rules as the keys — no reversing. */
+    let swipeStart: { x: number; y: number } | null = null;
+    const onPointerDown = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") return;
+      swipeStart = { x: e.clientX, y: e.clientY };
+    };
+    const onPointerMove = (e: PointerEvent) => {
+      if (!swipeStart || !playingRef.current) return;
+      const dx = e.clientX - swipeStart.x;
+      const dy = e.clientY - swipeStart.y;
+      if (Math.hypot(dx, dy) < 24) return;
+      const want: Dir =
+        Math.abs(dx) > Math.abs(dy)
+          ? { x: Math.sign(dx), y: 0 }
+          : { x: 0, y: Math.sign(dy) };
+      if (!(want.x === -dir.x && want.y === -dir.y)) queued = want;
+      swipeStart = { x: e.clientX, y: e.clientY };
+    };
+    const onPointerUp = () => {
+      swipeStart = null;
+    };
+    wrap.addEventListener("pointerdown", onPointerDown);
+    wrap.addEventListener("pointermove", onPointerMove);
+    wrap.addEventListener("pointerup", onPointerUp);
+    wrap.addEventListener("pointercancel", onPointerUp);
+
     resize();
     const observer = new ResizeObserver(resize);
     observer.observe(wrap);
@@ -390,6 +421,10 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       cancelAnimationFrame(raf);
       observer.disconnect();
       window.removeEventListener("keydown", onKeyDown, { capture: true });
+      wrap.removeEventListener("pointerdown", onPointerDown);
+      wrap.removeEventListener("pointermove", onPointerMove);
+      wrap.removeEventListener("pointerup", onPointerUp);
+      wrap.removeEventListener("pointercancel", onPointerUp);
     };
   }, []);
 
@@ -439,16 +474,26 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
           }}
         >
           <span className="snake-glass-card">
-            {ended !== null ? (
-              <span className="snake-glass-meta">
-                Game over · {ended} {ended === 1 ? "apple" : "apples"}
-                {best > ended ? ` · best ${best}` : ""}
+            <span className="snake-glass-text">
+              <span className="snake-glass-title">
+                {coarse ? "Tap" : "Click"} anywhere to play{best > 0 ? " again" : ""}
               </span>
-            ) : best > 0 ? (
-              <span className="snake-glass-meta">Best {best}</span>
-            ) : null}
-            <span className="snake-glass-title">
-              Click anywhere to play{best > 0 ? " again" : ""}
+              <span className="snake-glass-meta">
+                {ended !== null
+                  ? `Game over · ${ended} ${ended === 1 ? "apple" : "apples"}${
+                      best > ended ? ` · best ${best}` : ""
+                    }`
+                  : best > 0
+                    ? `Best ${best} · ${coarse ? "swipe" : "arrow keys"} to steer`
+                    : coarse
+                      ? "Swipe to steer"
+                      : "Arrow keys to steer"}
+              </span>
+            </span>
+            <span className="snake-glass-play" aria-hidden="true">
+              <svg viewBox="0 0 16 16" width="14" height="14">
+                <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
+              </svg>
             </span>
           </span>
         </button>
