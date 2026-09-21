@@ -949,3 +949,23 @@ the CTA's uppercase as the one display moment, the snake's pills.
 
 Lesson: eyebrow + heading + lede "for structural parity" is a template, not
 a design. If a label only exists to introduce the heading, it's filler.
+
+## Hero rework, glass, About cards (Sep 21 pm)
+
+- [x] Glass over the snake: aurora (snake palette, gathered centre) + frosted
+      pane with "Click anywhere to play"; lifts on click, returns on stop/crash
+      with the score. Crash in play = game over (was a silent reset). Rewards
+      only while steering. Yellow 7% hover wash removed.
+- [x] Reveal root extends 25% below the fold; --section-pad 48-72px under 900px.
+      (880px window: two-row strip + 90px pads sat hidden = "void" screenshot.)
+- [x] Hero: wordmark removed (name back in nav). Statement h1 at 32-44px over
+      one facts line (Now / Before / Case studies). Band = flex 1 1 0, children
+      absolute, edge to edge; hero = exactly 1vp at 1440x900, 1440x700,
+      1024x768, 390x844.
+- [x] Glass card compact; logos rounded 4px, no ring; Miro icon cropped to tile.
+- [x] Fun facts: spread of three tilted cards, hover trues up.
+
+Lessons:
+- A flex child with a canvas that sets its own CSS height will inflate the
+  parent. Absolutely position canvases inside sized bands.
+- Test reveals with a wheel flick at ~880px, not only a slow walk.
