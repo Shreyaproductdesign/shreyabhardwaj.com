@@ -51,7 +51,14 @@
   --shadow-rgb: 23, 23, 23;
 
   /* One deceleration curve for the whole site, so every surface settles alike. */
-  --ease-out: cubic-bezier(0.32, 0.72, 0, 1);
+  /* One curve for everything that moves, at three scales. An expo-out: fast
+     off the mark, long settle, so hovers feel immediate and reveals feel
+     unhurried without a second curve. Before this the site ran two curves and
+     nine durations, which is most of why it felt unfinished. */
+  --ease-out: cubic-bezier(0.16, 1, 0.1, 1);
+  --dur-fast: 150ms;   /* high-frequency: link colour, focus, toggles */
+  --dur-base: 350ms;   /* hover lift, state changes, fills */
+  --dur-reveal: 1000ms; /* content arriving as you reach it */
 
   /* Depth on cards and containers comes from these rather than a 1px border,
      so it adapts to whatever sits behind it. Three layers: a ring standing in

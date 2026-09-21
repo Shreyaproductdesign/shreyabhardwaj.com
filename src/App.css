@@ -84,7 +84,7 @@
   font-weight: 600;
   letter-spacing: var(--track-body);
   color: var(--text-secondary);
-  transition: color 0.2s var(--ease-out);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .glimpse-more:hover {
@@ -92,7 +92,7 @@
 }
 
 .glimpse-more-arrow {
-  transition: transform 0.2s var(--ease-out);
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 .glimpse-more:hover .glimpse-more-arrow {
@@ -190,7 +190,7 @@
   letter-spacing: -0.01em;
   color: var(--text-secondary);
   white-space: nowrap;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
 .nav-pill-link:hover {
@@ -240,8 +240,8 @@
   list-style: none;
   pointer-events: none;
   transition:
-    opacity 0.45s ease,
-    visibility 0.45s ease;
+    opacity var(--dur-fast) var(--ease-out),
+    visibility var(--dur-base) var(--ease-out);
 }
 
 .hero-trait {
@@ -345,7 +345,7 @@
   border-radius: 18px;
   background: transparent;
   cursor: pointer;
-  transition: background 0.2s var(--ease-out);
+  transition: background var(--dur-fast) var(--ease-out);
 }
 
 /* The cue that the area is live, across the whole of it. */
@@ -379,11 +379,11 @@
   white-space: nowrap;
   color: var(--text-primary);
   transition:
-    background 0.2s var(--ease-out),
-    color 0.2s var(--ease-out),
-    border-color 0.2s var(--ease-out),
-    box-shadow 0.2s var(--ease-out),
-    transform 0.2s var(--ease-out);
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
 }
 
 /* A triangle's geometric centre is left of its visual one, so it needs a nudge. */
@@ -407,7 +407,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .snake-start-label {
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
   }
 
   /* The fill still marks the hover, so no feedback is lost with the travel. */
@@ -432,7 +432,7 @@
   background: var(--accent);
   color: var(--text-on-accent);
   font: inherit;
-  transition: filter 0.2s ease, background 0.2s ease, color 0.2s ease;
+  transition: filter var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
 .snake-toggle:hover {
@@ -495,7 +495,7 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--text-primary);
-  transition: color 0.2s ease;
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .hero-index-label:hover {
@@ -521,7 +521,7 @@
   text-decoration-color: var(--border);
   text-underline-offset: 0.18em;
   text-decoration-thickness: 1px;
-  transition: text-decoration-color 0.2s ease, color 0.2s ease;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
 .hero-index-link:hover {
@@ -771,8 +771,8 @@
      edge and adapts to whatever the card sits on. */
   box-shadow: var(--shadow-border);
   transition:
-    transform 0.15s var(--ease-out),
-    box-shadow 0.15s var(--ease-out);
+    transform var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
 /* Only the cards that go somewhere respond to the cursor. */
@@ -850,7 +850,7 @@
   /* Outline rather than border: it adds no width and hugs the radius. */
   outline: 1px solid var(--image-outline);
   outline-offset: -1px;
-  transition: transform 0.4s var(--ease-out);
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 /* Placeholder for the cards with no artwork yet. */
@@ -1083,7 +1083,7 @@
   letter-spacing: var(--track-body);
   white-space: nowrap;
   color: var(--text-primary);
-  transition: color 0.25s var(--ease-out);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 /* Nothing to open yet, so it reads as a note instead of an invitation. */
@@ -1093,7 +1093,7 @@
 }
 
 .case-open-arrow {
-  transition: transform 0.3s var(--ease-out);
+  transition: transform var(--dur-base) var(--ease-out);
 }
 
 .case-card.is-open:has(a:hover) .case-open-arrow {
@@ -1443,8 +1443,8 @@
   transition:
     opacity 480ms var(--ease-out),
     transform 480ms var(--ease-out),
-    background 0.2s ease,
-    border-color 0.2s ease;
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
 
@@ -1513,8 +1513,8 @@
   border: 1px solid var(--border-subtle);
   box-shadow: 0 16px 40px rgba(var(--shadow-rgb), 0.08);
   transition:
-    transform 0.35s var(--ease-out),
-    opacity 0.3s ease;
+    transform var(--dur-base) var(--ease-out),
+    opacity var(--dur-fast) var(--ease-out);
 }
 
 .about-fact-card.is-dragging { transition: none; }
@@ -1603,7 +1603,7 @@
   inset: 0;
   border-radius: 50%;
   background: var(--border);
-  transition: transform 0.2s ease, background 0.2s ease;
+  transition: transform var(--dur-base) var(--ease-out), background var(--dur-fast) var(--ease-out);
 }
 
 /* The dot stays 8px in the layout; the target it answers to is 24px. */
@@ -1994,7 +1994,7 @@
 
 .cta-bar-links a {
   color: inherit;
-  transition: opacity 0.2s ease;
+  transition: opacity var(--dur-fast) var(--ease-out);
 }
 
 .cta-bar-links a:hover {
