@@ -254,6 +254,10 @@
 .hero {
   position: relative;
   isolation: isolate;
+  /* A full viewport: statement, facts, then the band takes what's left and
+     the foot closes it. Nothing below peeks in. */
+  min-height: 100vh;
+  min-height: 100dvh;
   margin-top: 0;
   padding: clamp(84px, 11vh, 116px) var(--page-pad) 0;
   display: flex;
@@ -269,10 +273,10 @@
 .hero-world {
   position: relative;
   z-index: 0;
-  flex: 0 0 auto;
-  /* A set height rather than the rest of the viewport: on a tall screen the
-     rest was 550px of sparse board and the hero read as a colour field. */
-  height: clamp(320px, 48vh, 500px);
+  /* Takes what the statement, facts and foot leave. The aurora blobs are
+     sized in px, so a tall band is more white around them, not more colour. */
+  flex: 1 1 0;
+  min-height: 320px;
   margin: clamp(28px, 5vh, 56px) calc(var(--page-pad) * -1) 0;
   overflow: hidden;
 }
@@ -372,9 +376,9 @@
      which drive `transform`. */
   translate: -50% -50%;
   padding: 6px 10px;
-  /* Square and hairline-ringed: the same object as the caption below the
-     field and the edge on every photo, so a reward doesn't arrive in a
-     different visual language from the page it lands on. */
+  /* Hairline-ringed with a small corner: the same object as the tags on the
+     page, so a reward doesn't arrive in a different visual language. */
+  border-radius: var(--radius-sm);
   background: var(--surface);
   box-shadow: var(--shadow-border);
   font-family: var(--font-sans);
@@ -584,7 +588,7 @@
   flex-direction: column;
   gap: 3px;
   padding: 14px 20px;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   text-align: start;
   /* Sheer: little white in the fill, so the pane is mostly the colour
      behind it made smooth. */
@@ -670,7 +674,7 @@
 @media (max-width: 640px) {
   .snake-glass-card {
     padding: 12px 16px;
-    border-radius: 14px;
+    border-radius: var(--radius-md);
   }
 }
 
@@ -745,7 +749,9 @@
 /* `mark`'s default is a browser yellow that ignores the palette, so the swipe
    is redrawn with the site's accent. */
 .hero-index-place {
-  padding: 0.16em 0;
+  padding: 0.16em 0.1em;
+  margin: 0 -0.04em;
+  border-radius: var(--radius-sm);
   background: var(--accent);
   color: var(--text-primary);
   font-weight: var(--weight-title);
@@ -787,7 +793,7 @@
 .hero-index-current {
   margin-inline-start: 2px;
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-border);
   font-size: 0.6875rem;
   font-weight: var(--weight-ui);
@@ -886,6 +892,7 @@
   width: 100%;
   height: 100%;
   min-height: 180px;
+  border-radius: var(--radius-lg);
   display: grid;
   place-content: center;
   gap: 6px;
@@ -997,7 +1004,7 @@
   display: inline-block;
   min-width: 2.2em;
   padding: 1px 5px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
   font-size: var(--text-label);
   font-variant-numeric: tabular-nums;
   line-height: var(--lh-flat);
@@ -1044,14 +1051,15 @@
   border-bottom: 0;
 }
 
-/* Square, full width, edged with the same hairline the photos carry. Grows
-   to fill the row; the image is absolute so its size comes from the frame,
-   never the other way round. */
+/* Full width, rounded like every frame on the page, edged with the same
+   hairline the photos carry. Grows to fill the row; the image is absolute so
+   its size comes from the frame, never the other way round. */
 .case-media {
   position: relative;
   flex: 1 1 0;
   min-height: 240px;
   overflow: hidden;
+  border-radius: var(--radius-lg);
   background: var(--surface-sunken);
 }
 
@@ -1062,6 +1070,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: inherit;
   outline: 1px solid var(--image-outline);
   outline-offset: -1px;
   transition: transform var(--dur-base) var(--ease-out);
@@ -1193,6 +1202,7 @@
 .case-stat-value {
   padding: 0.06em 0.2em;
   margin-inline: -0.06em;
+  border-radius: var(--radius-sm);
   background: var(--accent);
   font-family: var(--font-display);
   font-size: var(--text-display);
@@ -1582,7 +1592,7 @@
   --tint: oklch(0.93 0.05 235);
   min-height: 11rem;
   padding: clamp(20px, 2.4vw, 28px);
-  border-radius: 18px;
+  border-radius: var(--radius-lg);
   text-align: start;
   background: var(--tint);
   transform: translateY(var(--drop)) rotate(var(--tilt));
@@ -1690,6 +1700,7 @@
   width: min(72vw, 760px);
   aspect-ratio: 16 / 9;
   overflow: hidden;
+  border-radius: var(--radius-lg);
   background: var(--surface-sunken);
   outline: 1px solid var(--image-outline);
   outline-offset: -1px;

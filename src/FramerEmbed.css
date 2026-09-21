@@ -64,6 +64,7 @@
   align-items: center;
   gap: 8px;
   padding: 9px 14px 9px 12px;
+  border-radius: var(--radius-sm);
   font-family: var(--font-sans);
   font-size: var(--text-caption);
   font-weight: var(--weight-ui);
