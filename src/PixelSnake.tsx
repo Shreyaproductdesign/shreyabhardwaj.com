@@ -8,6 +8,9 @@ type Dir = { x: number; y: number };
    Nokia responsiveness. Either way the field is one big button, so a reader
    can take the controls whenever they like. */
 const TICK_ATTRACT_MS = 235;
+/* The attract snake starts over once it's this long. Left alone it grew into
+   a thirty-segment worm wrapped round both edges, which read as broken. */
+const ATTRACT_MAX_LENGTH = 12;
 const TICK_PLAY_MS = 145;
 /* Classic snake tightens as you grow. Caps out so it stays steerable. */
 const TICK_PLAY_MIN_MS = 95;
@@ -80,6 +83,9 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
   );
   const playingRef = useRef(false);
   const glassRef = useRef<HTMLButtonElement>(null);
+  /* Lets the pane start a fresh game. Clicking used to hand over the attract
+     snake mid-run — whatever length, score and position it had. */
+  const resetRef = useRef<() => void>(() => {});
 
   /* The pane follows the pointer across the field, clamped so it never runs
      past the edge, and drifts back to centre when the pointer leaves. Set as
@@ -184,6 +190,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       setScore(0);
       placeFood();
     };
+    resetRef.current = reset;
 
     const resize = () => {
       const width = wrap.clientWidth;
@@ -265,6 +272,10 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       snake.unshift(next);
 
       if (next.x === food.x && next.y === food.y) {
+        if (!playingRef.current && snake.length >= ATTRACT_MAX_LENGTH) {
+          reset();
+          return;
+        }
         scoreValue += 1;
         setScore(scoreValue);
         /* Rewards are for the person steering. The attract snake eats too, but
@@ -496,6 +507,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
           aria-hidden={playing}
           tabIndex={playing ? -1 : 0}
           onClick={() => {
+            resetRef.current();
             setEnded(null);
             setPlaying(true);
           }}
