@@ -838,7 +838,7 @@
 }
 
 .case-head,
-.case-grid {
+.case-list {
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
@@ -848,112 +848,67 @@
   margin-bottom: clamp(32px, 5vh, 56px);
 }
 
-.case-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 2.4vw, 32px);
+.case-list,
+.case-pair-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.case-card {
-  --case-radius: 20px;
-  /* Anchors the title link, which is stretched over the whole card below. */
+.case-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* A row is media over a line of facts, closing on a hairline. The padding is
+   the row's breath; the first row starts flush under the header and the last
+   hands over to the section hairline rather than doubling it. */
+.case-row {
   position: relative;
   display: flex;
   flex-direction: column;
+  gap: var(--space-6);
+  padding: var(--space-12) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.case-list > .case-row:first-child {
+  padding-top: 0;
+}
+
+.case-list > :last-child {
+  border-bottom: 0;
+}
+
+/* Square, full width, edged with the same hairline the photos carry. */
+.case-media {
   overflow: hidden;
-  border-radius: var(--case-radius);
-  background: var(--surface);
-  /* Depth is a shadow, not a border: the ring layer stands in for the 1px
-     edge and adapts to whatever the card sits on. */
-  box-shadow: var(--shadow-border);
-  transition:
-    transform var(--dur-base) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out);
-}
-
-/* Only the cards that go somewhere respond to the cursor. */
-.case-card.is-open:has(a:hover),
-.case-card.is-open:has(a:focus-visible) {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-border-hover), 0 18px 36px rgba(var(--shadow-rgb), 0.10);
-}
-
-/* Runs the full grid width with its copy beside the media. */
-.case-card.is-wide {
-  grid-column: 1 / -1;
-  flex-direction: row-reverse;
-}
-
-.case-card.is-wide .case-card-media {
-  flex: 1 1 50%;
-  /* Height comes from the copy column beside it, not a fixed ratio. */
-  aspect-ratio: auto;
-  min-height: 100%;
-}
-
-.case-card.is-wide .case-card-body {
-  flex: 1 1 50%;
-  padding: clamp(var(--space-6), 2.4vw, var(--space-8));
-}
-
-/* Deliberately the same step as the paired cards. At --text-display these ran
-   to 50px and wrapped to three lines in a half-width column, and with three of
-   them stacked nothing led. Width and the side-by-side split carry the
-   emphasis instead. */
-.case-card.is-wide .case-title {
-  font-size: var(--text-title);
-  line-height: var(--lh-title);
-  letter-spacing: var(--track-title);
-}
-
-/* Media bleeds to the card edge, so its flush corners take the card's radius
-   (outer = inner + 0 padding) and the image outline hugs them. */
-.case-card-media {
-  overflow: hidden;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 2.4 / 1;
   background: var(--surface-sunken);
-  border-start-start-radius: var(--case-radius);
-  border-start-end-radius: var(--case-radius);
 }
 
-/* Beside the copy rather than above it, so its divider is vertical. */
-.case-card.is-wide .case-card-media.is-empty {
-  border-inline-end: 1px solid var(--border-subtle);
-}
-
-/* Artwork earns half the card; a placeholder does not. Giving it the same
-   share left a third of the section as blank grey. */
-.case-card.is-wide:has(.case-card-media.is-empty) .case-card-media {
-  flex: 0 1 34%;
-}
-
-.case-card.is-wide:has(.case-card-media.is-empty) .case-card-body {
-  flex: 1 1 66%;
-}
-
-.case-card.is-wide .case-card-media {
-  border-start-start-radius: 0;
-  border-start-end-radius: var(--case-radius);
-  border-end-end-radius: var(--case-radius);
-}
-
-.case-card-media img {
+.case-media img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: inherit;
-  /* Outline rather than border: it adds no width and hugs the radius. */
   outline: 1px solid var(--image-outline);
   outline-offset: -1px;
   transition: transform var(--dur-base) var(--ease-out);
 }
 
-/* Placeholder for the cards with no artwork yet. */
-.case-card-media.is-empty {
+/* The frame clips, so the image drifts in behind a fixed edge. */
+.case-row.is-open:has(a:hover) .case-media img,
+.case-row.is-open:has(a:focus-visible) .case-media img {
+  transform: scale(1.02);
+}
+
+.case-media.is-empty {
   display: grid;
   place-items: center;
-  gap: 8px;
+  gap: var(--space-2);
+  outline: 1px solid var(--image-outline);
+  outline-offset: -1px;
   background:
     linear-gradient(145deg, rgba(var(--shadow-rgb), 0.04), transparent 55%),
     var(--surface-sunken);
@@ -972,307 +927,227 @@
   font-family: var(--font-sans);
   font-size: var(--text-label);
   font-weight: var(--weight-ui);
-  letter-spacing: 0.14em;
-  text-transform: none;
+  letter-spacing: var(--track-body);
   color: var(--text-muted);
 }
 
-/* The frame clips, so the image drifts in behind a fixed edge. */
-.case-card.is-open:has(a:hover) .case-card-media img {
-  transform: scale(1.04);
-}
-
-/* Every child here is a group, and the 24px between them is 3x the 8px inside
-   one, so the eye can tell where each ends. Before this every gap was 12px and
-   the card read as one undifferentiated stack. */
-.case-card-body {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: flex-start;
+/* The facts, as columns: index, title and company, result, topics, the way
+   in. One 14px voice; the title alone steps up. */
+.case-meta {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) auto;
   gap: var(--space-6);
-  padding: var(--space-6);
-}
-
-.case-identity {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.case-headline {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-/* Pushed to the bottom so the tags and the prompt line up across a row of
-   cards whose titles run to different lengths. The body's 24px gap already
-   separates it, so no extra padding here. */
-.case-card-foot {
-  width: 100%;
-  margin-top: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-}
-
-.case-brand {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  min-width: 0;
-}
-
-.case-logo {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  object-fit: cover;
-  flex-shrink: 0;
-}
-
-.case-company {
+  align-items: start;
   font-family: var(--font-sans);
   font-size: var(--text-caption);
   font-weight: var(--weight-ui);
-  line-height: var(--lh-flat);
-  letter-spacing: 0.01em;
-  color: var(--text-primary);
+  line-height: var(--lh-body);
+  letter-spacing: var(--track-body);
+  color: var(--text-muted);
+}
+
+.case-index {
+  padding-top: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.case-ident {
+  min-width: 0;
 }
 
 .case-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--text-title);
+  font-size: var(--text-lead);
   font-weight: var(--weight-title);
-  letter-spacing: var(--track-title);
   line-height: var(--lh-title);
+  letter-spacing: var(--track-title);
   color: var(--text-primary);
   text-wrap: balance;
 }
 
 .case-title a {
   color: inherit;
+  text-decoration: none;
 }
 
-/* Stretches the title's link across the card so the whole card is the hit
-   area. The card is the positioning context. */
+/* Stretches the title's link across the row so the whole row is the hit
+   area. The row is the positioning context. */
 .case-title a::after {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: var(--case-radius);
 }
 
-/* The ring belongs on the card, not on the inline title. By default the
-   browser drew it around the title text, which wrapped across two lines and
-   read as a broken box rather than "this card is selected". Moving it to the
-   stretched overlay traces the card, and putting it on the link itself means
-   it does not depend on :has() being supported.
-
-   Inset, because the card clips its overflow for the media — an outside ring
-   would be cut off. */
+/* The ring belongs on the row, not around two wrapped lines of title. */
 .case-title a:focus-visible {
   outline: none;
 }
 
 .case-title a:focus-visible::after {
   outline: 2px solid var(--text-primary);
-  outline-offset: -2px;
+  outline-offset: 6px;
 }
 
-.case-desc {
-  margin: 0;
-  /* Inside the measure the typography skill asks for, at both card widths. */
-  max-width: 52ch;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--text-secondary);
-  text-wrap: pretty;
-}
-
-.case-tags {
+.case-sub {
+  margin: var(--space-1) 0 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 0 0.5em;
 }
 
-.case-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
+.case-company {
   color: var(--text-secondary);
-  background: var(--surface-sunken);
-  border: 1px solid var(--border-subtle);
-  backdrop-filter: blur(14px) saturate(1.2);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-/* Its own line under the name. Sharing one with the status chip made the chip
-   wrap under the company at narrow widths, which looked accidental. */
-.case-sector {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 400;
-  line-height: var(--lh-body);
-  color: var(--text-muted);
-  text-wrap: pretty;
+.case-sector::before {
+  content: "·";
+  margin-inline-end: 0.5em;
 }
 
-/* Stacked, and with no rule above it: the 24px between groups already marks
-   the break, so the separator was doing a job space had done.
-
-   Values are sometimes a number and sometimes a phrase, so this is a stacked
-   value-and-label pair rather than a giant numeral. */
 .case-stat {
-  width: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: 2px;
 }
 
-/* A step below the title rather than level with it. At the same 28px the two
-   competed and neither led. */
 .case-stat-value {
-  font-family: var(--font-display);
-  font-size: var(--text-lead);
-  font-weight: var(--weight-display);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--track-title);
   color: var(--text-primary);
-  /* The figures don't change, but it keeps them evenly set. */
   font-variant-numeric: tabular-nums;
 }
 
-.case-stat-label {
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  line-height: var(--lh-body);
-  color: var(--text-muted);
+.case-tags {
+  margin: 0;
   text-wrap: pretty;
 }
 
 .case-open {
   margin: 0;
+  justify-self: end;
   display: inline-flex;
-  align-items: center;
-  gap: 0.45em;
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-ui);
-  letter-spacing: var(--track-body);
+  align-items: baseline;
+  gap: 0.4em;
   white-space: nowrap;
   color: var(--text-primary);
-  transition: color var(--dur-fast) var(--ease-out);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
+}
+
+.case-row.is-open:has(a:hover) .case-open,
+.case-row.is-open:has(a:focus-visible) .case-open {
+  text-decoration-color: currentColor;
 }
 
 /* Nothing to open yet, so it reads as a note instead of an invitation. */
-.case-card:not(.is-open) .case-open {
-  font-weight: 500;
+.case-row:not(.is-open) .case-open {
   color: var(--text-faint);
 }
 
 .case-open-arrow {
+  display: inline-block;
   transition: transform var(--dur-base) var(--ease-out);
 }
 
-.case-card.is-open:has(a:hover) .case-open-arrow {
+.case-row.is-open:has(a:hover) .case-open-arrow {
   transform: translateX(4px);
 }
 
-.case-status {
-  display: inline-flex;
-  align-items: center;
-  margin-inline-start: auto;
-  white-space: nowrap;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  font-weight: var(--weight-ui);
-  line-height: var(--lh-flat);
-  letter-spacing: 0.08em;
-  text-transform: none;
-  color: var(--text-on-accent);
-  background: var(--accent);
-  border: 1px solid rgba(255, 208, 47, 0.9);
-  box-shadow: 0 0 0 1px rgba(255, 208, 47, 0.2);
+/* The two self-initiated projects share a row: media side by side, and the
+   facts stacked beneath each, since five columns won't fit in half the width. */
+.case-pair {
+  padding: var(--space-12) 0;
 }
 
-.case-status-live {
-  background: var(--status-live);
-  border-color: rgba(54, 158, 78, 0.55);
-  box-shadow: 0 0 0 1px rgba(54, 158, 78, 0.18);
+.case-pair-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-8);
+}
+
+.case-row.is-compact {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.case-row.is-compact .case-media {
+  aspect-ratio: 16 / 10;
+}
+
+.case-row.is-compact .case-meta {
+  grid-template-columns: 3rem minmax(0, 1fr);
+  grid-template-areas:
+    "idx ident"
+    "idx stat"
+    "idx tags"
+    "idx open";
+  gap: var(--space-3) var(--space-6);
+}
+
+.case-row.is-compact .case-index { grid-area: idx; }
+.case-row.is-compact .case-ident { grid-area: ident; }
+.case-row.is-compact .case-stat { grid-area: stat; }
+.case-row.is-compact .case-tags { grid-area: tags; }
+.case-row.is-compact .case-open { grid-area: open; justify-self: start; }
+
+.case-stat.is-blank {
+  display: none;
 }
 
 @media (max-width: 900px) {
-  .case-grid {
+  /* Five columns of facts don't fit; every row stacks like the compact ones. */
+  .case-meta {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    grid-template-areas:
+      "idx ident"
+      "idx stat"
+      "idx tags"
+      "idx open";
+    gap: var(--space-3) var(--space-6);
+  }
+
+  .case-index { grid-area: idx; }
+  .case-ident { grid-area: ident; }
+  .case-stat { grid-area: stat; }
+  .case-tags { grid-area: tags; }
+  .case-open { grid-area: open; justify-self: start; }
+
+  .case-pair-list {
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-12);
   }
 
-  /* The wide cards lose their side-by-side split and stack like the rest. */
-  .case-card.is-wide {
-    flex-direction: column;
+  .case-row.is-compact + .case-row.is-compact {
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--border-subtle);
   }
+}
 
-  .case-card.is-wide .case-card-media {
-    flex: 1 1 auto;
+@media (max-width: 640px) {
+  /* 2.4:1 leaves a 146px strip on a phone. */
+  .case-media {
     aspect-ratio: 16 / 10;
-    min-height: 0;
   }
 
-  .case-card.is-wide .case-card-body {
-    flex: 1 1 auto;
-  }
-
-  /* Stacked, so the placeholder's divider turns horizontal and it goes back
-     to a full-width band. */
-  .case-card.is-wide .case-card-media.is-empty {
-    border-inline-end: 0;
-    border-block-end: 1px solid var(--border-subtle);
-  }
-
-  .case-card.is-wide:has(.case-card-media.is-empty) .case-card-media,
-  .case-card.is-wide:has(.case-card-media.is-empty) .case-card-body {
-    flex: 1 1 auto;
-  }
-
-  .case-card.is-wide .case-title {
-    font-size: var(--text-title);
-    line-height: var(--lh-title);
-    letter-spacing: var(--track-title);
+  .case-row {
+    padding: var(--space-8) 0;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .case-card,
-  .case-card-media img,
-  .case-open-arrow {
+  .case-media img,
+  .case-open-arrow,
+  .case-open {
     transition: none;
   }
 
-  /* Keep the feedback, drop the travel: the shadow still deepens on hover, so
-     the state change never depends on motion alone. */
-  .case-card.is-open:has(a:hover),
-  .case-card.is-open:has(a:focus-visible),
-  .case-card.is-open:has(a:hover) .case-card-media img,
-  .case-card.is-open:has(a:hover) .case-open-arrow {
+  /* The underline still marks the hover, so no feedback rests on motion. */
+  .case-row.is-open:has(a:hover) .case-media img,
+  .case-row.is-open:has(a:focus-visible) .case-media img,
+  .case-row.is-open:has(a:hover) .case-open-arrow {
     transform: none;
   }
 }
