@@ -1355,8 +1355,8 @@
 
 .about-greeting-word.is-ready {
   transition:
-    opacity 650ms var(--ease-out),
-    transform 650ms var(--ease-out);
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out);
 }
 
 .about-greeting-word.is-active {
@@ -1479,8 +1479,8 @@
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
-    opacity 480ms var(--ease-out),
-    transform 480ms var(--ease-out),
+    opacity var(--dur-reveal) var(--ease-out),
+    transform var(--dur-reveal) var(--ease-out),
     background var(--dur-fast) var(--ease-out),
     border-color var(--dur-fast) var(--ease-out);
   transition-delay: calc(var(--i, 0) * 80ms);

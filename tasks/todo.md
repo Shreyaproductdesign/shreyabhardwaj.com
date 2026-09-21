@@ -835,3 +835,71 @@ wordmark and snake don't share the viewport.
 | 1024x768 | 768 / 768 | yes |
 | 375x812 | 812 / 812 | yes |
 | 375x667 | 722 / 667 | no |
+
+## Interaction pass: motion system, reveals, rhythm, snake, nav
+
+Shreya's brief: the site reads as a first draft next to leoparpeix.com; the
+snake UI is unpolished and forced; sections don't flow. Measured both sites
+before changing anything.
+
+**The reference, measured:** one easing everywhere — `cubic-bezier(0.16, 1,
+0.1, 1)` — at two scales (0.35s micro, 1–1.4s reveals); content that arrives as
+you reach it; a strict editorial grid with hairlines and small type; the
+interactive bee introduced by a tiny "(Click to feed the bee)" caption.
+
+**Ours, measured:** two easings and nine durations scattered through the CSS;
+zero scroll reveals — every section simply already there; a different padding
+pair at every boundary (99/0, 72/81, 90/90, 0/0, 126/72, 108/28); the snake
+announced by a large pill covering the field.
+
+What changed, in dependency order:
+
+1. **Motion tokens.** `--ease-out` is now the expo-out curve, with `--dur-fast`
+   150ms (colour, focus), `--dur-base` 350ms (lifts, fills) and `--dur-reveal`
+   1000ms (arrivals). Every transition on the site swept onto them. Inventory
+   after: one easing, three durations, 147 transitioning elements.
+
+2. **Scroll reveals.** `useReveal` marks anything with `data-reveal` as `is-in`
+   once, on entering the viewport. Text groups rise 14px with a 4px blur
+   clearing; media rises without blur. Stagger is 100ms per `--reveal-i`.
+   Twenty-nine reveal points across every section. Two bugs found and fixed on
+   the way:
+   - The hidden state was gated on a flag set from an effect, which landed a
+     frame after first paint — everything below the fold flashed visible and
+     then animated *out* for a second. The flag is set in `main.tsx` before
+     React paints. No JavaScript, no flag, nothing hidden.
+   - A -8% root margin meant a short element flush with the bottom of the
+     viewport (the wordmark on a phone: 75px tall, pushed 14px lower while
+     hidden) never intersected and never revealed. Margin removed.
+   The hero is in view on load, so the same mechanism gives it a staggered
+   entrance: columns at 0/100/200ms, board at 300, wordmark at 400.
+
+3. **Section rhythm.** `--section-pad` on every section after the hero, and a
+   hairline where each hands over. About/Experience is one chapter; the accent
+   CTA gets no grey rule.
+
+4. **Snake.** Rounded bead segments with a gentle taper instead of hard squares.
+   Growth tiers now run ink → sky → leaf → sun → coral, the hues the drives
+   pills are already edged in, replacing an electric blue and magenta that
+   appeared nowhere else. The pill invitation became "(Click anywhere to play)"
+   at the foot of the field — the whole field is still the control, the hover
+   wash dropped from 12% to 7% — and with nothing covering the middle the apple
+   placement lost its exclusion zone. HUD in the label voice; Stop is an
+   outlined pill rather than a filled accent one.
+
+5. **Nav.** Marks the current section with a filled pill and `aria-current`,
+   choosing the section that covers most of the viewport (a bare intersection
+   check flipped too early). The pill dropped its border for the card's
+   shadow-border ring, so one surface language.
+
+Verified: 390/768/1024/1440/1920 — no horizontal overflow, all 29 reveals reach
+`is-in` after a scroll-through, hero still equals the viewport, no console
+errors. Reduced motion — flag unset, nothing hidden, no reveal transitions.
+Layout — `offsetTop` unchanged through a reveal, so no CLS; the 14px is visual
+only. Hover — cards still lift, the caption darkens on field hover, the nav
+tracks Home → Work → About → Playground and back.
+
+Deliberately not done: Lenis-style smooth scrolling, which the reference uses.
+Native scroll is what Shreya asked for after the horizontal deck, and reveals
+on native scroll get most of the feel without the floatiness or the
+dependency. Easy to add later if wanted.
