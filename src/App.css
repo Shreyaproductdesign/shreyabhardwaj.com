@@ -1286,8 +1286,7 @@
 
 /* One label role across the section: "What drives me" and the fun-facts
    overline were two sizes and two weights. */
-.about-drives-label,
-.about-facts-label {
+.about-drives-label {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-label);

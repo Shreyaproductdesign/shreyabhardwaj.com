@@ -176,8 +176,7 @@ export function AboutSection() {
         {/* Three cards laid out like they were put down by hand — each a
             little off true, all readable at once. The swipe deck they replace
             showed one at a time behind dots and a 1/3 counter. */}
-        <div className="about-facts-block" data-reveal="text">
-          <p className="about-facts-label">Fun facts</p>
+        <div className="about-facts-block" data-reveal="text" aria-label="Fun facts">
           <ul className="about-facts-spread">
             {FUN_FACTS.map((fact, i) => (
               <li
