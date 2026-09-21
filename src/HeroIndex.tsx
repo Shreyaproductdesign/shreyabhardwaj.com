@@ -19,9 +19,9 @@ export function HeroIndex({ experience }: HeroIndexProps) {
           opens with: small, then a sentence, then the band. */}
       <div className="hero-index">
         <h1 className="hero-statement" data-reveal="text" style={{ ["--reveal-i" as string]: 0 }}>
-          AI-native product designer at Miro, working on a canvas 100 million
-          people share. Based in{" "}
-          <mark className="hero-index-place">Amsterdam</mark>.
+          AI-native product designer based in{" "}
+          <mark className="hero-index-place">Amsterdam</mark>, currently
+          designing how teams think together on Miro’s canvas.
         </h1>
 
         <div className="hero-facts" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
