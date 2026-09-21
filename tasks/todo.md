@@ -931,3 +931,21 @@ nav is three text zones at 14px with no bar.
 
 Kept against the reference, on purpose: the yellow (wordmark mark, snake, CTA),
 the CTA's uppercase as the one display moment, the snake's pills.
+
+## Copy and pill consistency
+
+- [x] Removed every eyebrow/lede: Off the clock, Selected work, The person
+      behind the work, Outside the case studies, and the three taglines. Headings
+      stand alone (`margin: 0`; dead CSS removed).
+- [x] Glimpse = photo strip + one facts line (drives left, More about me right).
+      Same media-then-facts pattern as the case rows.
+- [x] Plain copy: "Coming soon", "Click to play", fun-fact bodies as statements,
+      no "Fun fact" label repeated on the card, "Preview incoming" dropped.
+      Traits trimmed 14 → 11 (cut the copywriting ones).
+- [x] Pills: reward pill + snake caption share one spec — square, 14px/400,
+      `--shadow-border` ring on white; intro pill yellow = same object as the
+      Amsterdam mark.
+- [x] Verified 1920→390, reduced motion, hover, 27/27 reveals.
+
+Lesson: eyebrow + heading + lede "for structural parity" is a template, not
+a design. If a label only exists to introduce the heading, it's filler.
