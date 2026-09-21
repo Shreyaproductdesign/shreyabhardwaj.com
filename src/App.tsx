@@ -164,14 +164,12 @@ function App() {
 
   return (
     <div className="page">
-      {/* Three zones at 14px, the way the reference does it: who, what, where
-          to. The name lives here and only here — set 200px tall at the foot of
-          the hero it carried nothing the corner didn't. */}
+      {/* Name left, links right, at 14px. The role isn't here: the statement
+          says it a line below, larger. */}
       <header className="nav">
         <a className="nav-name" href="#home">
           Shreya Bhardwaj
         </a>
-        <p className="nav-role">AI-native product designer, Amsterdam</p>
         <nav className="nav-links" aria-label="Primary">
           {NAV_SECTIONS.map((section) => (
             <a
