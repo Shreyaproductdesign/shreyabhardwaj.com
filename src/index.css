@@ -47,7 +47,6 @@
   --accent-soft: var(--sun-200);
   --status-live: var(--leaf-400);
   --status-live-solid: var(--leaf-600);
-  --wordmark: var(--n-900);
   --shadow-rgb: 23, 23, 23;
 
   /* One deceleration curve for the whole site, so every surface settles alike. */
@@ -82,19 +81,18 @@
   --image-outline: oklch(0 0 0 / 0.1);
 
   /* Two families, both of them already on the home page: Figtree carries every
-     display voice (wordmark, headings, italic asides), Manrope carries text and
+     display voice (headings, the statement, italic asides), Manrope carries text and
      UI. Figtree ships a real italic, which is why the asides use it. */
   --font-display: "Figtree", system-ui, -apple-system, sans-serif;
   --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
 
   /* Hierarchy comes from size and grey, not weight. The reference runs 400
-     for everything but its wordmark; Figtree needs a touch more to hold at
+     for everything but its display line; Figtree needs a touch more to hold at
      display sizes, so display sits at 600 and titles at 500. Everything else —
      labels, UI, metadata — is 400. */
   --weight-display: 600;
   --weight-title: 500;
   --weight-ui: 400;
-  --weight-wordmark: 900;
   --page-pad: clamp(20px, 4vw, 70px);
   --max: 1232px;
 

@@ -15,7 +15,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "miro-case-1",
     company: "Miro",
-    logo: "/assets/logo-miro-icon.png",
+    logo: "/assets/company-miro.png",
     sector: "Visual collaboration SaaS, 100M+ users",
     title: "Exploring the UI & UX of Miro AI Presence",
     tags: ["Product design", "AI", "Multiplayer"],
@@ -29,7 +29,7 @@ const caseStudies: CaseStudy[] = [
   {
     id: "miro-case-2",
     company: "Miro",
-    logo: "/assets/logo-miro-icon.png",
+    logo: "/assets/company-miro.png",
     sector: "Visual collaboration SaaS, 100M+ users",
     title: "An Obeya room, rebuilt in Miro",
     tags: ["Product design", "Enterprise", "Client work"],
@@ -113,7 +113,7 @@ const playgroundMarquee: MarqueeItem[] = [
 const experience: ExperienceItem[] = [
   {
     company: "Miro",
-    logo: "/assets/logo-miro-icon.png",
+    logo: "/assets/company-miro.png",
     role: "Product Designer",
     location: "Amsterdam",
     dates: "Aug 2025 – Present",
@@ -164,10 +164,13 @@ function App() {
 
   return (
     <div className="page">
-      {/* Two zones at 14px: what she does, and where to go. The name isn't
-          here — the wordmark below already says it, at a size that can't be
-          missed. No pill: the chrome was drawing more attention than the words. */}
+      {/* Three zones at 14px, the way the reference does it: who, what, where
+          to. The name lives here and only here — set 200px tall at the foot of
+          the hero it carried nothing the corner didn't. */}
       <header className="nav">
+        <a className="nav-name" href="#home">
+          Shreya Bhardwaj
+        </a>
         <p className="nav-role">Product designer, Amsterdam</p>
         <nav className="nav-links" aria-label="Primary">
           {NAV_SECTIONS.map((section) => (
