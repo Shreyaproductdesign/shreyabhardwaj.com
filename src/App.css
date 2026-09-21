@@ -277,6 +277,81 @@
   overflow: hidden;
 }
 
+/* ——— Hero foot ———
+   One 14px line closing the hero: place and local time, a mark, the way
+   onward. A hairline above it, the way every section hands over. */
+.hero-foot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-6);
+  padding: 14px 0 16px;
+  border-top: 1px solid var(--border-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-body);
+  color: var(--text-muted);
+}
+
+.hero-foot-place {
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+/* The clock: a step heavier and tabular, so the digits hold still as they
+   tick and read as an instrument rather than prose. */
+.hero-foot-time {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+}
+
+/* The sun in ink: greyscale, pushed dark, contrast up so the face's pixels
+   survive. A flat silhouette at this size was just a disc. */
+.hero-foot-mark {
+  width: 22px;
+  height: 22px;
+  filter: grayscale(1) brightness(0.55) contrast(2.2);
+  image-rendering: pixelated;
+}
+
+.hero-foot-next {
+  justify-self: end;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.hero-foot-arrow {
+  display: inline-block;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.hero-foot-next:hover .hero-foot-arrow {
+  transform: translateY(3px);
+}
+
+.hero-foot-next:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-foot-arrow {
+    transition: none;
+  }
+}
+
 /* ——— Idle traits ——— */
 .hero-traits {
   position: absolute;
