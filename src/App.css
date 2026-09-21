@@ -1411,48 +1411,37 @@
 
 /* Every card shares one grid cell, so the deck is exactly as tall as its
    tallest card. Nothing here is a magic height that longer copy can clip. */
-.about-facts-deck {
+.about-facts-spread {
+  list-style: none;
+  margin: 0;
+  padding: var(--space-3) 0 var(--space-4);
   display: grid;
-  width: 100%;
-  /* Room for the card behind to peek past the bottom edge. */
-  padding-bottom: var(--space-4);
-  touch-action: pan-y;
-  cursor: grab;
-  user-select: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-6);
+  align-items: start;
 }
 
-.about-facts-deck:active { cursor: grabbing; }
-
+/* Each card carries a small tilt and drop of its own, set per index so the
+   three don't share an angle. Hover trues it up and lifts it. */
 .about-fact-card {
-  grid-area: 1 / 1;
-  padding: clamp(22px, 3vw, 28px);
+  --tilt: calc(-3deg + var(--i, 0) * 2.6deg);
+  --drop: calc(var(--i, 0) * 10px - 6px);
+  min-height: 11rem;
+  padding: clamp(20px, 2.4vw, 28px);
   text-align: start;
   background: var(--surface-raised);
-  /* Square, edged by the ring the rest of the site uses for depth. */
   box-shadow: var(--shadow-border);
+  transform: translateY(var(--drop)) rotate(var(--tilt));
   transition:
     transform var(--dur-base) var(--ease-out),
-    opacity var(--dur-fast) var(--ease-out);
+    box-shadow var(--dur-base) var(--ease-out);
 }
 
-.about-fact-card.is-dragging { transition: none; }
-
-.about-fact-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: var(--space-4);
-  padding-bottom: var(--space-3);
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-
-.about-fact-count {
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 500;
-  line-height: var(--lh-flat);
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
+.about-fact-card:hover {
+  transform: translateY(calc(var(--drop) - 4px)) rotate(0deg);
+  box-shadow:
+    var(--shadow-border),
+    0 24px 48px -24px rgba(var(--shadow-rgb), 0.28);
 }
 
 .about-fact-title {
@@ -1476,45 +1465,15 @@
   text-wrap: pretty;
 }
 
-.about-facts-nav {
-  display: flex;
-  justify-content: flex-start;
-  /* 16px keeps the 24px targets below from overlapping each other. */
-  gap: var(--space-4);
-}
+@media (max-width: 640px) {
+  .about-facts-spread {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5, 20px);
+  }
 
-.about-facts-dot {
-  position: relative;
-  width: 8px;
-  height: 8px;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-}
-
-/* The dot is a pseudo-element so the active state can scale it without
-   dragging the hit area into the neighbouring target. */
-.about-facts-dot::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background: var(--border);
-  transition: transform var(--dur-base) var(--ease-out), background var(--dur-fast) var(--ease-out);
-}
-
-/* The dot stays 8px in the layout; the target it answers to is 24px. */
-.about-facts-dot::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-}
-
-.about-facts-dot.is-active::before {
-  background: var(--accent);
-  transform: scale(1.25);
+  .about-fact-card {
+    min-height: 0;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1543,12 +1502,8 @@
   }
 
   .about-fact-card { transition: none; }
-
-  /* No animation, but the filled dot still has to say which card you are on. */
-  .about-facts-dot::before { transition: none; }
 }
 
-/* Experience sits on dark about flow — keep card light */
 /* ——— Visual marquee ——— */
 .visuals {
   position: relative;

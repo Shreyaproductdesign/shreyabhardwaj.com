@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { PhotoRow, type Photo } from "./PhotoRow";
 
 const GREETINGS = ["Hello", "Ciao", "Hola", "Namaste", "Bonjour", "Hallo"] as const;
@@ -53,11 +53,6 @@ export function AboutSection() {
   const [leaving, setLeaving] = useState<number | null>(null);
   const [ready, setReady] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const [factIndex, setFactIndex] = useState(0);
-  const [dragX, setDragX] = useState(0);
-  const [dragging, setDragging] = useState(false);
-  const startX = useRef(0);
-  const activeX = useRef(0);
 
   useEffect(() => {
     const id = window.requestAnimationFrame(() => setReady(true));
@@ -88,35 +83,6 @@ export function AboutSection() {
     const id = window.setTimeout(() => setLeaving(null), 650);
     return () => window.clearTimeout(id);
   }, [leaving]);
-
-  const goFact = (next: number) => {
-    const n = FUN_FACTS.length;
-    setFactIndex(((next % n) + n) % n);
-    setDragX(0);
-  };
-
-  const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    setDragging(true);
-    startX.current = e.clientX;
-    activeX.current = 0;
-    e.currentTarget.setPointerCapture(e.pointerId);
-  };
-
-  const onPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (!dragging) return;
-    const dx = e.clientX - startX.current;
-    activeX.current = dx;
-    setDragX(dx);
-  };
-
-  const onPointerUp = () => {
-    if (!dragging) return;
-    setDragging(false);
-    const dx = activeX.current;
-    if (dx < -56) goFact(factIndex + 1);
-    else if (dx > 56) goFact(factIndex - 1);
-    else setDragX(0);
-  };
 
   return (
     <section className="about" aria-label="About Shreya">
@@ -207,66 +173,23 @@ export function AboutSection() {
           revealIndex={0}
         />
 
+        {/* Three cards laid out like they were put down by hand — each a
+            little off true, all readable at once. The swipe deck they replace
+            showed one at a time behind dots and a 1/3 counter. */}
         <div className="about-facts-block" data-reveal="text">
           <p className="about-facts-label">Fun facts</p>
-          <div
-            className="about-facts-deck"
-            onPointerDown={onPointerDown}
-            onPointerMove={onPointerMove}
-            onPointerUp={onPointerUp}
-            onPointerCancel={onPointerUp}
-          >
-            {FUN_FACTS.map((fact, i) => {
-              const offset = i - factIndex;
-              const isActive = i === factIndex;
-            const style = isActive
-              ? {
-                  transform: `translateX(${dragX}px) rotate(${dragX * 0.04}deg)`,
-                  zIndex: 3,
-                }
-              : {
-                  /* The card behind peeks far enough past the edge to read as
-                     a stack you can move. */
-                  transform: `translateY(${Math.abs(offset) * 16}px) scale(${
-                    1 - Math.abs(offset) * 0.04
-                  })`,
-                  zIndex: 2 - Math.abs(offset),
-                  opacity: Math.abs(offset) > 1 ? 0 : 0.55,
-                  pointerEvents: "none" as const,
-                };
-
-              return (
-                <article
-                  key={fact.title}
-                  className={`about-fact-card${isActive ? " is-active" : ""}${
-                    dragging && isActive ? " is-dragging" : ""
-                  }`}
-                  style={style}
-                  aria-hidden={!isActive}
-                >
-                  <header className="about-fact-header">
-                    <span className="about-fact-count">
-                      {i + 1}/{FUN_FACTS.length}
-                    </span>
-                  </header>
-                  <h3 className="about-fact-title">{fact.title}</h3>
-                  <p className="about-fact-body">{fact.body}</p>
-                </article>
-              );
-            })}
-          </div>
-          <div className="about-facts-nav" role="tablist" aria-label="Fun fact cards">
+          <ul className="about-facts-spread">
             {FUN_FACTS.map((fact, i) => (
-              <button
+              <li
                 key={fact.title}
-                type="button"
-                className={`about-facts-dot${i === factIndex ? " is-active" : ""}`}
-                aria-label={`Show fact: ${fact.title}`}
-                aria-selected={i === factIndex}
-                onClick={() => goFact(i)}
-              />
+                className="about-fact-card"
+                style={{ ["--i" as string]: i }}
+              >
+                <h3 className="about-fact-title">{fact.title}</h3>
+                <p className="about-fact-body">{fact.body}</p>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       </div>
     </section>
