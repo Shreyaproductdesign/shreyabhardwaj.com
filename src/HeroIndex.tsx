@@ -12,6 +12,9 @@ type HeroIndexProps = {
 
 const DISPLAY_NAME = "Shreya Bhardwaj";
 
+/** How many studies the index lists. The section itself still shows them all. */
+const INDEX_CASE_COUNT = 3;
+
 function shortCaseLabel(study: CaseStudy) {
   if (study.id === "miro-case-1") return "Miro AI Presence";
   if (study.id === "miro-case-2") return "Miro Obeya room";
@@ -133,7 +136,7 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
               Case studies
             </a>
             <ul className="hero-index-list">
-              {caseStudies.map((study) => (
+              {caseStudies.slice(0, INDEX_CASE_COUNT).map((study) => (
                 <li key={study.id}>
                   <a
                     className="hero-index-link"

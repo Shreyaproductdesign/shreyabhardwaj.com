@@ -816,3 +816,22 @@ Note the trait pills are ambient again, since attract-mode eating feeds them.
 That is the earlier behaviour, not a regression, but it does mean a pill and the
 play invitation can sit near each other — the invitation is larger (16px/700
 with a play triangle) against the pill's 13px/600.
+
+## Hero index lists three case studies
+
+Trimmed to Miro AI Presence, Miro Obeya room and Wise legalese. The Case
+Studies section still renders all five cards, so the design system and Dadvice
+studies remain reachable — the index is a table of contents, not the full set.
+
+Set by `INDEX_CASE_COUNT` rather than a slice buried at the call site.
+
+Side effect: the stacked mobile index dropped from 506px to 447px, so 375x667
+is now 55px from fitting rather than 114px. Still the one size where the
+wordmark and snake don't share the viewport.
+
+| Viewport | Hero / viewport | Both in view |
+| --- | --- | --- |
+| 1440x900 | 900 / 900 | yes |
+| 1024x768 | 768 / 768 | yes |
+| 375x812 | 812 / 812 | yes |
+| 375x667 | 722 / 667 | no |
