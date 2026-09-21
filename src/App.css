@@ -859,7 +859,7 @@
 }
 
 .case-head,
-.case-list {
+.case-layout {
   width: 100%;
   max-width: var(--max);
   margin: 0 auto;
@@ -869,21 +869,86 @@
   margin-bottom: clamp(32px, 5vh, 56px);
 }
 
-.case-list,
-.case-pair-list {
+/* Index beside the rows. */
+.case-layout {
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) minmax(0, 1fr);
+  gap: var(--space-12);
+  align-items: start;
+}
+
+/* ——— Index ———
+   Sticks below the nav and reads along: the row in view lights its number. */
+.case-index {
+  position: sticky;
+  top: 96px;
+}
+
+.case-index-list,
+.case-list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
+.case-index-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.case-index-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: baseline;
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  line-height: var(--lh-body);
+  letter-spacing: var(--track-body);
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--dur-base) var(--ease-out);
+}
+
+.case-index-item:hover,
+.case-index-item.is-active {
+  color: var(--text-primary);
+}
+
+/* The number: a small tile that fills with the accent on the active row. */
+.case-index-num {
+  display: inline-block;
+  min-width: 2.2em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: var(--text-label);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-flat);
+  text-align: center;
+  color: var(--text-muted);
+  transition:
+    background var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out);
+}
+
+.case-index-item.is-active .case-index-num {
+  background: var(--accent);
+  color: var(--text-primary);
+}
+
+.case-index-item:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 4px;
+}
+
+/* ——— Rows ——— */
 .case-list {
   display: flex;
   flex-direction: column;
 }
 
-/* A row is media over a line of facts, closing on a hairline. The padding is
-   the row's breath; the first row starts flush under the header and the last
-   hands over to the section hairline rather than doubling it. */
 .case-row {
   position: relative;
   display: flex;
@@ -904,7 +969,7 @@
 /* Square, full width, edged with the same hairline the photos carry. */
 .case-media {
   overflow: hidden;
-  aspect-ratio: 2.4 / 1;
+  aspect-ratio: 2 / 1;
   background: var(--surface-sunken);
 }
 
@@ -918,7 +983,6 @@
   transition: transform var(--dur-base) var(--ease-out);
 }
 
-/* The frame clips, so the image drifts in behind a fixed edge. */
 .case-row.is-open:has(a:hover) .case-media img,
 .case-row.is-open:has(a:focus-visible) .case-media img {
   transform: scale(1.02);
@@ -927,7 +991,6 @@
 .case-media.is-empty {
   display: grid;
   place-items: center;
-  gap: var(--space-2);
   outline: 1px solid var(--image-outline);
   outline-offset: -1px;
   background:
@@ -944,12 +1007,11 @@
   color: var(--n-200);
 }
 
-/* The facts, as columns: index, title and company, result, topics, the way
-   in. One 14px voice; the title alone steps up. */
+/* The facts, split: what it is on the left, what it did on the right. */
 .case-meta {
   display: grid;
-  grid-template-columns: 3rem minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr) auto;
-  gap: var(--space-6);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: var(--space-8);
   align-items: start;
   font-family: var(--font-sans);
   font-size: var(--text-caption);
@@ -959,19 +1021,45 @@
   color: var(--text-muted);
 }
 
-.case-index {
-  padding-top: 0.2em;
-  font-variant-numeric: tabular-nums;
+.case-what,
+.case-did {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
 }
 
-.case-ident {
+.case-sub {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5em;
+}
+
+.case-sub .case-index-num {
+  padding-inline: 0;
   min-width: 0;
+  text-align: start;
+  color: var(--text-secondary);
+}
+
+.case-company {
+  color: var(--text-secondary);
+}
+
+/* The separator travels with the company, so when the sector wraps on a
+   phone the dot trails the first line instead of leading the second. */
+.case-company:not(:last-child)::after {
+  content: "·";
+  margin-inline-start: 0.5em;
+  color: var(--text-muted);
 }
 
 .case-title {
   margin: 0;
   font-family: var(--font-display);
-  font-size: var(--text-lead);
+  font-size: var(--text-display);
   font-weight: var(--weight-title);
   line-height: var(--lh-title);
   letter-spacing: var(--track-title);
@@ -992,7 +1080,6 @@
   inset: 0;
 }
 
-/* The ring belongs on the row, not around two wrapped lines of title. */
 .case-title a:focus-visible {
   outline: none;
 }
@@ -1002,35 +1089,40 @@
   outline-offset: 6px;
 }
 
-.case-sub {
-  margin: var(--space-1) 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.5em;
-}
-
-.case-company {
+.case-desc {
+  margin: 0;
+  max-width: 34rem;
+  font-size: var(--text-body);
   color: var(--text-secondary);
-}
-
-/* The separator travels with the company, so when the sector wraps on a
-   phone the dot trails the first line instead of leading the second. */
-.case-company:not(:only-child)::after {
-  content: "·";
-  margin-inline-start: 0.5em;
-  color: var(--text-muted);
+  text-wrap: pretty;
 }
 
 .case-stat {
-  margin: 0;
+  margin: 0 0 var(--space-1);
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: flex-start;
+  gap: var(--space-2);
 }
 
+/* The result, in the same swipe of accent the hero puts on Amsterdam. */
 .case-stat-value {
+  padding: 0.06em 0.2em;
+  margin-inline: -0.06em;
+  background: var(--accent);
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: var(--weight-title);
+  line-height: 1.1;
+  letter-spacing: var(--track-title);
   color: var(--text-primary);
   font-variant-numeric: tabular-nums;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.case-stat-label {
+  color: var(--text-secondary);
 }
 
 .case-tags {
@@ -1040,7 +1132,6 @@
 
 .case-open {
   margin: 0;
-  justify-self: end;
   display: inline-flex;
   align-items: baseline;
   gap: 0.4em;
@@ -1072,78 +1163,23 @@
   transform: translateX(4px);
 }
 
-/* The two self-initiated projects share a row: media side by side, and the
-   facts stacked beneath each, since five columns won't fit in half the width. */
-.case-pair {
-  padding: var(--space-12) 0;
-}
-
-.case-pair-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-8);
-}
-
-.case-row.is-compact {
-  padding: 0;
-  border-bottom: 0;
-}
-
-.case-row.is-compact .case-media {
-  aspect-ratio: 16 / 10;
-}
-
-.case-row.is-compact .case-meta {
-  grid-template-columns: 3rem minmax(0, 1fr);
-  grid-template-areas:
-    "idx ident"
-    "idx stat"
-    "idx tags"
-    "idx open";
-  gap: var(--space-3) var(--space-6);
-}
-
-.case-row.is-compact .case-index { grid-area: idx; }
-.case-row.is-compact .case-ident { grid-area: ident; }
-.case-row.is-compact .case-stat { grid-area: stat; }
-.case-row.is-compact .case-tags { grid-area: tags; }
-.case-row.is-compact .case-open { grid-area: open; justify-self: start; }
-
-.case-stat.is-blank {
-  display: none;
-}
-
 @media (max-width: 900px) {
-  /* Five columns of facts don't fit; every row stacks like the compact ones. */
-  .case-meta {
-    grid-template-columns: 3rem minmax(0, 1fr);
-    grid-template-areas:
-      "idx ident"
-      "idx stat"
-      "idx tags"
-      "idx open";
-    gap: var(--space-3) var(--space-6);
-  }
-
-  .case-index { grid-area: idx; }
-  .case-ident { grid-area: ident; }
-  .case-stat { grid-area: stat; }
-  .case-tags { grid-area: tags; }
-  .case-open { grid-area: open; justify-self: start; }
-
-  .case-pair-list {
+  /* No room for a side index; the numbers in each row still count along. */
+  .case-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-12);
   }
 
-  .case-row.is-compact + .case-row.is-compact {
-    padding-top: var(--space-12);
-    border-top: 1px solid var(--border-subtle);
+  .case-index {
+    display: none;
+  }
+
+  .case-meta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-5, 20px);
   }
 }
 
 @media (max-width: 640px) {
-  /* 2.4:1 leaves a 146px strip on a phone. */
   .case-media {
     aspect-ratio: 16 / 10;
   }
@@ -1156,11 +1192,12 @@
 @media (prefers-reduced-motion: reduce) {
   .case-media img,
   .case-open-arrow,
-  .case-open {
+  .case-open,
+  .case-index-item,
+  .case-index-num {
     transition: none;
   }
 
-  /* The underline still marks the hover, so no feedback rests on motion. */
   .case-row.is-open:has(a:hover) .case-media img,
   .case-row.is-open:has(a:focus-visible) .case-media img,
   .case-row.is-open:has(a:hover) .case-open-arrow {
