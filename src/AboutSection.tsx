@@ -35,16 +35,16 @@ const ABOUT_PHOTOS: Photo[] = [
    correctly. The cards are for things the prose doesn't cover. */
 const FUN_FACTS = [
   {
-    title: "200+ wins",
-    body: "Art competitions since I was a kid. Walls were never safe.",
+    title: "200+ art competitions",
+    body: "Entered since I was a kid, and still painting.",
   },
   {
     title: "Volleyball",
-    body: "Played at state level. Still chase that competitive spark.",
+    body: "Played at state level through school.",
   },
   {
     title: "Skating",
-    body: "Loved it as a kid. Haven’t skated in a while. Rusty but willing.",
+    body: "As a kid. Out of practice, not out of interest.",
   },
 ] as const;
 
@@ -122,7 +122,6 @@ export function AboutSection() {
     <section className="about" aria-label="About Shreya">
       <div className="about-shell">
         <div className="about-intro" data-reveal="text">
-          <p className="about-eyebrow">The person behind the work</p>
           <h2 className="about-greeting" aria-live="polite">
             <span className="about-greeting-slot">
               {GREETINGS.map((word, i) => {
@@ -148,10 +147,6 @@ export function AboutSection() {
               })}
             </span>
           </h2>
-          <p className="about-lede">
-            How I got here, what I care about, and a few things that keep me
-            curious.
-          </p>
         </div>
 
         <div className="about-story">
@@ -213,7 +208,7 @@ export function AboutSection() {
         />
 
         <div className="about-facts-block" data-reveal="text">
-          <p className="about-facts-label">Fun facts · swipe</p>
+          <p className="about-facts-label">Fun facts</p>
           <div
             className="about-facts-deck"
             onPointerDown={onPointerDown}
@@ -250,9 +245,6 @@ export function AboutSection() {
                   aria-hidden={!isActive}
                 >
                   <header className="about-fact-header">
-                    <span className="about-fact-meta">
-                      Fun fact
-                    </span>
                     <span className="about-fact-count">
                       {i + 1}/{FUN_FACTS.length}
                     </span>

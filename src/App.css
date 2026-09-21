@@ -67,65 +67,28 @@
   overflow-x: clip;
 }
 
-.glimpse-head,
+.glimpse-foot,
 .glimpse-strip {
   width: 100%;
   max-width: var(--max);
   margin-inline: auto;
 }
 
-/* Two columns rather than a flex row with space-between: the headline and the
-   pills are different heights, and `start` puts their labels on one line
-   instead of bottom-aligning them 64px apart. The second column is wide enough
-   for two pills per row. */
-.glimpse-head {
-  margin-bottom: clamp(32px, 5vh, 56px);
-  display: grid;
-  /* The pills column is sized to its content rather than to a fraction of the
-     viewport. A fraction drifted as the window changed and wrapped the pills
-     into ragged rows; content-sized, the row ends on the container's right
-     edge — the same edge the photo strip below ends on. The 1fr beside it
-     absorbs the slack, so the column stays flush right. */
-  grid-template-columns: minmax(0, 1fr) minmax(min-content, max-content);
-  align-items: start;
-  gap: var(--space-8) var(--space-12);
-}
-
-.glimpse-intro {
+/* Under the strip: what drives her on the left, the way onward on the right,
+   in the same 14px voice the case rows use for their facts. */
+.glimpse-foot {
+  margin-top: var(--space-6);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-3);
-  /* Reading measure, narrower than the column it sits in. */
-  max-width: 36rem;
-}
-
-.glimpse-eyebrow {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  font-weight: var(--weight-ui);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--track-label);
-  text-transform: none;
-  color: var(--text-muted);
-}
-
-.glimpse-line {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: var(--text-title);
-  font-weight: var(--weight-title);
-  line-height: var(--lh-title);
-  letter-spacing: var(--track-title);
-  text-wrap: balance;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-8);
 }
 
 .glimpse-more {
   display: inline-flex;
   align-items: center;
   gap: 0.4em;
-  margin-top: var(--space-1);
   font-family: var(--font-sans);
   font-size: var(--text-caption);
   font-weight: var(--weight-ui);
@@ -146,11 +109,14 @@
   transform: translateY(2px);
 }
 
-.glimpse-drives {
-  width: 100%;
-  /* Stops long labels from eating the headline's column; the pills wrap
-     inside this instead. */
-  max-width: 27rem;
+/* Compound selector: the shared .about-drives rule is declared later and
+   would otherwise win and stack these. */
+.about-drives.glimpse-drives {
+  width: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
 }
 
 /* Shared by the glimpse strip and the row inside About. The proportional
@@ -171,14 +137,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-@media (max-width: 900px) {
-  /* One column, so the pills follow the headline instead of squeezing beside
-     it. */
-  .glimpse-head {
-    grid-template-columns: minmax(0, 1fr);
-  }
 }
 
 @media (max-width: 900px) {
@@ -367,24 +325,27 @@
   /* `translate` centres the pill on the apple without fighting the keyframes,
      which drive `transform`. */
   translate: -50% -50%;
-  padding: 9px 18px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
+  padding: 6px 10px;
+  /* Square and hairline-ringed: the same object as the caption below the
+     field and the edge on every photo, so a reward doesn't arrive in a
+     different visual language from the page it lands on. */
   background: var(--surface);
+  box-shadow: var(--shadow-border);
   font-family: var(--font-sans);
-  font-size: clamp(12px, 1vw, 14px);
+  font-size: var(--text-caption);
   font-weight: var(--weight-ui);
-  letter-spacing: 0.01em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-body);
   white-space: nowrap;
-  color: var(--text-secondary);
+  color: var(--text-primary);
   /* Runs exactly as long as the pill is mounted, so it fades out rather than
      vanishing when the timer removes it. */
   animation: trait-reward 2600ms ease forwards;
 }
 
 .hero-trait[data-accent="true"] {
-  border-color: transparent;
   background: var(--accent);
+  box-shadow: none;
   color: var(--text-on-accent);
 }
 
@@ -481,9 +442,11 @@
 }
 
 .snake-start-label {
-  padding: 4px 10px;
-  /* Just enough backing to stay legible when the snake runs beneath it. */
+  padding: 6px 10px;
+  /* Just enough backing to stay legible when the snake runs beneath it, ringed
+     like the reward pills so they read as one family. */
   background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--shadow-border);
   font-family: var(--font-sans);
   font-size: var(--text-caption);
   font-weight: var(--weight-ui);
@@ -917,14 +880,6 @@
   color: var(--n-200);
 }
 
-.case-media-label {
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  font-weight: var(--weight-ui);
-  letter-spacing: var(--track-body);
-  color: var(--text-muted);
-}
-
 /* The facts, as columns: index, title and company, result, topics, the way
    in. One 14px voice; the title alone steps up. */
 .case-meta {
@@ -1152,56 +1107,26 @@
 .playground-projects {
   position: relative;
   z-index: 1;
-  /* Header-to-content gap matches the block rhythm in About, so both sections
-     breathe the same. The 36px this replaced sat the lede on top of the reel. */
+  /* Header-to-reel gap matches the block rhythm in About, so both sections
+     breathe the same. */
   padding: 88px var(--page-pad) var(--space-24);
   max-width: calc(var(--max) + 2 * var(--page-pad));
   margin: 0 auto;
 }
 
 
-/* Section headers -----------------------------------------------------------
-   Every section leads with the same three parts in the same order — eyebrow,
-   title, lede — and each part is defined once, here. Before this the site had
-   three eyebrow treatments, three title scales and two lede voices. */
-.playground-eyebrow,
-.case-eyebrow,
-.about-eyebrow {
-  margin: 0 0 var(--space-4);
-  font-family: var(--font-sans);
-  font-size: var(--text-label);
-  font-weight: var(--weight-ui);
-  line-height: var(--lh-flat);
-  letter-spacing: var(--track-label);
-  text-transform: none;
-  color: var(--text-muted);
-}
-
+/* A section opens with its title and nothing else — no eyebrow above, no
+   lede beneath. The title is the whole header. */
 .playground-heading,
 .case-heading,
 .about-greeting {
-  margin: 0 0 var(--space-4);
+  margin: 0;
   font-family: var(--font-display);
   font-size: var(--text-section);
   font-weight: var(--weight-display);
   line-height: var(--lh-section);
   letter-spacing: var(--track-section);
   color: var(--text-primary);
-}
-
-.playground-lede,
-.case-lede,
-.about-lede {
-  margin: 0;
-  max-width: 44ch;
-  font-family: var(--font-sans);
-  font-style: normal;
-  font-size: var(--text-lead);
-  font-weight: 400;
-  line-height: var(--lh-lead);
-  letter-spacing: var(--track-body);
-  color: var(--text-secondary);
-  text-wrap: pretty;
 }
 
 /* ——— About (editorial, normal flow) ——— */
@@ -1405,7 +1330,7 @@
   display: inline-flex;
   align-items: center;
   font-family: var(--font-sans);
-  font-size: var(--text-body);
+  font-size: var(--text-caption);
   font-weight: var(--weight-ui);
   line-height: var(--lh-body);
   letter-spacing: var(--track-body);
@@ -1478,23 +1403,10 @@
 
 .about-fact-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
+  justify-content: flex-end;
   margin-bottom: var(--space-4);
   padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--border-subtle);
-}
-
-.about-fact-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: 500;
-  line-height: var(--lh-flat);
-  color: var(--text-primary);
 }
 
 

@@ -414,7 +414,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
             type="button"
             onClick={() => setPlaying(true)}
           >
-            <span className="snake-start-label">(Click anywhere to play)</span>
+            <span className="snake-start-label">Click to play</span>
           </button>
         )}
       </div>

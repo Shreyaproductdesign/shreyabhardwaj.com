@@ -41,12 +41,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
       aria-label="Selected work"
     >
       <div className="case-head" data-reveal="text">
-        <p className="case-eyebrow">Selected work</p>
         <h2 className="case-heading">Case studies</h2>
-        <p className="case-lede">
-          Enterprise canvases, a policy nobody was reading, and a couple of
-          projects that started as my own idea.
-        </p>
       </div>
 
       <ol className="case-list">
@@ -98,7 +93,6 @@ function CaseRow({ study, n, compact = false }: CaseRowProps) {
       ) : (
         <div className="case-media is-empty" aria-hidden="true">
           <span className="case-media-mark">{study.company.slice(0, 1)}</span>
-          <span className="case-media-label">Preview incoming</span>
         </div>
       )}
 
@@ -143,7 +137,7 @@ function CaseRow({ study, n, compact = false }: CaseRowProps) {
               </span>
             </>
           ) : (
-            "Case study soon"
+            "Coming soon"
           )}
         </p>
       </div>

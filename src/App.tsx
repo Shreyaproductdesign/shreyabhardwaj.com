@@ -203,11 +203,7 @@ function App() {
         <section className="visuals" id="visual-design" aria-label="Playground">
           <div className="pixel-field pixel-field-soft" aria-hidden="true" />
           <div className="playground-projects" data-reveal="text">
-            <p className="playground-eyebrow">Outside the case studies</p>
             <h2 className="playground-heading">Playground</h2>
-            <p className="playground-lede">
-              Sketches, side projects, and visual experiments in motion.
-            </p>
           </div>
 
           <div className="marquee">

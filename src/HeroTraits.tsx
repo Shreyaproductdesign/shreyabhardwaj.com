@@ -17,10 +17,7 @@ const QUALITIES = [
   "She is a storyteller",
   "She asks why first",
   "She prototypes to think",
-  "She creates without boundaries",
-  "She mixes depth with personality",
   "She sweats the details",
-  "She ships, then listens",
 ];
 
 /** The opener lands on the first apple, then a quality every second one. */

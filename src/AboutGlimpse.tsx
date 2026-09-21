@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { PhotoRow, type Photo } from "./PhotoRow";
 
-/* A short personal beat between the hero and the case studies. Readers were
-   reaching the long About only after five viewports of work and calling it
-   too long, so the photos and the drives moved up here as a teaser and the
-   narrative, fun facts and experience stayed below. Nothing is duplicated. */
+/* A short personal beat between the hero and the case studies: the photos,
+   what drives her, and the way to the rest. Readers were reaching the long
+   About only after five viewports of work, so this moved up; the narrative,
+   fun facts and experience stayed below. Nothing is duplicated. */
 
 /* Ordered portrait, landscape, portrait… so the strip has a rhythm rather
    than three tall frames in a row. */
@@ -82,25 +82,17 @@ export function AboutGlimpse() {
 
   return (
     <section className="glimpse" aria-label="A little about Shreya">
-      <div className="glimpse-head">
-        <div className="glimpse-intro" data-reveal="text">
-          <p className="glimpse-eyebrow">Off the clock</p>
-          <p className="glimpse-line">
-            200+ art competitions, volleyball at state level, and still
-            happiest mid-brainstorm.
-          </p>
-          <a className="glimpse-more" href="#about-me">
-            More about me
-            <span className="glimpse-more-arrow" aria-hidden="true">
-              ↓
-            </span>
-          </a>
-        </div>
+      <PhotoRow
+        photos={PHOTOS}
+        className="glimpse-strip"
+        label="Photos of Shreya"
+        revealIndex={0}
+      />
 
+      {/* One line of facts under the photos, the way the case rows do it. */}
+      <div className="glimpse-foot" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
         <div
           className={`about-drives glimpse-drives${drivesIn ? " is-in" : ""}`}
-          data-reveal="text"
-          style={{ ["--reveal-i" as string]: 1 }}
           ref={drivesRef}
         >
           <p className="about-drives-label">What drives me</p>
@@ -116,15 +108,14 @@ export function AboutGlimpse() {
             ))}
           </ul>
         </div>
+
+        <a className="glimpse-more" href="#about-me">
+          More about me
+          <span className="glimpse-more-arrow" aria-hidden="true">
+            ↓
+          </span>
+        </a>
       </div>
-
-      <PhotoRow
-        photos={PHOTOS}
-        className="glimpse-strip"
-        label="Photos of Shreya"
-        revealIndex={2}
-      />
-
     </section>
   );
 }
