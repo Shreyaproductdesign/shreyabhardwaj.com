@@ -251,7 +251,6 @@ export function AboutSection() {
                 >
                   <header className="about-fact-header">
                     <span className="about-fact-meta">
-                      <span className="about-fact-dot" aria-hidden="true" />
                       Fun fact
                     </span>
                     <span className="about-fact-count">

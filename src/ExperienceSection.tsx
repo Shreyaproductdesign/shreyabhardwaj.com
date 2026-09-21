@@ -51,12 +51,8 @@ export function ExperienceSection({
               <span className="exp-dates">{job.dates}</span>
               <div className="exp-detail">
                 <div className="exp-company-line">
-                  {job.current ? (
-                    <span className="exp-current">
-                      Current
-                    </span>
-                  ) : null}
                   <h3 className="exp-company">{job.company}</h3>
+                  {job.current ? <span className="exp-current">Current</span> : null}
                 </div>
                 <p className="exp-role">
                   {job.role}

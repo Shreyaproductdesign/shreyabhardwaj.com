@@ -163,7 +163,6 @@
 .photo-frame {
   margin: 0;
   overflow: hidden;
-  border-radius: 12px;
   background: var(--surface-sunken);
 }
 
@@ -465,7 +464,6 @@
   justify-content: center;
   padding: 0 0 var(--space-3);
   border: 0;
-  border-radius: 18px;
   background: transparent;
   cursor: pointer;
   transition: background var(--dur-base) var(--ease-out);
@@ -484,12 +482,11 @@
 
 .snake-start-label {
   padding: 4px 10px;
-  border-radius: 999px;
   /* Just enough backing to stay legible when the snake runs beneath it. */
   background: rgba(255, 255, 255, 0.85);
   font-family: var(--font-sans);
   font-size: var(--text-caption);
-  font-weight: 500;
+  font-weight: var(--weight-ui);
   letter-spacing: var(--track-body);
   white-space: nowrap;
   color: var(--text-muted);
@@ -516,23 +513,22 @@
 /* The way out, in the same quiet voice as the score. It used to be a filled
    accent pill, which made stopping look like the main event. */
 .snake-toggle {
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: 1px solid var(--border-subtle);
+  padding: 0;
+  border: 0;
   background: transparent;
   color: var(--text-primary);
   font: inherit;
   letter-spacing: inherit;
-  text-transform: inherit;
   cursor: pointer;
-  transition:
-    border-color var(--dur-fast) var(--ease-out),
-    background var(--dur-fast) var(--ease-out);
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: from-font;
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out);
 }
 
 .snake-toggle:hover {
-  border-color: var(--border);
-  background: var(--surface-sunken);
+  text-decoration-color: currentColor;
 }
 
 .snake-toggle:focus-visible {
@@ -640,7 +636,6 @@
   flex: 0 0 auto;
   width: 20px;
   height: 20px;
-  border-radius: 5px;
   object-fit: cover;
   /* The marks are square tiles carrying their own backgrounds, so they need
      the same hairline the photos get rather than sitting edge-to-edge on white. */
@@ -653,18 +648,17 @@
    squashed. No dot: "Current" already says it, and the card's copy of this
    chip dropped its dot too so there is one treatment. */
 .hero-index-current {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 10px;
+  font-size: var(--text-label);
   font-weight: var(--weight-ui);
-  letter-spacing: 0.04em;
   line-height: var(--lh-flat);
-  text-transform: none;
   white-space: nowrap;
-  color: var(--text-primary);
-  background: var(--accent);
+  color: var(--text-muted);
+}
+
+/* Set off from the name by a middle dot rather than a chip. */
+.hero-index-current::before {
+  content: "·";
+  margin-inline-end: 0.5em;
 }
 
 /* Stand-in where there is no mark on file. A pale tile read as an image that
@@ -1000,9 +994,12 @@
   color: var(--text-secondary);
 }
 
-.case-sector::before {
+/* The separator travels with the company, so when the sector wraps on a
+   phone the dot trails the first line instead of leading the second. */
+.case-company:not(:only-child)::after {
   content: "·";
-  margin-inline-end: 0.5em;
+  margin-inline-start: 0.5em;
+  color: var(--text-muted);
 }
 
 .case-stat {
@@ -1394,47 +1391,36 @@
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: 0 0.6em;
+}
+
+/* Separators between the words, and none before the first. */
+.about-drive-pill + .about-drive-pill::before {
+  content: "·";
+  margin-inline-end: 0.6em;
+  color: var(--text-faint);
 }
 
 .about-drive-pill {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-2) var(--space-3);
-  border-radius: 999px;
   font-family: var(--font-sans);
-  font-size: var(--text-caption);
+  font-size: var(--text-body);
   font-weight: var(--weight-ui);
-  line-height: var(--lh-flat);
+  line-height: var(--lh-body);
   letter-spacing: var(--track-body);
   color: var(--text-secondary);
-  background: var(--surface-sunken);
-  border: 1px solid var(--border-subtle);
   opacity: 0;
   transform: translate3d(0, 10px, 0);
   transition:
     opacity var(--dur-reveal) var(--ease-out),
-    transform var(--dur-reveal) var(--ease-out),
-    background var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out);
+    transform var(--dur-reveal) var(--ease-out);
   transition-delay: calc(var(--i, 0) * 80ms);
 }
 
 .about-drives.is-in .about-drive-pill {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-}
-
-.about-drive-pill:nth-child(1) {
-  border-color: rgba(255, 208, 47, 0.85);
-}
-
-.about-drive-pill:nth-child(2) {
-  border-color: rgba(54, 158, 78, 0.45);
-}
-
-.about-drive-pill:nth-child(3) {
-  border-color: rgba(8, 146, 196, 0.45);
 }
 
 .about-spectrum {
@@ -1479,11 +1465,10 @@
 .about-fact-card {
   grid-area: 1 / 1;
   padding: clamp(22px, 3vw, 28px);
-  border-radius: 28px;
   text-align: start;
   background: var(--surface-raised);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 16px 40px rgba(var(--shadow-rgb), 0.08);
+  /* Square, edged by the ring the rest of the site uses for depth. */
+  box-shadow: var(--shadow-border);
   transition:
     transform var(--dur-base) var(--ease-out),
     opacity var(--dur-fast) var(--ease-out);
@@ -1512,13 +1497,6 @@
   color: var(--text-primary);
 }
 
-.about-fact-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--status-live-solid);
-  box-shadow: 0 0 0 3px rgba(54, 158, 78, 0.2);
-}
 
 .about-fact-count {
   font-family: var(--font-sans);
@@ -1653,11 +1631,10 @@
   flex: 0 0 auto;
   width: min(72vw, 760px);
   aspect-ratio: 16 / 9;
-  border-radius: 24px;
   overflow: hidden;
   background: var(--surface-sunken);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 18px 40px rgba(var(--shadow-rgb), 0.1);
+  outline: 1px solid var(--image-outline);
+  outline-offset: -1px;
 }
 
 .marquee-link {
@@ -1703,11 +1680,9 @@
      a wrapper element: 100% here is the section's content box. */
   width: min(52rem, 100%);
   margin-inline: max(0px, (100% - var(--max)) / 2) auto;
-  padding: clamp(28px, 4vw, 40px);
-  border-radius: 28px;
-  background: var(--surface-raised);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 16px 40px rgba(var(--shadow-rgb), 0.09);
+  /* No box: the roles read as a hairline table, the way the reference sets
+     its archive. */
+  padding: 0;
 }
 
 .exp-card-header {
@@ -1809,17 +1784,16 @@
 }
 
 .exp-current {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 10px;
-  border-radius: 999px;
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
+  font-size: var(--text-label);
   font-weight: var(--weight-ui);
-  letter-spacing: 0.04em;
-  text-transform: none;
-  color: var(--text-primary);
-  background: var(--accent);
+  line-height: var(--lh-flat);
+  color: var(--text-muted);
+}
+
+.exp-current::before {
+  content: "·";
+  margin-inline-end: 0.5em;
 }
 
 .exp-company {

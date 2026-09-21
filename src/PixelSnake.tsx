@@ -382,21 +382,25 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
 
   return (
     <div className="snake" data-playing={playing ? "true" : "false"}>
-      <div className="snake-hud">
-        <span className="snake-score">
-          {score} {best > 0 ? `· best ${best}` : ""}
-        </span>
-        {/* Starting is the field's job now, so the HUD only offers the way out. */}
-        {playing ? (
-          <button
-            className="snake-toggle"
-            type="button"
-            onClick={() => setPlaying(false)}
-          >
-            Stop
-          </button>
-        ) : null}
-      </div>
+      {/* Nothing while the snake wanders on its own: an attract-mode score is
+          a number floating beside the hero with no one to mean anything to. */}
+      {playing || best > 0 ? (
+        <div className="snake-hud">
+          <span className="snake-score">
+            {score} {best > 0 ? `· best ${best}` : ""}
+          </span>
+          {/* Starting is the field's job now, so the HUD only offers the way out. */}
+          {playing ? (
+            <button
+              className="snake-toggle"
+              type="button"
+              onClick={() => setPlaying(false)}
+            >
+              Stop
+            </button>
+          ) : null}
+        </div>
+      ) : null}
 
       <div className="snake-field" ref={wrapRef}>
         <canvas className="snake-canvas" ref={canvasRef} />
