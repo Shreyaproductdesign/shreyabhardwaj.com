@@ -31,8 +31,8 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
           sentence about who I am) read as a template. */}
       <div className="hero-index">
         <h1 className="hero-statement" data-reveal="text" style={{ ["--reveal-i" as string]: 0 }}>
-          Product designer at Miro, working on how AI shows up on a canvas
-          100 million people share. Based in{" "}
+          AI-native product designer at Miro, working on a canvas 100 million
+          people share. Based in{" "}
           <mark className="hero-index-place">Amsterdam</mark>, via London and
           Bangalore.
         </h1>

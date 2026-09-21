@@ -171,7 +171,7 @@ function App() {
         <a className="nav-name" href="#home">
           Shreya Bhardwaj
         </a>
-        <p className="nav-role">Product designer, Amsterdam</p>
+        <p className="nav-role">AI-native product designer, Amsterdam</p>
         <nav className="nav-links" aria-label="Primary">
           {NAV_SECTIONS.map((section) => (
             <a
