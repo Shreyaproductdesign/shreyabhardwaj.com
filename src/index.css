@@ -147,6 +147,19 @@
   }
 }
 
+/* Selecting text paints it in the site's accent, the same swipe the hero
+   puts on Amsterdam. Ink stays ink: yellow behind black reads at 15:1. */
+::selection {
+  background: var(--accent);
+  color: var(--text-primary);
+}
+
+/* Selected images and the snake canvas shouldn't take the tint. */
+img::selection,
+canvas::selection {
+  background: transparent;
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--surface);
