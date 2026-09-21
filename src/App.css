@@ -949,9 +949,10 @@
   flex-direction: column;
 }
 
-/* One study per screen. The row is a viewport tall (less the nav), the media
-   takes whatever the facts leave, and the page snaps to each row's top as
-   you pass — proximity, so the rest of the page scrolls as it always did. */
+/* One study per screen: the row is a viewport tall (less the nav) and the
+   media takes whatever the facts leave, so a flick moves one study. No
+   scroll-snap — with 800px targets a notched wheel snapped back to the row it
+   was on after every notch and could never leave. */
 .case-row {
   --row-nav: 72px;
   position: relative;
@@ -961,7 +962,6 @@
   min-height: calc(100dvh - var(--row-nav));
   padding: var(--space-8) 0;
   border-bottom: 1px solid var(--border-subtle);
-  scroll-snap-align: start;
   scroll-margin-top: var(--row-nav);
 }
 
@@ -1193,7 +1193,6 @@
      height it needs and the media keeps a fixed ratio. */
   .case-row {
     min-height: 0;
-    scroll-snap-align: none;
   }
 
   .case-media {
