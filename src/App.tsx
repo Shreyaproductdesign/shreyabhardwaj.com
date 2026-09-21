@@ -190,7 +190,7 @@ function App() {
       </header>
 
       <main className="deck">
-        <HeroIndex caseStudies={caseStudies} experience={experience} />
+        <HeroIndex experience={experience} />
 
         <AboutGlimpse />
 
