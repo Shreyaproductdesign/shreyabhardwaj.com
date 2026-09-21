@@ -12,6 +12,8 @@ type PhotoRowProps = {
   /** Variant hook for the row's width and breakpoints. */
   className?: string;
   label: string;
+  /** Position in a reveal stagger, if the row takes part in one. */
+  revealIndex?: number;
 };
 
 /* One justified row of photos at their true aspect ratios.
@@ -21,14 +23,18 @@ type PhotoRowProps = {
    cropped: if width is k × ratio then height is k for all of them. That beats
    a fixed grid, where portraits and landscapes in the same cell shape means
    one of them loses a third of the picture. */
-export function PhotoRow({ photos, className, label }: PhotoRowProps) {
+export function PhotoRow({ photos, className, label, revealIndex }: PhotoRowProps) {
   const columns = photos.map((p) => `${(p.w / p.h).toFixed(3)}fr`).join(" ");
 
   return (
     <div
       className={`photo-row${className ? ` ${className}` : ""}`}
-      style={{ gridTemplateColumns: columns }}
+      style={{
+        gridTemplateColumns: columns,
+        ...(revealIndex !== undefined ? { ["--reveal-i" as string]: revealIndex } : {}),
+      }}
       aria-label={label}
+      data-reveal={revealIndex !== undefined ? "" : undefined}
     >
       {photos.map((photo) => (
         <figure

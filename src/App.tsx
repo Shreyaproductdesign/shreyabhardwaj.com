@@ -4,6 +4,7 @@ import { AboutSection } from "./AboutSection";
 import { CaseStudies, type CaseStudy } from "./CaseStudies";
 import { ExperienceSection, type ExperienceItem } from "./ExperienceSection";
 import { HeroIndex } from "./HeroIndex";
+import { useReveal } from "./useReveal";
 
 const RESUME_URL = "/shreya-bhardwaj-resume.pdf";
 const LINKEDIN_URL = "https://www.linkedin.com/in/shreya-bhardwaj19/";
@@ -148,6 +149,8 @@ const experience: ExperienceItem[] = [
 ];
 
 function App() {
+  useReveal();
+
   return (
     <div className="page">
       <header className="nav">
@@ -189,7 +192,7 @@ function App() {
 
         <section className="visuals" id="visual-design" aria-label="Playground">
           <div className="pixel-field pixel-field-soft" aria-hidden="true" />
-          <div className="playground-projects">
+          <div className="playground-projects" data-reveal="text">
             <p className="playground-eyebrow">Outside the case studies</p>
             <h2 className="playground-heading">Playground</h2>
             <p className="playground-lede">
@@ -224,7 +227,7 @@ function App() {
         </section>
 
         <section className="cta" aria-label="Contact">
-          <h2 className="cta-title">
+          <h2 className="cta-title" data-reveal="text">
             <span>Let’s create</span>
             <span className="cta-title-mid">
               <span className="cta-orb" aria-hidden="true" />
@@ -239,7 +242,7 @@ function App() {
             <span>Journey</span>
           </h2>
 
-          <div className="cta-bar">
+          <div className="cta-bar" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
             <a className="cta-bar-side" href="#about-me">
               Credits
             </a>

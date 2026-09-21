@@ -27,7 +27,7 @@ export function ExperienceSection({
       <div className="pixel-field" aria-hidden="true" />
 
       <div className="exp-card">
-        <header className="exp-card-header">
+        <header className="exp-card-header" data-reveal="text">
           <div className="exp-card-meta">
             <span className="exp-card-years">
               <span className="exp-card-dot" aria-hidden="true" />
@@ -41,8 +41,13 @@ export function ExperienceSection({
         </header>
 
         <ul className="exp-list">
-          {items.map((job) => (
-            <li className="exp-row" key={`${job.company}-${job.dates}`}>
+          {items.map((job, i) => (
+            <li
+              className="exp-row"
+              key={`${job.company}-${job.dates}`}
+              data-reveal="text"
+              style={{ ["--reveal-i" as string]: 1 + i }}
+            >
               <span className="exp-dates">{job.dates}</span>
               <div className="exp-detail">
                 <div className="exp-company-line">

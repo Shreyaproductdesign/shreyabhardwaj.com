@@ -88,7 +88,7 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
     <section className="hero" id="home" aria-label="Introduction">
       <nav className="hero-index" aria-label="On this page">
         <div className="hero-index-grid">
-          <div className="hero-index-col">
+          <div className="hero-index-col" data-reveal="text" style={{ ["--reveal-i" as string]: 0 }}>
             <a className="hero-index-label" href="#about-me">
               Who I am
             </a>
@@ -101,7 +101,7 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
             </p>
           </div>
 
-          <div className="hero-index-col">
+          <div className="hero-index-col" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
             <a className="hero-index-label" href="#about-me">
               Experience
             </a>
@@ -131,7 +131,7 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
             </ul>
           </div>
 
-          <div className="hero-index-col">
+          <div className="hero-index-col" data-reveal="text" style={{ ["--reveal-i" as string]: 2 }}>
             <a className="hero-index-label" href="#product-design">
               Case studies
             </a>
@@ -152,14 +152,14 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
         </div>
       </nav>
 
-      <div className="hero-world">
+      <div className="hero-world" data-reveal style={{ ["--reveal-i" as string]: 3 }}>
         <HeroTraits earned={earned} />
         <PixelSnake
           onEat={(score, at) => setEarned({ score, at, id: Date.now() })}
         />
       </div>
 
-      <h1 className="hero-giant-name" ref={nameRef}>
+      <h1 className="hero-giant-name" ref={nameRef} data-reveal style={{ ["--reveal-i" as string]: 4 }}>
         <span className="hero-giant-inner" ref={nameInnerRef}>
           {DISPLAY_NAME.split(" ").map((word, i) => (
             <span key={word}>

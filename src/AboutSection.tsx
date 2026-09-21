@@ -121,7 +121,7 @@ export function AboutSection() {
   return (
     <section className="about" aria-label="About Shreya">
       <div className="about-shell">
-        <div className="about-intro">
+        <div className="about-intro" data-reveal="text">
           <p className="about-eyebrow">The person behind the work</p>
           <h2 className="about-greeting" aria-live="polite">
             <span className="about-greeting-slot">
@@ -159,7 +159,7 @@ export function AboutSection() {
               child it would only add a gap the story already sets. Decorative,
               so it carries no alt text — the copy it used to illustrate
               ("let me get my coffee first") is gone. */}
-          <figure className="about-coffee">
+          <figure className="about-coffee" data-reveal>
             <img
               className="about-coffee-img"
               src="/assets/pixel-coffee.png"
@@ -167,7 +167,7 @@ export function AboutSection() {
             />
           </figure>
 
-          <div className="about-beat">
+          <div className="about-beat" data-reveal="text">
             {/* Lines are balanced rather than hand-broken, so no viewport
                 leaves a single word stranded on the last line. */}
             <p className="about-display">
@@ -180,7 +180,7 @@ export function AboutSection() {
             </p>
           </div>
 
-          <div className="about-beat">
+          <div className="about-beat" data-reveal="text">
             <p className="about-display">
               Okay, enough about work.{" "}
               <span className="about-display-quiet">
@@ -209,9 +209,10 @@ export function AboutSection() {
           photos={ABOUT_PHOTOS}
           className="about-photo-row"
           label="More photos of Shreya"
+          revealIndex={0}
         />
 
-        <div className="about-facts-block">
+        <div className="about-facts-block" data-reveal="text">
           <p className="about-facts-label">Fun facts · swipe</p>
           <div
             className="about-facts-deck"

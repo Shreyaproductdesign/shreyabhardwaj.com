@@ -83,7 +83,7 @@ export function AboutGlimpse() {
   return (
     <section className="glimpse" aria-label="A little about Shreya">
       <div className="glimpse-head">
-        <div className="glimpse-intro">
+        <div className="glimpse-intro" data-reveal="text">
           <p className="glimpse-eyebrow">Off the clock</p>
           <p className="glimpse-line">
             200+ art competitions, volleyball at state level, and still
@@ -99,6 +99,8 @@ export function AboutGlimpse() {
 
         <div
           className={`about-drives glimpse-drives${drivesIn ? " is-in" : ""}`}
+          data-reveal="text"
+          style={{ ["--reveal-i" as string]: 1 }}
           ref={drivesRef}
         >
           <p className="about-drives-label">What drives me</p>
@@ -120,6 +122,7 @@ export function AboutGlimpse() {
         photos={PHOTOS}
         className="glimpse-strip"
         label="Photos of Shreya"
+        revealIndex={2}
       />
 
     </section>

@@ -34,7 +34,7 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
       id="product-design"
       aria-label="Selected work"
     >
-      <div className="case-head">
+      <div className="case-head" data-reveal="text">
         <p className="case-eyebrow">Selected work</p>
         <h2 className="case-heading">Case studies</h2>
         <p className="case-lede">
@@ -55,6 +55,8 @@ export function CaseStudies({ studies }: CaseStudiesProps) {
             <article
               key={study.id}
               id={study.id}
+              data-reveal
+              style={{ ["--reveal-i" as string]: i % 2 }}
               /* The Miro and Wise work gets the full width with its media
                  beside the copy; the two self-initiated projects share the
                  last row. */
