@@ -32,11 +32,13 @@ export function useReveal() {
           io.unobserve(entry.target);
         }
       },
-      /* Fire once a slice is genuinely on screen. No negative root margin:
-         with one, a short element sitting flush at the bottom of the viewport
-         (the wordmark on a phone, 75px tall and pushed 14px lower while
-         hidden) fell entirely inside the dead zone and never revealed. */
-      { threshold: 0.12 },
+      /* Start a beat early: the root reaches a quarter-viewport below the
+         fold, so a slice begins arriving while it's still just out of sight and
+         a fast fling never lands on a blank. The threshold is a slice of the
+         element inside that extended root. No negative margin: with one, a
+         short element flush at the bottom of the viewport (the wordmark on a
+         phone) fell in the dead zone and never revealed. */
+      { threshold: 0.12, rootMargin: "0px 0px 25% 0px" },
     );
 
     /* One painted frame in the hidden state before anything is marked in,

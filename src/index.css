@@ -139,6 +139,14 @@
   --space-24: 96px;
 }
 
+/* Narrow windows get less air between sections: at 880px a two-row photo
+   strip plus 90px above and below ran taller than the viewport. */
+@media (max-width: 900px) {
+  :root {
+    --section-pad: clamp(48px, 7vh, 72px);
+  }
+}
+
 html {
   scroll-behavior: smooth;
   background: var(--surface);
