@@ -60,6 +60,11 @@
   --dur-base: 350ms;   /* hover lift, state changes, fills */
   --dur-reveal: 1000ms; /* content arriving as you reach it */
 
+  /* One vertical rhythm for every section after the hero. Before this each
+     boundary had its own pair (72/81, 90/90, 126/72…), so the page had no
+     beat to hand over on. */
+  --section-pad: clamp(72px, 10vh, 120px);
+
   /* Depth on cards and containers comes from these rather than a 1px border,
      so it adapts to whatever sits behind it. Three layers: a ring standing in
      for the border, a subtle lift, then ambient depth. */

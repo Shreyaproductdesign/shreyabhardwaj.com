@@ -47,12 +47,21 @@
   }
 }
 
+/* ——— Section rhythm ———
+   Sections after the hero share one padding token and hand over on a
+   hairline. The About/Experience pair is one chapter inside .deck-panel, so
+   the rule lands above the chapter, not between them. The CTA is on the
+   accent, where a grey hairline would read as a mistake. */
+.deck > * + *:not(.cta) {
+  border-top: 1px solid var(--border-subtle);
+}
+
 /* ——— About glimpse ——— */
 /* The gutter lives here, once. The head and the strip then both sit in the
    same --max column as .case-head and .about-shell, so the section's text and
    its first photo start on the site's one leading edge. */
 .glimpse {
-  padding: clamp(56px, 8vh, 96px) var(--page-pad) clamp(64px, 9vh, 104px);
+  padding: var(--section-pad) var(--page-pad);
   background: var(--surface);
   color: var(--text-primary);
   overflow-x: clip;
@@ -774,7 +783,7 @@
 /* ——— Case studies (card grid) ——— */
 .case-studies {
   position: relative;
-  padding: clamp(72px, 10vh, 120px) var(--page-pad);
+  padding: var(--section-pad) var(--page-pad);
   background: var(--surface);
   color: var(--text-primary);
 }
@@ -1276,7 +1285,8 @@
 
 /* ——— About (editorial, normal flow) ——— */
 .about {
-  padding: clamp(96px, 14vh, 140px) var(--page-pad) var(--space-16);
+  /* Shorter below: Experience follows inside the same chapter. */
+  padding: var(--section-pad) var(--page-pad) var(--space-16);
   background: var(--surface);
   color: var(--text-primary);
 }
@@ -1692,7 +1702,7 @@
 /* ——— Visual marquee ——— */
 .visuals {
   position: relative;
-  padding: clamp(96px, 14vh, 150px) 0 72px;
+  padding: var(--section-pad) 0;
   background: var(--surface);
   color: var(--text-primary);
 }
@@ -1752,7 +1762,7 @@
   position: relative;
   isolation: isolate;
   overflow-x: hidden;
-  padding: 0 var(--page-pad) clamp(72px, 12vh, 120px);
+  padding: 0 var(--page-pad) var(--section-pad);
   background: var(--surface);
 }
 
@@ -1931,7 +1941,7 @@
   position: relative;
   z-index: 1;
   min-height: min(88vh, 820px);
-  padding: clamp(72px, 12vh, 120px) var(--page-pad) 28px;
+  padding: var(--section-pad) var(--page-pad) 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
