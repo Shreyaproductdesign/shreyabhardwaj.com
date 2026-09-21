@@ -164,12 +164,10 @@ function App() {
 
   return (
     <div className="page">
-      {/* Three zones at 14px, the way the reference does it: who, what, where
-          to. No pill — the chrome was drawing more attention than the words. */}
+      {/* Two zones at 14px: what she does, and where to go. The name isn't
+          here — the wordmark below already says it, at a size that can't be
+          missed. No pill: the chrome was drawing more attention than the words. */}
       <header className="nav">
-        <a className="nav-name" href="#home">
-          Shreya Bhardwaj
-        </a>
         <p className="nav-role">Product designer, Amsterdam</p>
         <nav className="nav-links" aria-label="Primary">
           {NAV_SECTIONS.map((section) => (
