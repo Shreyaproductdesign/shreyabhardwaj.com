@@ -44,7 +44,9 @@ const FOOD_PIXELS: Record<string, string> = {
 /* Grows through the page's own tints — ink, then the sky, leaf, sun and coral
    the "what drives me" pills are edged in — instead of the electric blue and
    magenta it had, which came from nowhere else on the site. */
-const BODY_TIERS = ["#171717", "#0892c4", "#369e4e", "#bd9a2a", "#d15d51"];
+/* Ink, then the aurora's colours in wheel order as the snake grows: sky,
+   violet, magenta, coral. Same family as the light behind the glass. */
+const BODY_TIERS = ["#171717", "#3a9fe0", "#7d55e6", "#ee4fa8", "#ff7a4d"];
 
 const BODY_TIER_AT = [1, 6, 11, 17, 24];
 
