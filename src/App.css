@@ -358,12 +358,15 @@
   align-self: flex-end;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding-bottom: 8px;
+  gap: var(--space-3);
+  padding-bottom: var(--space-2);
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
 
 .snake-field {
@@ -379,26 +382,27 @@
   height: 100%;
 }
 
-/* The whole field is the control while idle, not just the pill in the middle
-   of it. The canvas gave no sign it was clickable, so a click that missed the
-   pill looked like a dead button. */
+/* The whole field is the control while idle. The caption sits at its foot and
+   says so in a small voice, the way the reference introduces its bee — a big
+   pill in the middle turned an ambient board into a demand. */
 .snake-start {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 0 var(--space-3);
   border: 0;
   border-radius: 18px;
   background: transparent;
   cursor: pointer;
-  transition: background var(--dur-fast) var(--ease-out);
+  transition: background var(--dur-base) var(--ease-out);
 }
 
-/* The cue that the area is live, across the whole of it. */
+/* The cue that the whole area is live: a wash across it, not a spotlight. */
 .snake-start:hover,
 .snake-start:focus-visible {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 
 .snake-start:focus-visible {
@@ -406,65 +410,29 @@
   outline-offset: -2px;
 }
 
-/* Always visible rather than revealed on hover: a hover-only control can't be
-   found on a touch screen. Translucent, so the still board reads behind it. */
 .snake-start-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55em;
-  padding: 14px 26px;
+  padding: 4px 10px;
   border-radius: 999px;
-  border: 1px solid var(--border-subtle);
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(10px) saturate(140%);
-  -webkit-backdrop-filter: blur(10px) saturate(140%);
-  box-shadow: var(--shadow-border);
+  /* Just enough backing to stay legible when the snake runs beneath it. */
+  background: rgba(255, 255, 255, 0.85);
   font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 700;
+  font-size: var(--text-caption);
+  font-weight: 500;
   letter-spacing: var(--track-body);
   white-space: nowrap;
-  color: var(--text-primary);
-  transition:
-    background var(--dur-fast) var(--ease-out),
-    color var(--dur-fast) var(--ease-out),
-    border-color var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-base) var(--ease-out),
-    transform var(--dur-base) var(--ease-out);
-}
-
-/* A triangle's geometric centre is left of its visual one, so it needs a nudge. */
-.snake-start-icon {
-  font-size: 0.8em;
-  transform: translateX(1px);
+  color: var(--text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 .snake-start:hover .snake-start-label,
 .snake-start:focus-visible .snake-start-label {
-  background: var(--accent);
-  border-color: transparent;
-  color: var(--text-on-accent);
-  box-shadow: var(--shadow-border-hover);
-  transform: translateY(-1px);
-}
-
-.snake-start:active .snake-start-label {
-  scale: 0.96;
+  color: var(--text-primary);
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .snake-start,
   .snake-start-label {
-    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
-  }
-
-  /* The fill still marks the hover, so no feedback is lost with the travel. */
-  .snake-start:hover .snake-start-label,
-  .snake-start:focus-visible .snake-start-label {
-    transform: none;
-  }
-
-  .snake-start:active .snake-start-label {
-    scale: 1;
+    transition: none;
   }
 }
 
@@ -473,22 +441,31 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* The way out, in the same quiet voice as the score. It used to be a filled
+   accent pill, which made stopping look like the main event. */
 .snake-toggle {
-  padding: 6px 12px;
+  padding: 6px 10px;
   border-radius: 999px;
-  background: var(--accent);
-  color: var(--text-on-accent);
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-primary);
   font: inherit;
-  transition: filter var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out);
 }
 
 .snake-toggle:hover {
-  filter: brightness(0.93);
+  border-color: var(--border);
+  background: var(--surface-sunken);
 }
 
-.snake[data-playing="true"] .snake-toggle {
-  background: var(--surface-inverse);
-  color: var(--accent);
+.snake-toggle:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
 }
 
 

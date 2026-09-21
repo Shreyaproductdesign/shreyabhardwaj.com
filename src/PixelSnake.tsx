@@ -41,16 +41,12 @@ const FOOD_PIXELS: Record<string, string> = {
   s: FOOD_SHINE,
 };
 
-const BODY_TIERS = [
-  "#171717",
-  "#0953ea",
-  "#0fa20b",
-  "#b88500",
-  "#7b0de8",
-  "#e929a3",
-];
+/* Grows through the page's own tints — ink, then the sky, leaf, sun and coral
+   the "what drives me" pills are edged in — instead of the electric blue and
+   magenta it had, which came from nowhere else on the site. */
+const BODY_TIERS = ["#171717", "#0892c4", "#369e4e", "#bd9a2a", "#d15d51"];
 
-const BODY_TIER_AT = [1, 6, 10, 15, 21, 28];
+const BODY_TIER_AT = [1, 6, 11, 17, 24];
 
 const bodyTier = (rank: number) => {
   let tier = 0;
@@ -131,14 +127,6 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       };
     };
 
-    /* The invitation sits in the middle of the field until someone takes over,
-       and an apple behind frosted glass is hard to see. Only a small block is
-       excluded, so the attract snake's path barely notices. */
-    const underPlayButton = (c: Cell) =>
-      !playingRef.current &&
-      Math.abs(c.x - (cols - 1) / 2) < cols * 0.22 &&
-      Math.abs(c.y - (rows - 1) / 2) < Math.max(1, rows * 0.22);
-
     const placeFood = () => {
       let spot: Cell;
       let guard = 0;
@@ -148,7 +136,7 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
           y: Math.floor(Math.random() * rows),
         };
         guard += 1;
-      } while ((hits(spot, snake) || underPlayButton(spot)) && guard < 200);
+      } while (hits(spot, snake) && guard < 200);
       food = spot;
     };
 
@@ -284,16 +272,19 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
         }
       }
 
-      // body
+      // body: a gentle taper toward the tail, corners softened so the run
+      // reads as beads rather than a stack of hard squares
       for (let i = snake.length - 1; i >= 1; i -= 1) {
         const seg = snake[i];
         const t = i / snake.length;
-        const size = cell * (0.82 - t * 0.22);
+        const size = cell * (0.8 - t * 0.2);
         const x = offsetX + seg.x * cell + (cell - size) / 2;
         const y = offsetY + seg.y * cell + (cell - size) / 2;
 
         ctx.fillStyle = bodyTier(snake.length - i);
-        ctx.fillRect(x, y, size, size);
+        ctx.beginPath();
+        ctx.roundRect(x, y, size, size, size * 0.24);
+        ctx.fill();
       }
 
       // head
@@ -410,21 +401,16 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       <div className="snake-field" ref={wrapRef}>
         <canvas className="snake-canvas" ref={canvasRef} />
 
-        {/* Covers the whole field rather than sitting in the middle of it. As a
-            pill it was a 215x45 target inside a 1325x396 area, so a click
-            anywhere near the snake itself did nothing at all. */}
+        {/* The whole field is the control; the caption just says so. A big pill
+            in the middle turned an ambient board into a demand, and covered
+            the snake it was inviting you to play with. */}
         {playing ? null : (
           <button
             className="snake-start"
             type="button"
             onClick={() => setPlaying(true)}
           >
-            <span className="snake-start-label">
-              <span className="snake-start-icon" aria-hidden="true">
-                ▶
-              </span>
-              Play to learn about Shreya
-            </span>
+            <span className="snake-start-label">(Click anywhere to play)</span>
           </button>
         )}
       </div>
