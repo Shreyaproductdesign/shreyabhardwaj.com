@@ -69,6 +69,9 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
   const [playing, setPlaying] = useState(false);
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(0);
+  /* Score of the game that just ended, so the glass can say how it went.
+     Null until a game has been lost; cleared again when the next one starts. */
+  const [ended, setEnded] = useState<number | null>(null);
   const playingRef = useRef(false);
 
   useEffect(() => {
@@ -220,6 +223,13 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       if (hits(next, snake.slice(0, -1))) {
         flash = 10;
         setBest((b) => Math.max(b, scoreValue));
+        /* A crash in a real game ends it: the glass comes back with the score
+           and the snake wanders on behind it. In attract mode it just starts
+           over, since nobody was steering. */
+        if (playingRef.current) {
+          setEnded(scoreValue);
+          setPlaying(false);
+        }
         reset();
         return;
       }
@@ -229,7 +239,10 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       if (next.x === food.x && next.y === food.y) {
         scoreValue += 1;
         setScore(scoreValue);
-        onEatRef.current?.(scoreValue, cellCenter(food));
+        /* Rewards are for the person steering. The attract snake eats too, but
+           handing out what it finds would spoil the reason the glass gives to
+           click. */
+        if (playingRef.current) onEatRef.current?.(scoreValue, cellCenter(food));
         placeFood();
       } else {
         snake.pop();
@@ -403,20 +416,42 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
       ) : null}
 
       <div className="snake-field" ref={wrapRef}>
+        {/* Soft colour behind the board, in the snake's own palette. Read
+            through the glass it becomes the blur of colour the glass needs; with
+            the glass gone it drops back so the pixels stay legible. */}
+        <div className="snake-aurora" aria-hidden="true" />
+
         <canvas className="snake-canvas" ref={canvasRef} />
 
-        {/* The whole field is the control; the caption just says so. A big pill
-            in the middle turned an ambient board into a demand, and covered
-            the snake it was inviting you to play with. */}
-        {playing ? null : (
-          <button
-            className="snake-start"
-            type="button"
-            onClick={() => setPlaying(true)}
-          >
-            <span className="snake-start-label">Click to play</span>
-          </button>
-        )}
+        {/* Frosted glass over the field while the snake plays itself. The whole
+            pane is the control; clicking it lifts the glass and hands over the
+            keys. It returns when the game ends or is stopped. It stays mounted
+            either way so it can fade rather than pop. */}
+        <button
+          className="snake-glass"
+          type="button"
+          data-visible={playing ? "false" : "true"}
+          aria-hidden={playing}
+          tabIndex={playing ? -1 : 0}
+          onClick={() => {
+            setEnded(null);
+            setPlaying(true);
+          }}
+        >
+          <span className="snake-glass-card">
+            {ended !== null ? (
+              <span className="snake-glass-meta">
+                Game over · {ended} {ended === 1 ? "apple" : "apples"}
+                {best > ended ? ` · best ${best}` : ""}
+              </span>
+            ) : best > 0 ? (
+              <span className="snake-glass-meta">Best {best}</span>
+            ) : null}
+            <span className="snake-glass-title">
+              Click anywhere to play{best > 0 ? " again" : ""}
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   );

@@ -397,56 +397,154 @@
   height: 100%;
 }
 
-/* The whole field is the control while idle. The caption sits at its foot and
-   says so in a small voice, the way the reference introduces its bee — a big
-   pill in the middle turned an ambient board into a demand. */
-.snake-start {
+/* ——— Aurora + glass ———
+   While the snake plays itself the field sits under frosted glass: soft
+   colour behind, the board moving through it, one line on the pane. Click
+   and the glass lifts; lose or stop and it settles back. */
+
+.snake-field {
+  /* The glass and aurora are clipped to the field's edge. */
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Three drifting blobs in the snake's own body colours. Kept below the board
+   and faint enough that the pixels always win; the glass is what turns them
+   into a wash. */
+.snake-aurora {
+  position: absolute;
+  inset: -20%;
+  z-index: 0;
+  pointer-events: none;
+  /* Gathered toward the middle, behind the pane, so the band's edges stay the
+     page's white and the colour reads as a thing behind the glass rather than
+     a stripe across the hero. */
+  background:
+    radial-gradient(22% 42% at 40% 48%, rgba(8, 146, 196, 0.6), transparent 70%),
+    radial-gradient(20% 40% at 58% 42%, rgba(209, 93, 81, 0.55), transparent 70%),
+    radial-gradient(24% 40% at 52% 68%, rgba(189, 154, 42, 0.5), transparent 70%),
+    radial-gradient(16% 34% at 44% 72%, rgba(54, 158, 78, 0.45), transparent 70%);
+  filter: blur(48px) saturate(1.1);
+  opacity: 0.9;
+  animation: aurora-drift 26s var(--ease-out) infinite alternate;
+  transition: opacity var(--dur-reveal) var(--ease-out);
+}
+
+/* Board on top of colour: the pixels have to read against it. */
+.snake[data-playing="true"] .snake-aurora {
+  opacity: 0.22;
+}
+
+@keyframes aurora-drift {
+  from { transform: translate3d(-3%, -2%, 0) rotate(0deg) scale(1); }
+  to   { transform: translate3d(3%, 3%, 0) rotate(8deg) scale(1.08); }
+}
+
+.snake-canvas {
+  position: relative;
+  z-index: 1;
+}
+
+/* The pane. It is the button: the entire field starts the game. */
+.snake-glass {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0 0 var(--space-3);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  padding: var(--space-6);
   border: 0;
   background: transparent;
   cursor: pointer;
-  transition: background var(--dur-base) var(--ease-out);
+  transition:
+    opacity var(--dur-reveal) var(--ease-out),
+    visibility 0s linear;
 }
 
-/* The cue that the whole area is live: a wash across it, not a spotlight. */
-.snake-start:hover,
-.snake-start:focus-visible {
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
+.snake-glass[data-visible="false"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition-delay: 0s, var(--dur-reveal);
 }
 
-.snake-start:focus-visible {
+.snake-glass:focus-visible {
+  outline: none;
+}
+
+.snake-glass:focus-visible .snake-glass-card {
   outline: 2px solid var(--text-primary);
-  outline-offset: -2px;
+  outline-offset: 4px;
 }
 
-.snake-start-label {
-  padding: 6px 10px;
-  /* Just enough backing to stay legible when the snake runs beneath it, ringed
-     like the reward pills so they read as one family. */
-  background: rgba(255, 255, 255, 0.85);
-  box-shadow: var(--shadow-border);
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-ui);
-  letter-spacing: var(--track-body);
-  white-space: nowrap;
-  color: var(--text-muted);
-  transition: color var(--dur-fast) var(--ease-out);
+/* Frosted card: white at low opacity, a deep blur, a bright hairline for the
+   edge light, and a long soft shadow. Rounded on purpose — glass is a
+   different material from the square media and reads as one. */
+.snake-glass-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: min(100%, 26rem);
+  padding: clamp(24px, 4vw, 40px) clamp(24px, 4vw, 48px);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(26px) saturate(1.3);
+  -webkit-backdrop-filter: blur(26px) saturate(1.3);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.75),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 24px 60px -20px rgba(0, 0, 0, 0.18);
+  text-align: center;
+  /* Lifts with the fade so it leaves like a pane, not a fade of text. */
+  transform: translate3d(0, 0, 0) scale(1);
+  transition:
+    transform var(--dur-reveal) var(--ease-out),
+    background var(--dur-base) var(--ease-out);
 }
 
-.snake-start:hover .snake-start-label,
-.snake-start:focus-visible .snake-start-label {
+.snake-glass[data-visible="false"] .snake-glass-card {
+  transform: translate3d(0, -6px, 0) scale(1.03);
+}
+
+.snake-glass:hover .snake-glass-card {
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.snake-glass-title {
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: var(--weight-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--track-title);
   color: var(--text-primary);
 }
 
+.snake-glass-meta {
+  font-family: var(--font-sans);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-body);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .snake-glass-card {
+    padding: 20px 22px;
+    border-radius: 18px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .snake-start,
-  .snake-start-label {
+  .snake-aurora {
+    animation: none;
+    transition: none;
+  }
+
+  .snake-glass,
+  .snake-glass-card {
     transition: none;
   }
 }
