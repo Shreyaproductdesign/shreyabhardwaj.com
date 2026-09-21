@@ -150,6 +150,8 @@
 html {
   scroll-behavior: smooth;
   background: var(--surface);
+  /* Snap targets are only the case-study rows; elsewhere this is inert. */
+  scroll-snap-type: y proximity;
 }
 
 /* Nav is anchor-driven and the page runs to about a dozen viewports, so a jump

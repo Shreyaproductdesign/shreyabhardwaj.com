@@ -949,31 +949,40 @@
   flex-direction: column;
 }
 
+/* One study per screen. The row is a viewport tall (less the nav), the media
+   takes whatever the facts leave, and the page snaps to each row's top as
+   you pass — proximity, so the rest of the page scrolls as it always did. */
 .case-row {
+  --row-nav: 72px;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
-  padding: var(--space-12) 0;
+  min-height: calc(100dvh - var(--row-nav));
+  padding: var(--space-8) 0;
   border-bottom: 1px solid var(--border-subtle);
-}
-
-.case-list > .case-row:first-child {
-  padding-top: 0;
+  scroll-snap-align: start;
+  scroll-margin-top: var(--row-nav);
 }
 
 .case-list > :last-child {
   border-bottom: 0;
 }
 
-/* Square, full width, edged with the same hairline the photos carry. */
+/* Square, full width, edged with the same hairline the photos carry. Grows
+   to fill the row; the image is absolute so its size comes from the frame,
+   never the other way round. */
 .case-media {
+  position: relative;
+  flex: 1 1 0;
+  min-height: 240px;
   overflow: hidden;
-  aspect-ratio: 2 / 1;
   background: var(--surface-sunken);
 }
 
 .case-media img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -1180,12 +1189,17 @@
 }
 
 @media (max-width: 640px) {
-  .case-media {
-    aspect-ratio: 16 / 10;
+  /* A phone screen can't hold media plus stacked facts; the row takes the
+     height it needs and the media keeps a fixed ratio. */
+  .case-row {
+    min-height: 0;
+    scroll-snap-align: none;
   }
 
-  .case-row {
-    padding: var(--space-8) 0;
+  .case-media {
+    flex: 0 0 auto;
+    aspect-ratio: 16 / 10;
+    min-height: 0;
   }
 }
 
