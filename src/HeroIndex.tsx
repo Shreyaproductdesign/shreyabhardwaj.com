@@ -38,29 +38,19 @@ export function HeroIndex({ caseStudies, experience }: HeroIndexProps) {
         </h1>
 
         <div className="hero-facts" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
-          <div className="hero-fact">
-            <span className="hero-fact-label">Now</span>
-            <ul className="hero-fact-list">
-              {experience.filter((job) => job.current).map((job) => (
-                <li className="hero-index-item" key={job.company}>
-                  <Logo job={job} />
-                  {job.company}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="hero-fact">
-            <span className="hero-fact-label">Before</span>
-            <ul className="hero-fact-list">
-              {experience.filter((job) => !job.current).map((job) => (
+          {/* Where she's worked, current first. No "now / before" labels: the
+              tag on Miro says it, and the order does the rest. */}
+          <ul className="hero-fact-list">
+            {[...experience]
+              .sort((a, b) => Number(b.current ?? false) - Number(a.current ?? false))
+              .map((job) => (
                 <li className="hero-index-item" key={`${job.company}-${job.dates}`}>
                   <Logo job={job} />
                   {job.company}
+                  {job.current ? <span className="hero-index-current">Current</span> : null}
                 </li>
               ))}
-            </ul>
-          </div>
+          </ul>
 
           <div className="hero-fact is-end">
             <span className="hero-fact-label">Case studies</span>
