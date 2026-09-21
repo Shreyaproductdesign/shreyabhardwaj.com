@@ -32,10 +32,11 @@ export function useReveal() {
           io.unobserve(entry.target);
         }
       },
-      /* Fire once a slice is genuinely on screen, and a little before the
-         element's top edge would otherwise cross in, so the settle finishes
-         about where the eye lands. */
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+      /* Fire once a slice is genuinely on screen. No negative root margin:
+         with one, a short element sitting flush at the bottom of the viewport
+         (the wordmark on a phone, 75px tall and pushed 14px lower while
+         hidden) fell entirely inside the dead zone and never revealed. */
+      { threshold: 0.12 },
     );
 
     /* One painted frame in the hidden state before anything is marked in,
