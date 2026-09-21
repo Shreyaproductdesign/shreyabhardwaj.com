@@ -903,3 +903,31 @@ Deliberately not done: Lenis-style smooth scrolling, which the reference uses.
 Native scroll is what Shreya asked for after the horizontal deck, and reveals
 on native scroll get most of the feel without the floatiness or the
 dependency. Easy to add later if wanted.
+
+## UI finesse pass: typography and surfaces (leoparpeix reference)
+
+Measured the reference before touching anything: 263 of ~310 text nodes are
+14px / weight 400; hierarchy is size (14 → 18 → 24 → 34) and grey, never bold;
+all 276 media elements are 0px radius; no pills, no tracked uppercase labels;
+nav is three text zones at 14px with no bar.
+
+- [x] Type tokens: `--weight-ui: 400` base, titles 500, display 600, wordmark 900.
+      Section titles 44–80px → 32–44px. Labels natural-case 13px, tracking 0.
+      Body 15px, caption 14px is the workhorse. UI line-height 1.15.
+- [x] Nav: name | role | links at 14px on a soft blur; active = ink + hairline.
+      Collapses 3 → 2 → 1 zones at 1024 / 640.
+- [x] Case studies: editorial rows. Full-width 2.4:1 square media, metadata as
+      a five-column 14px grid (index, title+company·sector, result, topics, way
+      in), hairline between rows. Last two share a row with stacked facts.
+      Whole row is the link; status chips removed (last column says it).
+- [x] Square: photo frames, marquee tiles, fun-fact cards, embed back control.
+      Experience box → hairline table.
+- [x] Pills → text: Current (hero + experience), drives, Stop, snake caption
+      backing. Snake reward pills kept — they're the game.
+- [x] Attract-mode score hidden; HUD only once someone plays.
+- [x] Verified 1920/1440/1024/820/390: no overflow, 28/28 reveals, meta grid
+      collapses at 900, reduced motion hides nothing, hover = image scale +
+      underline + arrow nudge, aria-current on the active nav link.
+
+Kept against the reference, on purpose: the yellow (wordmark mark, snake, CTA),
+the CTA's uppercase as the one display moment, the snake's pills.
