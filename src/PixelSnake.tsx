@@ -79,6 +79,28 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
     () => window.matchMedia("(pointer: coarse)").matches,
   );
   const playingRef = useRef(false);
+  const glassRef = useRef<HTMLButtonElement>(null);
+
+  /* The pane follows the pointer across the field, clamped so it never runs
+     past the edge, and drifts back to centre when the pointer leaves. Set as
+     CSS variables so the transition on the card does the easing. */
+  const follow = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const pane = glassRef.current;
+    const card = pane?.firstElementChild as HTMLElement | null;
+    if (!pane || !card) return;
+    const r = pane.getBoundingClientRect();
+    const maxX = Math.max(0, r.width / 2 - card.offsetWidth / 2 - 16);
+    const maxY = Math.max(0, r.height / 2 - card.offsetHeight / 2 - 16);
+    const x = Math.max(-maxX, Math.min(maxX, e.clientX - (r.left + r.width / 2)));
+    const y = Math.max(-maxY, Math.min(maxY, e.clientY - (r.top + r.height / 2)));
+    pane.style.setProperty("--fx", `${x}px`);
+    pane.style.setProperty("--fy", `${y}px`);
+  };
+  const unfollow = () => {
+    glassRef.current?.style.setProperty("--fx", "0px");
+    glassRef.current?.style.setProperty("--fy", "0px");
+  };
 
   useEffect(() => {
     playingRef.current = playing;
@@ -467,6 +489,9 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
         <button
           className="snake-glass"
           type="button"
+          ref={glassRef}
+          onPointerMove={follow}
+          onPointerLeave={unfollow}
           data-visible={playing ? "false" : "true"}
           aria-hidden={playing}
           tabIndex={playing ? -1 : 0}
@@ -476,26 +501,19 @@ export function PixelSnake({ onEat }: PixelSnakeProps) {
           }}
         >
           <span className="snake-glass-card">
-            <span className="snake-glass-text">
-              <span className="snake-glass-title">
-                {coarse ? "Tap" : "Click"} anywhere to play{best > 0 ? " again" : ""}
-              </span>
-              <span className="snake-glass-meta">
-                {ended !== null
-                  ? `Game over · ${ended} ${ended === 1 ? "apple" : "apples"}${
-                      best > ended ? ` · best ${best}` : ""
-                    }`
-                  : best > 0
-                    ? `Best ${best} · ${coarse ? "swipe" : "arrow keys"} to steer`
-                    : coarse
-                      ? "Swipe to steer"
-                      : "Arrow keys to steer"}
-              </span>
+            <span className="snake-glass-title">
+              {coarse ? "Tap" : "Click"} to play{best > 0 ? " again" : ""}
             </span>
-            <span className="snake-glass-play" aria-hidden="true">
-              <svg viewBox="0 0 16 16" width="14" height="14">
-                <path d="M4 2.5v11l9-5.5z" fill="currentColor" />
-              </svg>
+            <span className="snake-glass-meta">
+              {ended !== null
+                ? `Game over · ${ended} ${ended === 1 ? "apple" : "apples"}${
+                    best > ended ? ` · best ${best}` : ""
+                  }`
+                : best > 0
+                  ? `Best ${best} · ${coarse ? "swipe" : "arrow keys"} to steer`
+                  : coarse
+                    ? "Swipe to steer"
+                    : "Arrow keys to steer"}
             </span>
           </span>
         </button>

@@ -49,10 +49,10 @@
 
 /* ——— Section rhythm ———
    Sections after the hero share one padding token and hand over on a
-   hairline. The About/Experience pair is one chapter inside .deck-panel, so
+   hairline — except the first, which the hero's aurora fades into. The About/Experience pair is one chapter inside .deck-panel, so
    the rule lands above the chapter, not between them. The CTA is on the
    accent, where a grey hairline would read as a mistake. */
-.deck > * + *:not(.cta) {
+.deck > * + *:not(.cta):not(.glimpse) {
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -67,56 +67,49 @@
   overflow-x: clip;
 }
 
-.glimpse-foot,
-.glimpse-strip {
+/* ——— Collage ———
+   Twelve columns, dense flow, one gap. Each cell's span comes from the
+   component; the row unit tracks the column width so cells stay near their
+   photo's aspect and the crop is a trim, not a cut. */
+.collage {
+  list-style: none;
   width: 100%;
   max-width: var(--max);
-  margin-inline: auto;
+  margin: 0 auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-auto-rows: clamp(44px, calc((min(100vw, var(--max)) - 2 * var(--page-pad)) / 12 * 0.78), 84px);
+  grid-auto-flow: dense;
+  gap: var(--space-3);
 }
 
-/* Under the strip: what drives her on the left, the way onward on the right,
-   in the same 14px voice the case rows use for their facts. */
-.glimpse-foot {
-  margin-top: var(--space-6);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-3) var(--space-8);
+.collage-cell {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-sunken);
+  transition: opacity var(--dur-base) var(--ease-out);
 }
 
-.glimpse-more {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-family: var(--font-sans);
-  font-size: var(--text-caption);
-  font-weight: var(--weight-ui);
-  letter-spacing: var(--track-body);
-  color: var(--text-secondary);
-  transition: color var(--dur-fast) var(--ease-out);
+.collage-cell img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  outline: 1px solid var(--image-outline);
+  outline-offset: -1px;
+  transform: scale(1);
+  transition: transform 700ms var(--ease-out);
 }
 
-.glimpse-more:hover {
-  color: var(--text-primary);
+/* Hover: the photo under the pointer drifts in behind its fixed edge and
+   the rest step back a little, so attention goes to one face at a time. */
+.collage-cell:hover img {
+  transform: scale(1.05);
 }
 
-.glimpse-more-arrow {
-  transition: transform var(--dur-base) var(--ease-out);
-}
-
-.glimpse-more:hover .glimpse-more-arrow {
-  transform: translateY(2px);
-}
-
-/* Compound selector: the shared .about-drives rule is declared later and
-   would otherwise win and stack these. */
-.about-drives.glimpse-drives {
-  width: auto;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-4);
+.collage:hover .collage-cell:not(:hover) {
+  opacity: 0.72;
 }
 
 /* Shared by the glimpse strip and the row inside About. The proportional
@@ -137,25 +130,6 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-@media (max-width: 900px) {
-  /* Six proportional columns get too short to read here, so the strip becomes
-     two rows of three squares. The `!important` overrides the inline columns
-     and ratios the component sets. */
-  .glimpse-strip {
-    grid-template-columns: repeat(3, 1fr) !important;
-  }
-
-  .glimpse-strip .photo-frame {
-    aspect-ratio: 1 !important;
-  }
-}
-
-@media (max-width: 520px) {
-  .glimpse-strip {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
 }
 
 /* ——— Nav ———
@@ -457,6 +431,10 @@
     radial-gradient(20% 38% at 36% 70% in oklch, oklch(0.72 0.15 235 / 0.6), transparent 70%);
   filter: blur(52px) saturate(1.15);
   opacity: 0.95;
+  /* Dissolves toward the foot of the band, so the hero hands over to the
+     next section on colour fading to white rather than on an edge. */
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 96%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 96%);
   animation: aurora-drift 26s var(--ease-out) infinite alternate;
   transition: opacity var(--dur-reveal) var(--ease-out);
 }
@@ -477,6 +455,10 @@
 
 /* The pane. It is the button: the entire field starts the game. */
 .snake-glass {
+  /* Where the card sits relative to centre; the pane writes these from the
+     pointer. Declared here, not on the card, so the inline values win. */
+  --fx: 0px;
+  --fy: 0px;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -515,31 +497,34 @@
 .snake-glass-card {
   position: relative;
   display: flex;
-  align-items: center;
-  gap: var(--space-6);
-  min-width: 20rem;
-  padding: 18px 20px 18px 24px;
-  border-radius: 20px;
+  flex-direction: column;
+  gap: 3px;
+  padding: 14px 20px;
+  border-radius: 16px;
   text-align: start;
+  /* Sheer: little white in the fill, so the pane is mostly the colour
+     behind it made smooth. */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.62) 0%,
-    rgba(255, 255, 255, 0.34) 55%,
-    rgba(255, 255, 255, 0.46) 100%
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0.14) 55%,
+    rgba(255, 255, 255, 0.22) 100%
   );
-  backdrop-filter: blur(28px) saturate(1.5) brightness(1.06);
-  -webkit-backdrop-filter: blur(28px) saturate(1.5) brightness(1.06);
+  backdrop-filter: blur(22px) saturate(1.4) brightness(1.03);
+  -webkit-backdrop-filter: blur(22px) saturate(1.4) brightness(1.03);
   box-shadow:
     /* edge light: bright along the top, a fainter ring all round */
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.42),
     /* a hair of ink under the bottom edge so it doesn't dissolve into pale
        parts of the aurora */
     0 1px 1px rgba(0, 0, 0, 0.05),
     0 28px 60px -24px rgba(0, 0, 0, 0.22);
-  transform: translate3d(0, 0, 0) scale(1);
+  /* Follows the pointer: the offset arrives as --fx/--fy from the pane and
+     the transition is what makes it trail rather than snap. */
+  transform: translate3d(var(--fx), var(--fy), 0) scale(1);
   transition:
-    transform var(--dur-base) var(--ease-out),
+    transform 420ms var(--ease-out),
     box-shadow var(--dur-base) var(--ease-out);
 }
 
@@ -552,39 +537,33 @@
   border-radius: inherit;
   background: radial-gradient(
     120% 90% at 12% 0%,
-    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.38),
     rgba(255, 255, 255, 0) 55%
   );
   pointer-events: none;
 }
 
 .snake-glass[data-visible="false"] .snake-glass-card {
-  transform: translate3d(0, -6px, 0) scale(1.03);
+  transform: translate3d(var(--fx), calc(var(--fy) - 6px), 0) scale(1.03);
 }
 
 .snake-glass:hover .snake-glass-card {
-  transform: translate3d(0, -1px, 0) scale(1.01);
+  transform: translate3d(var(--fx), var(--fy), 0) scale(1.01);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.55),
     0 1px 1px rgba(0, 0, 0, 0.05),
     0 32px 64px -24px rgba(0, 0, 0, 0.26);
 }
 
 /* Scale on press: the pane gives a little under the click. */
 .snake-glass:active .snake-glass-card {
-  transform: translate3d(0, 0, 0) scale(0.99);
+  transform: translate3d(var(--fx), var(--fy), 0) scale(0.99);
   transition-duration: var(--dur-fast);
 }
 
-.snake-glass-text {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .snake-glass-title {
+  position: relative;
   font-family: var(--font-display);
   font-size: var(--text-lead);
   font-weight: var(--weight-title);
@@ -594,6 +573,7 @@
 }
 
 .snake-glass-meta {
+  position: relative;
   font-family: var(--font-sans);
   font-size: var(--text-label);
   font-weight: var(--weight-ui);
@@ -603,43 +583,10 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* The one control glyph: a filled disc with a play mark, ink on white, so
-   the pane has a place the eye lands after the words. */
-.snake-glass-play {
-  position: relative;
-  flex: 0 0 auto;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  margin-inline-start: auto;
-  border-radius: 50%;
-  background: var(--n-900);
-  color: var(--surface);
-  box-shadow: 0 6px 16px -6px rgba(0, 0, 0, 0.35);
-  transition: transform var(--dur-base) var(--ease-out);
-}
-
-.snake-glass-play svg {
-  /* Optical centre: a triangle sits left of the geometric centre. */
-  transform: translateX(1px);
-}
-
-.snake-glass:hover .snake-glass-play {
-  transform: scale(1.06);
-}
-
 @media (max-width: 640px) {
   .snake-glass-card {
-    min-width: 0;
-    gap: var(--space-4);
-    padding: 14px 14px 14px 18px;
-    border-radius: 16px;
-  }
-
-  .snake-glass-play {
-    width: 36px;
-    height: 36px;
+    padding: 12px 16px;
+    border-radius: 14px;
   }
 }
 
@@ -650,8 +597,7 @@
   }
 
   .snake-glass,
-  .snake-glass-card,
-  .snake-glass-play {
+  .snake-glass-card {
     transition: none;
   }
 }
@@ -2017,5 +1963,29 @@
   .footer {
     flex-direction: column;
     align-items: flex-start;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Six columns: pairs of cells per row, spans halve. */
+  .collage {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-auto-rows: clamp(56px, 14vw, 96px);
+  }
+
+  .collage-cell {
+    grid-column: span 3 !important;
+    grid-row: span 3 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collage-cell,
+  .collage-cell img {
+    transition: none;
+  }
+
+  .collage-cell:hover img {
+    transform: none;
   }
 }

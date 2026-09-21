@@ -1,13 +1,6 @@
-import { useEffect, useRef, useState } from "react";
-import { PhotoRow, type Photo } from "./PhotoRow";
+import type { Photo } from "./PhotoRow";
 
-/* A short personal beat between the hero and the case studies: the photos,
-   what drives her, and the way to the rest. Readers were reaching the long
-   About only after five viewports of work, so this moved up; the narrative,
-   fun facts and experience stayed below. Nothing is duplicated. */
-
-/* Ordered portrait, landscape, portrait… so the strip has a rhythm rather
-   than three tall frames in a row. */
+/* Placement order for the collage; see SPANS. */
 const PHOTOS: Photo[] = [
   {
     id: "graduation",
@@ -53,69 +46,45 @@ const PHOTOS: Photo[] = [
   },
 ];
 
-const DRIVES = [
-  "Data",
-  "Asking why",
-  "Old-school design + AI",
-] as const;
+/* Grid spans per photo on a 12-column collage: columns × rows. Portraits get
+   tall cells, landscapes wide ones; dense auto-placement packs them into a
+   12 × 7 block with no gaps. Order matters — it's the placement order. */
+const SPANS: Record<string, [number, number]> = {
+  graduation: [3, 4],
+  workshop: [5, 3],
+  athens: [4, 4],
+  "team-social": [5, 3],
+  concern: [3, 3],
+  "team-studio": [4, 3],
+};
 
+/* A collage of photos between the hero and the case studies — the person,
+   quickly, before the work. Nothing else: the narrative, fun facts and
+   experience live in About. */
 export function AboutGlimpse() {
-  const [drivesIn, setDrivesIn] = useState(false);
-  const drivesRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const node = drivesRef.current;
-    if (!node) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDrivesIn(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting) setDrivesIn(true);
-      },
-      { threshold: 0.4 },
-    );
-    io.observe(node);
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section className="glimpse" aria-label="A little about Shreya">
-      <PhotoRow
-        photos={PHOTOS}
-        className="glimpse-strip"
-        label="Photos of Shreya"
-        revealIndex={0}
-      />
-
-      {/* One line of facts under the photos, the way the case rows do it. */}
-      <div className="glimpse-foot" data-reveal="text" style={{ ["--reveal-i" as string]: 1 }}>
-        <div
-          className={`about-drives glimpse-drives${drivesIn ? " is-in" : ""}`}
-          ref={drivesRef}
-        >
-          <p className="about-drives-label">What drives me</p>
-          <ul className="about-drive-list">
-            {DRIVES.map((label, i) => (
-              <li
-                key={label}
-                className="about-drive-pill"
-                style={{ ["--i" as string]: i }}
-              >
-                {label}
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <a className="glimpse-more" href="#about-me">
-          More about me
-          <span className="glimpse-more-arrow" aria-hidden="true">
-            ↓
-          </span>
-        </a>
-      </div>
+    <section className="glimpse" aria-label="Photos of Shreya">
+      <ul className="collage" data-reveal>
+        {PHOTOS.map((photo) => {
+          const [c, r] = SPANS[photo.id] ?? [3, 3];
+          return (
+            <li
+              key={photo.id}
+              className="collage-cell"
+              style={{ gridColumn: `span ${c}`, gridRow: `span ${r}` }}
+            >
+              <img
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.w}
+                height={photo.h}
+                loading="lazy"
+                decoding="async"
+              />
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }
