@@ -48,12 +48,13 @@ const PHOTOS: Photo[] = [
 
 /* Grid spans per photo on a 12-column collage: columns × rows. Portraits get
    tall cells, landscapes wide ones; dense auto-placement packs them into a
-   12 × 7 block with no gaps. Order matters — it's the placement order. */
+   12 × 7 block. Every column of cells has to sum to 7 rows (3+4, 3+4, 4+3)
+   or one column comes up short and leaves a hole. Order is placement order. */
 const SPANS: Record<string, [number, number]> = {
   graduation: [3, 4],
   workshop: [5, 3],
   athens: [4, 4],
-  "team-social": [5, 3],
+  "team-social": [5, 4],
   concern: [3, 3],
   "team-studio": [4, 3],
 };

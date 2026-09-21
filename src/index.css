@@ -79,6 +79,8 @@
   /* Pure black at 10%, never a palette neutral: a tinted ring picks up the
      surface behind the image and reads as dirt on its edge. */
   --image-outline: oklch(0 0 0 / 0.1);
+  /* Corner on photos of people; media of work stays square. */
+  --photo-radius: 10px;
 
   /* Two families, both of them already on the home page: Figtree carries every
      display voice (headings, the statement, italic asides), Manrope carries text and
