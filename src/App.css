@@ -104,10 +104,10 @@
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-muted);
 }
 
@@ -128,7 +128,7 @@
   margin-top: var(--space-1);
   font-family: var(--font-sans);
   font-size: var(--text-caption);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   letter-spacing: var(--track-body);
   color: var(--text-secondary);
   transition: color var(--dur-fast) var(--ease-out);
@@ -201,61 +201,120 @@
   }
 }
 
-/* ——— Nav ——— */
+/* ——— Nav ———
+   Three zones at the top edges — name, role, links — in the 14px voice the
+   rest of the metadata uses. The bar itself is almost nothing: a soft blur so
+   content passing beneath it dims rather than collides. */
 .nav {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 60;
-  display: flex;
-  justify-content: center;
-  padding: 16px var(--page-pad);
-  pointer-events: none;
-}
-
-.nav-pill {
-  display: inline-flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 2px;
-  padding: 4px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  /* Same surface language as the cards: the ring layer stands in for the
-     border, so the pill isn't drawing its edge twice. */
-  box-shadow: var(--shadow-border);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
-  pointer-events: auto;
-}
-
-.nav-pill-link {
-  padding: 7px 14px;
-  border-radius: 999px;
+  gap: var(--space-6);
+  padding: 18px var(--page-pad);
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
   font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: -0.01em;
-  color: var(--text-secondary);
+  font-size: var(--text-caption);
+  font-weight: var(--weight-ui);
+  line-height: var(--lh-flat);
+  letter-spacing: var(--track-body);
+}
+
+.nav-name {
+  justify-self: start;
+  color: var(--text-primary);
   white-space: nowrap;
-  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
 
-.nav-pill-link:hover {
+.nav-role {
+  margin: 0;
+  justify-self: center;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.nav-links {
+  justify-self: end;
+  display: flex;
+  gap: var(--space-6);
+}
+
+.nav-link {
+  position: relative;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.nav-link:hover {
   color: var(--text-primary);
-  background: var(--n-100);
 }
 
-/* Where you are. A filled pill, so it's read at a glance rather than by
-   comparing text colours. */
-.nav-pill-link.is-active {
+/* Where you are: ink, with a hairline beneath that grows in. Weight would be
+   the obvious marker, but the voice here is 400 throughout. */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -5px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.nav-link.is-active {
   color: var(--text-primary);
-  background: var(--n-100);
 }
 
-.nav-pill-link:focus-visible {
+.nav-link.is-active::after {
+  transform: scaleX(1);
+}
+
+.nav-link:focus-visible,
+.nav-name:focus-visible {
   outline: 2px solid var(--text-primary);
-  outline-offset: -2px;
+  outline-offset: 3px;
+}
+
+@media (max-width: 1024px) {
+  .nav {
+    grid-template-columns: auto 1fr;
+  }
+
+  .nav-role {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav {
+    grid-template-columns: 1fr;
+    padding-block: 14px;
+  }
+
+  .nav-name {
+    display: none;
+  }
+
+  .nav-links {
+    justify-self: center;
+    gap: var(--space-4);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-link::after {
+    transition: none;
+  }
 }
 
 /* ——— Hero index (Deji-inspired) ——— */
@@ -315,7 +374,7 @@
   background: var(--surface);
   font-family: var(--font-sans);
   font-size: clamp(12px, 1vw, 14px);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   letter-spacing: 0.01em;
   white-space: nowrap;
   color: var(--text-secondary);
@@ -375,10 +434,10 @@
   padding-bottom: var(--space-2);
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-muted);
 }
 
@@ -519,7 +578,7 @@
   padding: 0.16em 0;
   background: var(--accent);
   color: var(--text-primary);
-  font-weight: 700;
+  font-weight: var(--weight-title);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -529,7 +588,7 @@
   margin: 0 0 10px;
   font-family: var(--font-sans);
   font-size: clamp(19px, 1.45vw, 21px);
-  font-weight: 700;
+  font-weight: var(--weight-title);
   letter-spacing: -0.02em;
   color: var(--text-primary);
   transition: color var(--dur-fast) var(--ease-out);
@@ -599,10 +658,10 @@
   padding: 5px 10px;
   border-radius: 999px;
   font-size: 10px;
-  font-weight: 700;
+  font-weight: var(--weight-ui);
   letter-spacing: 0.04em;
   line-height: var(--lh-flat);
-  text-transform: uppercase;
+  text-transform: none;
   white-space: nowrap;
   color: var(--text-primary);
   background: var(--accent);
@@ -615,7 +674,7 @@
   place-items: center;
   background: var(--n-900);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: var(--weight-title);
   line-height: 1;
   color: var(--surface);
 }
@@ -749,7 +808,7 @@
 .image-placeholder span {
   font-family: var(--font-sans);
   font-size: 15px;
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   color: var(--text-secondary);
 }
 
@@ -912,9 +971,9 @@
 .case-media-label {
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   letter-spacing: 0.14em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-muted);
 }
 
@@ -980,7 +1039,7 @@
 .case-company {
   font-family: var(--font-sans);
   font-size: var(--text-caption);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: 0.01em;
   color: var(--text-primary);
@@ -1116,7 +1175,7 @@
   gap: 0.45em;
   font-family: var(--font-sans);
   font-size: var(--text-caption);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   letter-spacing: var(--track-body);
   white-space: nowrap;
   color: var(--text-primary);
@@ -1146,10 +1205,10 @@
   border-radius: 999px;
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 700;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-on-accent);
   background: var(--accent);
   border: 1px solid rgba(255, 208, 47, 0.9);
@@ -1239,10 +1298,10 @@
   margin: 0 0 var(--space-4);
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-muted);
 }
 
@@ -1378,10 +1437,10 @@
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-label);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-muted);
 }
 
@@ -1470,7 +1529,7 @@
   border-radius: 999px;
   font-family: var(--font-sans);
   font-size: var(--text-caption);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
   line-height: var(--lh-flat);
   letter-spacing: var(--track-body);
   color: var(--text-secondary);
@@ -1516,7 +1575,7 @@
 
 .about-spectrum-end {
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: var(--weight-ui);
 }
 
 .about-facts-block {
@@ -1881,9 +1940,9 @@
   border-radius: 999px;
   font-family: var(--font-sans);
   font-size: 0.6875rem;
-  font-weight: 700;
+  font-weight: var(--weight-ui);
   letter-spacing: 0.04em;
-  text-transform: uppercase;
+  text-transform: none;
   color: var(--text-primary);
   background: var(--accent);
 }

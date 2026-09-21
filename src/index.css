@@ -87,10 +87,13 @@
   --font-display: "Figtree", system-ui, -apple-system, sans-serif;
   --font-sans: "Manrope", system-ui, -apple-system, sans-serif;
 
-  /* Figtree has no stroke contrast to lean on, so a display line carries its
-     hierarchy through weight. */
-  --weight-display: 700;
-  --weight-title: 600;
+  /* Hierarchy comes from size and grey, not weight. The reference runs 400
+     for everything but its wordmark; Figtree needs a touch more to hold at
+     display sizes, so display sits at 600 and titles at 500. Everything else —
+     labels, UI, metadata — is 400. */
+  --weight-display: 600;
+  --weight-title: 500;
+  --weight-ui: 400;
   --weight-wordmark: 900;
   --page-pad: clamp(20px, 4vw, 70px);
   --max: 1232px;
@@ -98,28 +101,30 @@
   /* Type scale — one step per role, so a role is one decision instead of three.
      Size, leading and tracking are picked together and travel together. */
   --text-display-xl: clamp(3.25rem, 10vw, 7rem);
-  /* Section titles. Every section header uses this one step, so About and
-     Playground can't drift back into two different scales. */
-  --text-section: clamp(2.75rem, 7vw, 5rem);
-  --text-display: clamp(2rem, 4.6vw, 3.125rem);
-  --text-title: clamp(1.5rem, 2.6vw, 1.75rem);
-  --text-lead: clamp(1.0625rem, 1.5vw, 1.25rem);
-  --text-body: 1rem;
+  /* Section titles. One step for every section header, and a restrained one:
+     they ran 44–80px, which made each section open with a shout. */
+  --text-section: clamp(2rem, 3.2vw, 2.75rem);
+  --text-display: clamp(1.75rem, 2.6vw, 2.125rem);
+  --text-title: clamp(1.25rem, 1.6vw, 1.5rem);
+  --text-lead: clamp(1.0625rem, 1.25vw, 1.125rem);
+  --text-body: 0.9375rem;
+  /* The workhorse. Metadata, labels, UI, captions all sit here. */
   --text-caption: 0.875rem;
-  --text-label: 0.75rem;
+  /* Small labels, in natural case — no tracked uppercase. */
+  --text-label: 0.8125rem;
 
   --lh-display: 1.06;
   --lh-section: 1;
   --lh-title: 1.15;
   --lh-lead: 1.5;
-  --lh-body: 1.55;
-  --lh-flat: 1.2;
+  --lh-body: 1.5;
+  --lh-flat: 1.15;
 
   --track-display: -0.03em;
   --track-section: -0.02em;
   --track-title: -0.02em;
   --track-body: -0.01em;
-  --track-label: 0.14em;
+  --track-label: 0;
 
   /* Spacing scale — grouping relies on the ratio between steps, so inter-group
      space is always at least 2x the intra-group step it separates. */

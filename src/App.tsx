@@ -164,26 +164,25 @@ function App() {
 
   return (
     <div className="page">
+      {/* Three zones at 14px, the way the reference does it: who, what, where
+          to. No pill — the chrome was drawing more attention than the words. */}
       <header className="nav">
-        <nav className="nav-pill" aria-label="Primary">
-          {/* The current section is marked, so the nav reads as a position as
-              well as a menu. */}
+        <a className="nav-name" href="#home">
+          Shreya Bhardwaj
+        </a>
+        <p className="nav-role">Product designer, Amsterdam</p>
+        <nav className="nav-links" aria-label="Primary">
           {NAV_SECTIONS.map((section) => (
             <a
               key={section.id}
-              className={`nav-pill-link${active === section.id ? " is-active" : ""}`}
+              className={`nav-link${active === section.id ? " is-active" : ""}`}
               href={`#${section.id}`}
               aria-current={active === section.id ? "location" : undefined}
             >
               {section.label}
             </a>
           ))}
-          <a
-            className="nav-pill-link"
-            href={RESUME_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a className="nav-link" href={RESUME_URL} target="_blank" rel="noreferrer">
             Resume
           </a>
         </nav>
