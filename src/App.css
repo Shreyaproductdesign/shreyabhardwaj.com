@@ -220,9 +220,10 @@
   gap: 2px;
   padding: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.68);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 6px 20px rgba(var(--shadow-rgb), 0.07);
+  background: rgba(255, 255, 255, 0.72);
+  /* Same surface language as the cards: the ring layer stands in for the
+     border, so the pill isn't drawing its edge twice. */
+  box-shadow: var(--shadow-border);
   backdrop-filter: blur(16px) saturate(150%);
   -webkit-backdrop-filter: blur(16px) saturate(150%);
   pointer-events: auto;
@@ -243,6 +244,18 @@
 .nav-pill-link:hover {
   color: var(--text-primary);
   background: var(--n-100);
+}
+
+/* Where you are. A filled pill, so it's read at a glance rather than by
+   comparing text colours. */
+.nav-pill-link.is-active {
+  color: var(--text-primary);
+  background: var(--n-100);
+}
+
+.nav-pill-link:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: -2px;
 }
 
 /* ——— Hero index (Deji-inspired) ——— */

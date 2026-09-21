@@ -4,6 +4,7 @@ import { AboutSection } from "./AboutSection";
 import { CaseStudies, type CaseStudy } from "./CaseStudies";
 import { ExperienceSection, type ExperienceItem } from "./ExperienceSection";
 import { HeroIndex } from "./HeroIndex";
+import { useActiveSection } from "./useActiveSection";
 import { useReveal } from "./useReveal";
 
 const RESUME_URL = "/shreya-bhardwaj-resume.pdf";
@@ -148,25 +149,35 @@ const experience: ExperienceItem[] = [
   },
 ];
 
+/* The in-page links, in page order. Resume opens a file and isn't a section. */
+const NAV_SECTIONS = [
+  { id: "home", label: "Home" },
+  { id: "product-design", label: "Work" },
+  { id: "about-me", label: "About" },
+  { id: "visual-design", label: "Playground" },
+];
+const NAV_IDS = NAV_SECTIONS.map((s) => s.id);
+
 function App() {
   useReveal();
+  const active = useActiveSection(NAV_IDS);
 
   return (
     <div className="page">
       <header className="nav">
         <nav className="nav-pill" aria-label="Primary">
-          <a className="nav-pill-link" href="#home">
-            Home
-          </a>
-          <a className="nav-pill-link" href="#product-design">
-            Work
-          </a>
-          <a className="nav-pill-link" href="#about-me">
-            About
-          </a>
-          <a className="nav-pill-link" href="#visual-design">
-            Playground
-          </a>
+          {/* The current section is marked, so the nav reads as a position as
+              well as a menu. */}
+          {NAV_SECTIONS.map((section) => (
+            <a
+              key={section.id}
+              className={`nav-pill-link${active === section.id ? " is-active" : ""}`}
+              href={`#${section.id}`}
+              aria-current={active === section.id ? "location" : undefined}
+            >
+              {section.label}
+            </a>
+          ))}
           <a
             className="nav-pill-link"
             href={RESUME_URL}
